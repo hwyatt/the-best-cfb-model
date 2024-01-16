@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "The Best CFB Model",
   description: `America's Next Top CFB Model`,
   openGraph: {
-    images: "tbcfbm.png",
+    images: "https://i.ibb.co/pR872L3/tbcfbm.png",
   },
 };
 
