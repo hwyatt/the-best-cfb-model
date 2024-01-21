@@ -1,4 +1,4 @@
-import Compare from "./compare/page";
+// import Compare from "./compare/page";
 import Team from "./team";
 
 const BASE_URL = "https://api.collegefootballdata.com";
