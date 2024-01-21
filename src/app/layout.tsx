@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "The Best CFB Model",
+  title: "Saturday Stats",
   description: `America's Next Top CFB Model`,
   openGraph: {
     images: "https://i.ibb.co/pR872L3/tbcfbm.png",

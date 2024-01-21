@@ -1,3 +1,4 @@
+import Compare from "./compare/page";
 import Team from "./team";
 
 const BASE_URL = "https://api.collegefootballdata.com";
@@ -25,7 +26,10 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-8 bg-gray-200">
-      <Team data={data} />
+      <div className="w-full mx-auto" style={{ maxWidth: "1312px" }}>
+        <Team data={data} />
+        {/* <Compare data={data} /> */}
+      </div>
     </main>
   );
 }

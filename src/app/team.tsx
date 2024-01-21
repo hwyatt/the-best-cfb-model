@@ -163,7 +163,7 @@ export default function Team(data: any) {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 md:max-w-md">
         <label className="font-semibold text-gray-600">
           Select or Search a Team
         </label>

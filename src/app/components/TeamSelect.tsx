@@ -22,7 +22,8 @@ const SingleValue = (props: any) => (
 );
 
 export default function TeamSelect({ teams, selectedTeam, handleSelect }: any) {
-  const options = teams.map((team: any) => ({
+  console.log(teams);
+  const options = teams?.map((team: any) => ({
     value: team.school,
     label: team.school,
     icon: team?.logos?.[0] || null,
@@ -30,7 +31,7 @@ export default function TeamSelect({ teams, selectedTeam, handleSelect }: any) {
 
   return (
     <Select
-      value={options.find(
+      value={options?.find(
         (option: any) => option.value === (selectedTeam && selectedTeam.school)
       )}
       onChange={handleSelect}
