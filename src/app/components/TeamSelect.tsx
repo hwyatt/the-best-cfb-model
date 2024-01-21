@@ -22,7 +22,6 @@ const SingleValue = (props: any) => (
 );
 
 export default function TeamSelect({ teams, selectedTeam, handleSelect }: any) {
-  console.log(teams);
   const options = teams?.map((team: any) => ({
     value: team.school,
     label: team.school,

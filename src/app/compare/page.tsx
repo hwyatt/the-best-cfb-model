@@ -10,6 +10,8 @@ interface YearOption {
   value: string;
 }
 
+const TeamForCompare = () => {};
+
 const Compare = (data: any) => {
   useEffect(() => {
     const currentDate = new Date();
@@ -94,44 +96,85 @@ const Compare = (data: any) => {
   };
 
   return (
-    <div className="grid md:grid-cols-2 m-8 w-full gap-8">
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <label className="font-semibold text-gray-600">
-            Select or Search a Team
-          </label>
-          <TeamSelect
-            teams={teams}
-            selectedTeam={selectedTeam}
-            handleSelect={handleSelect}
-          />
-          <label className="font-semibold text-gray-600">Select a Season</label>
-          <SeasonSelect
-            yearOpts={yearOpts}
-            year={year}
-            handleYearChange={handleYearChange}
-          />
+    <div className="flex flex-col gap-8">
+      <h1 className="text-4xl font-bold">Simulate Game</h1>
+      <div className="grid md:grid-cols-2 w-full gap-8">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <label className="font-semibold text-gray-600">
+              Select or Search a Team
+            </label>
+            <TeamSelect
+              teams={teams}
+              selectedTeam={selectedTeam}
+              handleSelect={handleSelect}
+            />
+            {selectedTeam && selectedTeam.id !== null && (
+              <>
+                <label className="font-semibold text-gray-600">
+                  Select a Season
+                </label>
+                <SeasonSelect
+                  yearOpts={yearOpts}
+                  year={year}
+                  handleYearChange={handleYearChange}
+                />
+              </>
+            )}
+          </div>
+          {selectedTeam && (
+            <div>
+              <TeamHero selectedTeam={selectedTeam} />
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {selectedTeam.school} {selectedTeam.mascot}
+                </h2>
+                <p className="uppercase text-gray-600">
+                  {selectedTeam.conference}{" "}
+                  {selectedTeam.division && selectedTeam.division}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
-        {selectedTeam && <TeamHero selectedTeam={selectedTeam} />}
-      </div>
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <label className="font-semibold text-gray-600">
-            Select or Search a Team
-          </label>
-          <TeamSelect
-            teams={teams}
-            selectedTeam={selectedTeam}
-            handleSelect={handleSelect}
-          />
-          <label className="font-semibold text-gray-600">Select a Season</label>
-          <SeasonSelect
-            yearOpts={yearOpts}
-            year={year}
-            handleYearChange={handleYearChange}
-          />
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <label className="font-semibold text-gray-600">
+              Select or Search a Team
+            </label>
+            <TeamSelect
+              teams={teams}
+              selectedTeam={selectedTeam}
+              handleSelect={handleSelect}
+            />
+            {selectedTeam && selectedTeam.id !== null && (
+              <>
+                <label className="font-semibold text-gray-600">
+                  Select a Season
+                </label>
+                <SeasonSelect
+                  yearOpts={yearOpts}
+                  year={year}
+                  handleYearChange={handleYearChange}
+                />
+              </>
+            )}
+          </div>
+          {selectedTeam && (
+            <div>
+              <TeamHero selectedTeam={selectedTeam} />
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {selectedTeam.school} {selectedTeam.mascot}
+                </h2>
+                <p className="uppercase text-gray-600">
+                  {selectedTeam.conference}{" "}
+                  {selectedTeam.division && selectedTeam.division}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
-        {selectedTeam && <TeamHero selectedTeam={selectedTeam} />}
       </div>
     </div>
   );
