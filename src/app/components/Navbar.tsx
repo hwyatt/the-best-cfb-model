@@ -15,26 +15,25 @@ const Navbar = () => {
         className="container mx-auto flex justify-between items-center w-full"
         style={{ maxWidth: "1312px" }}
       >
-        <div className="text-gray-800 font-bold text-xl">Saturday Stats</div>
+        <div className="text-gray-800 font-bold text-xl">
+          <a href="/">Saturday Stats</a>
+        </div>
         <div className="md:hidden">
           <button onClick={toggleMenu}>
             <FaBars className="font-semibold text-gray-800 text-2xl" />
           </button>
         </div>
         <div className={`md:flex md:gap-8 ${isOpen ? "block" : "hidden"}`}>
-          <a href="/" className="font-semibold text-gray-800">
-            Home
-          </a>
           <a href="/teams" className="font-semibold text-gray-800">
             Teams
           </a>
           <a href="/compare" className="font-semibold text-gray-800">
             Model
           </a>
-          <a href="#" className="font-semibold text-gray-800">
+          <a href="/bracket" className="font-semibold text-gray-800">
             Bracket
           </a>
-          <a href="#" className="font-semibold text-gray-800">
+          <a href="/portal" className="font-semibold text-gray-800">
             Portal
           </a>
         </div>

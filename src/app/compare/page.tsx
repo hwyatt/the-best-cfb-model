@@ -224,7 +224,7 @@ const Compare = () => {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4">
-        <h1 className="text-4xl font-bold">Simulate Game</h1>
+        <h1 className="text-4xl font-bold">Game Simulation Model</h1>
         <p>Simulate a game between any two teams from any two seasons.</p>
       </div>
       {teams.length > 0 && (
