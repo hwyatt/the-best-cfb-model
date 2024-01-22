@@ -227,86 +227,12 @@ const Compare = () => {
         <h1 className="text-4xl font-bold">Simulate Game</h1>
         <p>Simulate a game between any two teams from any two seasons.</p>
       </div>
-      <div className="grid md:grid-cols-2 w-full gap-8">
-        {/* <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <label className="font-semibold text-gray-600">
-              Select or Search a Team
-            </label>
-            <TeamSelect
-              teams={teams}
-              selectedTeam={selectedTeam}
-              handleSelect={handleSelect}
-            />
-            {selectedTeam && selectedTeam.id !== null && (
-              <>
-                <label className="font-semibold text-gray-600">
-                  Select a Season
-                </label>
-                <SeasonSelect
-                  yearOpts={yearOpts}
-                  year={year}
-                  handleYearChange={handleYearChange}
-                />
-              </>
-            )}
-          </div>
-          {selectedTeam && selectedTeam.id !== null && (
-            <div>
-              <TeamHero selectedTeam={selectedTeam} />
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800">
-                  {selectedTeam.school} {selectedTeam.mascot}
-                </h2>
-                <p className="uppercase text-gray-600">
-                  {selectedTeam.conference}{" "}
-                  {selectedTeam.division && selectedTeam.division}
-                </p>
-              </div>
-            </div>
-          )}
-        </div> */}
-        {teams.length > 0 && <TeamForCompare teams={teams} />}
-
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <label className="font-semibold text-gray-600">
-              Select or Search a Team
-            </label>
-            <TeamSelect
-              teams={teams}
-              selectedTeam={selectedTeam}
-              handleSelect={handleSelect}
-            />
-            {selectedTeam && selectedTeam.id !== null && (
-              <>
-                <label className="font-semibold text-gray-600">
-                  Select a Season
-                </label>
-                <SeasonSelect
-                  yearOpts={yearOpts}
-                  year={year}
-                  handleYearChange={handleYearChange}
-                />
-              </>
-            )}
-          </div>
-          {selectedTeam && selectedTeam.id !== null && (
-            <div>
-              <TeamHero selectedTeam={selectedTeam} />
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800">
-                  {selectedTeam.school} {selectedTeam.mascot}
-                </h2>
-                <p className="uppercase text-gray-600">
-                  {selectedTeam.conference}{" "}
-                  {selectedTeam.division && selectedTeam.division}
-                </p>
-              </div>
-            </div>
-          )}
+      {teams.length > 0 && (
+        <div className="grid md:grid-cols-2 w-full gap-8">
+          <TeamForCompare teams={teams} />
+          <TeamForCompare teams={teams} />
         </div>
-      </div>
+      )}
     </div>
   );
 };
