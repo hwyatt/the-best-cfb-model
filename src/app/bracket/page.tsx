@@ -38,8 +38,12 @@ export default async function Bracket() {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4">
-        <h1 className="text-4xl font-bold">CFP Bracket Builder</h1>
-        <p>Choose top 12 teams, then move them along your bracket.</p>
+        <h1 className="text-4xl font-bold text-gray-800">
+          CFP Bracket Builder
+        </h1>
+        <p className="text-gray-800">
+          Choose top 12 teams, then move them along your bracket.
+        </p>
       </div>
     </div>
   );

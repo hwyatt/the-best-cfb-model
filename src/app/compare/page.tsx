@@ -224,8 +224,12 @@ const Compare = () => {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4">
-        <h1 className="text-4xl font-bold">Game Simulation Model</h1>
-        <p>Simulate a game between any two teams from any two seasons.</p>
+        <h1 className="text-4xl font-bold text-gray-800">
+          Game Simulation Model
+        </h1>
+        <p className="text-gray-800">
+          Simulate a game between any two teams from any two seasons.
+        </p>
       </div>
       {teams.length > 0 && (
         <div className="grid md:grid-cols-2 w-full gap-8">
