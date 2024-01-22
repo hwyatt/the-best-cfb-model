@@ -3,17 +3,17 @@
 @tailwind utilities;
 
 :root {
-    --foreground-rgb: 0, 0, 0;
-    --background-start-rgb: 214, 219, 220;
-    --background-end-rgb: 255, 255, 255;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
-        --foreground-rgb: 255, 255, 255;
-        --background-start-rgb: 0, 0, 0;
-        --background-end-rgb: 0, 0, 0;
-    }
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
 }
 
 /* body {
@@ -27,17 +27,27 @@
 } */
 
 ::-webkit-scrollbar {
-    height: 4px;
-    width: 4px;
-    border: 1px solid #d5d5d5;
+  height: 4px;
+  width: 4px;
+  border: 1px solid #d5d5d5;
 }
 
 ::-webkit-scrollbar-track {
-    border-radius: 0;
-    background: #eeeeee;
+  border-radius: 0;
+  background: #eeeeee;
 }
 
 ::-webkit-scrollbar-thumb {
-    border-radius: 0;
-    background: #b0b0b0;
+  border-radius: 0;
+  background: #b0b0b0;
+}
+
+.playerTeamSearch:focus {
+  border-color: #2684ff !important;
+  outline: none !important;
+  box-shadow: 0 0 0 1px #2684ff !important;
+}
+
+.playerTeamSearch::placeholder {
+  color: hsl(0, 0%, 50%);
 }
