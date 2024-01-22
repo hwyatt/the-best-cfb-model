@@ -1,8 +1,3 @@
-// import Compare from "./compare/page";
-import Team from "./teams/page";
-import Container from "./components/Container";
-import Navbar from "./components/Navbar";
-
 const BASE_URL = "https://api.collegefootballdata.com";
 const BEARER_TOKEN =
   "8474sJ42lQEtgWGBYsru+i6Ltl9k05P+Ohf/ZccNOMc7xow9G409Cm2QxLbJxyaw";
@@ -24,17 +19,5 @@ export async function getData() {
 }
 
 export default async function Home() {
-  const data = await getData();
-
-  return (
-    <>
-      <div>HOME</div>
-      {/* <Navbar />
-      <Container>
-        <div className="w-full mx-auto" style={{ maxWidth: "1312px" }}>
-          <Team data={data} />
-        </div>
-      </Container> */}
-    </>
-  );
+  return <div>HOME</div>;
 }
