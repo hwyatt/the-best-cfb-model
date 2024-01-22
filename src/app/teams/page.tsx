@@ -2,19 +2,59 @@
 
 import { useState, useId, useEffect } from "react";
 import { GiAmericanFootballHelmet } from "react-icons/gi";
-import { teamStadiumImages } from "./teams";
-import TeamSelect from "./components/TeamSelect";
-import TeamHero from "./components/TeamHero";
-import TeamImg from "./components/TeamImg";
-import SeasonSelect from "./components/SeasonSelect";
+import { teamStadiumImages } from "../teamStadiumImages";
+import TeamSelect from "../components/TeamSelect";
+import TeamHero from "../components/TeamHero";
+import TeamImg from "../components/TeamImg";
+import SeasonSelect from "../components/SeasonSelect";
 
 interface YearOption {
   label: string;
   value: string;
 }
 
-export default function Team(data: any) {
-  const teams = data.data.map((team: any) => ({
+export default function Team() {
+  const [data, setData] = useState([]);
+  const [games, setGames] = useState<any[]>();
+  const [stats, setStats] = useState();
+  const [gamesLoading, setGamesLoading] = useState(false);
+  const [statsLoading, setStatsLoading] = useState(false);
+  const [year, setYear] = useState("");
+  const [yearOpts, setYearOpts] = useState<YearOption[]>([]);
+
+  useEffect(() => {
+    handleGetTeams();
+
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+
+    // If we are not yet in August of the current year, set the current football year to the previous year
+    const currentYear =
+      currentMonth >= 7
+        ? currentDate.getFullYear()
+        : currentDate.getFullYear() - 1;
+
+    setYear(currentYear.toString());
+
+    const years = Array.from(
+      { length: 100 },
+      (_, index) => currentYear - index
+    );
+    const formattedYears = years.map((year) => ({
+      value: year.toString(),
+      label: year.toString(),
+    }));
+
+    setYearOpts(formattedYears);
+  }, []);
+
+  const handleGetTeams = async () => {
+    const getTeams = await fetch(`/api/teams`);
+    const teams = await getTeams.json();
+    setData(teams);
+  };
+
+  const teams = data?.map((team: any) => ({
     ...team,
     stadiumImg:
       teamStadiumImages.find(
@@ -56,36 +96,6 @@ export default function Team(data: any) {
       dome: true,
     },
   });
-  const [games, setGames] = useState<any[]>();
-  const [stats, setStats] = useState();
-  const [gamesLoading, setGamesLoading] = useState(false);
-  const [statsLoading, setStatsLoading] = useState(false);
-  const [year, setYear] = useState("");
-  const [yearOpts, setYearOpts] = useState<YearOption[]>([]);
-
-  useEffect(() => {
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-
-    // If we are not yet in August of the current year, set the current football year to the previous year
-    const currentYear =
-      currentMonth >= 7
-        ? currentDate.getFullYear()
-        : currentDate.getFullYear() - 1;
-
-    setYear(currentYear.toString());
-
-    const years = Array.from(
-      { length: 100 },
-      (_, index) => currentYear - index
-    );
-    const formattedYears = years.map((year) => ({
-      value: year.toString(),
-      label: year.toString(),
-    }));
-
-    setYearOpts(formattedYears);
-  }, []);
 
   const handleSelect = async (selectedOption: any) => {
     setGamesLoading(true);
@@ -162,7 +172,11 @@ export default function Team(data: any) {
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-8 w-full">
+      <div className="flex flex-col gap-4">
+        <h1 className="text-4xl font-bold">Team Stats</h1>
+        <p>See stats, schedule, and more for a team any given season.</p>
+      </div>
       <div className="flex flex-col gap-2 md:max-w-md">
         <label className="font-semibold text-gray-600">
           Select or Search a Team

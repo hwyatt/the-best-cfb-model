@@ -1,7 +1,5 @@
 import { useState, useEffect, useId } from "react";
 import Select, { components } from "react-select";
-import { GiAmericanFootballHelmet } from "react-icons/gi";
-import { teamStadiumImages } from "../teams";
 
 const Option = (props: any) => (
   <components.Option {...props}>
