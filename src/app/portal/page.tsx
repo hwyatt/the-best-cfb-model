@@ -24,10 +24,7 @@ export default function Portal() {
   const [year, setYear] = useState("");
   const [yearOpts, setYearOpts] = useState<YearOption[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  // const [positionOptions, setPositionOptions] = useState<PositionOption[]>([]);
-  // const [selectedPosition, setSelectedPosition] =
-  //   useState<PositionOption | null>(null);
-  // const [filteredPosData, setFilteredPosData] = useState([]);
+  const [position, setPosition] = useState("");
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -40,14 +37,14 @@ export default function Portal() {
   };
 
   const filteredData = data.filter((row: any) => {
-    // Adjust the conditions based on the fields you want to search
     const fullName = `${row.firstName} ${row.lastName}`.toLowerCase();
 
     return (
-      fullName.includes(searchTerm.toLowerCase()) ||
-      row.origin.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (row.destination !== null &&
-        row.destination.toLowerCase().includes(searchTerm.toLowerCase()))
+      (fullName.includes(searchTerm.toLowerCase()) ||
+        row.origin.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (row.destination !== null &&
+          row.destination.toLowerCase().includes(searchTerm.toLowerCase()))) &&
+      (position === "" || row.position === position)
     );
   });
 
@@ -113,24 +110,6 @@ export default function Portal() {
     setYearOpts(formattedYears);
   }, []);
 
-  // useEffect(() => {
-  //   const updatedFilteredData = selectedPosition
-  //     ? data.filter(
-  //         (row: any) =>
-  //           row.position === selectedPosition.value &&
-  //           (row.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //             row.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //             row.origin.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //             (row.destination !== null &&
-  //               row.destination
-  //                 .toLowerCase()
-  //                 .includes(searchTerm.toLowerCase())))
-  //       )
-  //     : data;
-
-  //   setFilteredPosData(updatedFilteredData);
-  // }, [data, selectedPosition, searchTerm]);
-
   useEffect(() => {
     const handleGetData = async () => {
       if (year) {
@@ -155,26 +134,18 @@ export default function Portal() {
     setYear(year.value);
   };
 
-  // const handlePositionFilter = (selectedOption: PositionOption | null) => {
-  //   setSelectedPosition(selectedOption);
+  const handlePositionChange = (selectedOption: any) => {
+    setSearchTerm("");
+    setPosition(selectedOption ? selectedOption.value : "");
+  };
 
-  //   // If selectedOption is null, clear the filter
-  //   if (!selectedOption) {
-  //     setFilteredPosData(filteredData);
-  //   } else {
-  //     // Filter the data based on the selected position and search term
-  //     const filteredPosData = filteredData.filter(
-  //       (row: any) =>
-  //         row.position === selectedOption.value &&
-  //         (row.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //           row.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //           row.origin.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //           (row.destination !== null &&
-  //             row.destination.toLowerCase().includes(searchTerm.toLowerCase())))
-  //     );
-  //     setFilteredPosData(filteredPosData);
-  //   }
-  // };
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setPosition("");
+    // Add any other filter state variables you might have
+  };
+
+  const isFiltered = position !== "" || searchTerm !== "";
 
   return (
     <div className="flex flex-col gap-8">
@@ -185,42 +156,60 @@ export default function Portal() {
           of data.
         </p>
       </div>
-      <div className="flex gap-8">
-        <div className="flex flex-col gap-2">
-          <label className="font-semibold text-gray-600">Search</label>
-          <input
-            type="text"
-            placeholder="Search Player or Team..."
-            value={searchTerm}
-            onChange={(e) => handleSearch(e.target.value)}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            className="playerTeamSearch rounded transition-all duration-100 py-1.5 px-3"
-            style={{
-              borderColor: `${
-                isHovered ? "hsl(0, 0%, 70%)" : "hsl(0, 0%, 80%)"
-              }`,
-              borderWidth: "1px",
-            }}
-          />
+      <div className="flex gap-8 justify-between">
+        <div className="flex gap-8">
+          <div className="flex flex-col gap-2">
+            <label className="font-semibold text-gray-600">Search</label>
+            <input
+              type="text"
+              placeholder="Search Player or Team..."
+              value={searchTerm}
+              onChange={(e) => handleSearch(e.target.value)}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              className="playerTeamSearch rounded transition-all duration-100 py-1.5 px-3"
+              style={{
+                borderColor: `${
+                  isHovered ? "hsl(0, 0%, 70%)" : "hsl(0, 0%, 80%)"
+                }`,
+                borderWidth: "1px",
+              }}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="font-semibold text-gray-600">Position</label>
+            <Select
+              value={
+                position !== "" ? { value: position, label: position } : null
+              }
+              options={[
+                ...new Set(filteredData.map((row: any) => row.position)),
+              ].map((position) => ({ value: position, label: position }))}
+              onChange={(selectedOption) =>
+                handlePositionChange(selectedOption)
+              }
+              className="z-30"
+              instanceId={useId()}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="font-semibold text-gray-600">Year</label>
+            <SeasonSelect
+              yearOpts={yearOpts}
+              year={year}
+              handleYearChange={handleYearChange}
+            />
+          </div>
         </div>
-        <div className="flex flex-col gap-2">
-          <label className="font-semibold text-gray-600">Position</label>
-          <Select
-            // value={selectedPosition} // Set the initial value as needed
-            // options={positionOptions}
-            // onChange={(selectedOption) => handlePositionFilter(selectedOption)}
-            className="z-30"
-            instanceId={useId()}
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="font-semibold text-gray-600">Year</label>
-          <SeasonSelect
-            yearOpts={yearOpts}
-            year={year}
-            handleYearChange={handleYearChange}
-          />
+        <div className="flex gap-8">
+          {isFiltered && (
+            <button
+              className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded self-end transition-all duration-100"
+              onClick={handleResetFilters}
+            >
+              Reset Filters
+            </button>
+          )}
         </div>
       </div>
       {filteredData.length > 0 && (
