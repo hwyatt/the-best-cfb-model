@@ -122,6 +122,14 @@ export default function Team() {
       (team: any) => team.school === selectedTeamName
     );
     setSelectedTeam(foundTeam);
+    // Build the new URL with the team query parameter
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    url.searchParams.set("team", selectedTeamName);
+
+    // Update the URL
+    window.history.replaceState({}, "", url.toString());
+
     const getRoster = await fetch(
       `/api/roster?${
         foundTeam.school && `team=${foundTeam.school}&`
