@@ -7,6 +7,7 @@ import TeamSelect from "../components/TeamSelect";
 import TeamHero from "../components/TeamHero";
 import TeamImg from "../components/TeamImg";
 import SeasonSelect from "../components/SeasonSelect";
+import { useSearchParams } from "next/navigation";
 
 interface YearOption {
   label: string;
@@ -14,6 +15,9 @@ interface YearOption {
 }
 
 export default function Team() {
+  const searchParams = useSearchParams();
+  const teamParam = searchParams.get("team");
+
   const [data, setData] = useState([]);
   const [games, setGames] = useState<any[]>();
   const [stats, setStats] = useState();
@@ -62,6 +66,20 @@ export default function Team() {
           teamStadium.id === team.id && teamStadium.school === team.school
       )?.stadiumImg || null,
   }));
+
+  useEffect(() => {
+    if (data.length > 0) {
+      const teamFromParam =
+        teamParam !== null && teams.find((team) => team.school === teamParam);
+      if (teamFromParam) {
+        setSelectedTeam(teamFromParam);
+        handleSelect({
+          option: teamFromParam.school,
+          value: teamFromParam.school,
+        });
+      }
+    }
+  }, [data]);
 
   const [selectedTeam, setSelectedTeam] = useState({
     id: null,
