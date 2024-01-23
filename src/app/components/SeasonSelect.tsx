@@ -13,7 +13,7 @@ const SeasonSelect = ({ yearOpts, year, handleYearChange }: any) => {
       )}
       options={yearOpts}
       onChange={handleYearChange}
-      className="z-30"
+      className="z-20"
     />
   );
 };

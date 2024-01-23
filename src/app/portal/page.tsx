@@ -156,8 +156,8 @@ export default function Portal() {
           of data.
         </p>
       </div>
-      <div className="flex gap-8 justify-between">
-        <div className="flex gap-8">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-8 justify-between">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-8">
           <div className="flex flex-col gap-2">
             <label className="font-semibold text-gray-600">Search</label>
             <input
@@ -207,7 +207,7 @@ export default function Portal() {
         <div className="flex gap-8">
           {isFiltered && (
             <button
-              className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded self-end transition-all duration-100"
+              className="w-full md:w-auto bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded self-end transition-all duration-100"
               onClick={handleResetFilters}
             >
               Reset Filters
