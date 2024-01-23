@@ -182,9 +182,12 @@ export default function Portal() {
               value={
                 position !== "" ? { value: position, label: position } : null
               }
-              options={[
-                ...new Set(filteredData.map((row: any) => row.position)),
-              ].map((position) => ({ value: position, label: position }))}
+              options={Array.from(
+                new Set(filteredData.map((row: any) => row.position))
+              ).map((position) => ({
+                value: position,
+                label: position,
+              }))}
               onChange={(selectedOption) =>
                 handlePositionChange(selectedOption)
               }
