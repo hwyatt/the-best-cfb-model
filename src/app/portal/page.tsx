@@ -60,7 +60,6 @@ export default function Portal() {
     {
       name: "Position",
       selector: (row: any) => row.position,
-      sortable: true,
     },
     {
       name: "Stars",
