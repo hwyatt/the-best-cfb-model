@@ -3,6 +3,7 @@ import { useEffect, useId, useState } from "react";
 import DataTable from "react-data-table-component";
 import SeasonSelect from "../components/SeasonSelect";
 import Select from "react-select";
+import { GiAmericanFootballHelmet } from "react-icons/gi";
 
 interface YearOption {
   label: string;
@@ -144,7 +145,11 @@ export default function Portal() {
                   alt="Team Logo"
                   style={{ width: "30px", height: "30px" }}
                 />
-              ) : null}
+              ) : (
+                <GiAmericanFootballHelmet
+                  style={{ width: "30px", height: "30px" }}
+                />
+              )}
             </div>
             <span>{row.origin}</span>
           </div>
