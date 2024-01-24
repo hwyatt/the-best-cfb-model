@@ -20,7 +20,7 @@ const MultiValue = (props: any) => (
   </components.MultiValue>
 );
 
-export function TeamSelectMulti({
+function TeamSelectMulti({
   teams,
   selectedTeam,
   handleSelect,
