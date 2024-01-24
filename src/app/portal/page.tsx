@@ -21,7 +21,41 @@ const getDate = (stringDate: string) => {
 
 export default function Portal() {
   const [data, setData] = useState([]);
-  const [teamsData, setTeamsData] = useState([]);
+  const [teamsData, setTeamsData] = useState([
+    {
+      id: null,
+      school: null,
+      mascot: null,
+      abbreviation: null,
+      alt_name_1: null,
+      alt_name_2: null,
+      alt_name_3: null,
+      classification: null,
+      conference: null,
+      division: null,
+      color: null,
+      alt_color: null,
+      logos: [null],
+      stadiumImg: null,
+      twitter: null,
+      location: {
+        venue_id: 0,
+        name: null,
+        city: null,
+        state: null,
+        zip: null,
+        country_code: null,
+        timezone: "string",
+        latitude: 0,
+        longitude: 0,
+        elevation: 0,
+        capacity: 0,
+        year_constructed: 0,
+        grass: true,
+        dome: true,
+      },
+    },
+  ]);
   const [year, setYear] = useState("");
   const [yearOpts, setYearOpts] = useState<YearOption[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
