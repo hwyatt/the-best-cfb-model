@@ -21,6 +21,7 @@ const getDate = (stringDate: string) => {
 
 export default function Portal() {
   const [data, setData] = useState([]);
+  const [teamsData, setTeamsData] = useState([]);
   const [year, setYear] = useState("");
   const [yearOpts, setYearOpts] = useState<YearOption[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,6 +35,12 @@ export default function Portal() {
 
   const handleMouseLeave = () => {
     setIsHovered(false);
+  };
+
+  const handleGetTeams = async () => {
+    const getTeams = await fetch(`/api/teams`);
+    const teams = await getTeams.json();
+    setTeamsData(teams);
   };
 
   const filteredData = data.filter((row: any) => {
@@ -52,7 +59,7 @@ export default function Portal() {
     {
       name: "Name",
       cell: (row: any) => (
-        <div>
+        <div className="">
           {row.firstName} {row.lastName}
         </div>
       ),
@@ -63,12 +70,22 @@ export default function Portal() {
     },
     {
       name: "Stars",
-      selector: (row: any) => (row.stars !== null ? row.stars : "-"),
+      selector: (row: any) =>
+        row.stars !== null ? (
+          row.stars
+        ) : (
+          <span className="text-gray-600 text-xl">-</span>
+        ),
       sortable: true,
     },
     {
       name: "Rating",
-      cell: (row: any) => (row.rating !== null ? row.rating : "-"),
+      cell: (row: any) =>
+        row.rating !== null ? (
+          row.rating
+        ) : (
+          <span className="text-gray-600 text-xl">-</span>
+        ),
       sortable: true,
     },
     {
@@ -78,17 +95,60 @@ export default function Portal() {
     },
     {
       name: "Origin",
-      selector: (row: any) => row.origin,
+      cell: (row: any) => {
+        const matchingTeam = teamsData.find(
+          (team) => team?.school === row.origin
+        );
+        const teamLogo = matchingTeam?.logos?.[0];
+
+        return (
+          <div className="flex items-center gap-2">
+            <div>
+              {teamLogo ? (
+                <img
+                  src={teamLogo}
+                  alt="Team Logo"
+                  style={{ width: "30px", height: "30px" }}
+                />
+              ) : null}
+            </div>
+            <span>{row.origin}</span>
+          </div>
+        );
+      },
     },
     {
       name: "Destination",
-      selector: (row: any) =>
-        row.destination !== null ? row.destination : "?",
+      cell: (row: any) => {
+        const matchingTeam = teamsData.find(
+          (team) => team?.school === row.destination
+        );
+        const teamLogo = matchingTeam?.logos?.[0];
+
+        return (
+          <div className="flex items-center gap-2">
+            <div>
+              {teamLogo ? (
+                <img
+                  src={teamLogo}
+                  alt="Team Logo"
+                  style={{ width: "30px", height: "30px" }}
+                />
+              ) : null}
+            </div>
+            {row.destination !== null ? (
+              <span>{row.destination}</span>
+            ) : (
+              <span className="text-gray-600 text-xl">-</span>
+            )}
+          </div>
+        );
+      },
     },
-    {
-      name: "Eligibility",
-      selector: (row: any) => row.eligibility,
-    },
+    // {
+    //   name: "Eligibility",
+    //   selector: (row: any) => row.eligibility,
+    // },
   ];
 
   const handleSearch = (searchTerm: string) => {
@@ -96,6 +156,8 @@ export default function Portal() {
   };
 
   useEffect(() => {
+    handleGetTeams();
+
     const currentYear = new Date().getFullYear();
 
     setYear(currentYear.toString());
@@ -215,12 +277,14 @@ export default function Portal() {
         </div>
       </div>
       {filteredData.length > 0 && (
-        <DataTable
-          columns={columns}
-          data={filteredData}
-          pagination
-          fixedHeader
-        />
+        <div>
+          <DataTable
+            columns={columns}
+            data={filteredData}
+            pagination
+            fixedHeader
+          />
+        </div>
       )}
     </div>
   );
