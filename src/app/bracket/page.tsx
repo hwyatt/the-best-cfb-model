@@ -452,8 +452,8 @@ export default function Bracket() {
                 )}
               </div>
             </div>
-            <div className="flex flex-col gap-8">
-              <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-8 mt-32">
+              <div className="flex flex-col gap-72">
                 {game9Winner.index !== null ? (
                   <div>Game 9 Winner</div>
                 ) : (
