@@ -247,8 +247,8 @@ export default function Portal() {
       <div className="flex flex-col gap-4">
         <h1 className="text-4xl font-bold text-gray-800">Transfer Portal</h1>
         <p className="text-gray-800">
-          Search through the Transfer Portal and sort/filter based on all kinds
-          of data.
+          Search the Transfer Portal for players and teams. Sort/filter based on
+          all kinds of data.
         </p>
       </div>
       <div className="flex flex-col md:flex-row gap-4 md:gap-8 justify-between">

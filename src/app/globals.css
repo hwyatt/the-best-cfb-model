@@ -65,7 +65,8 @@
   font-size: 14.4px;
 }
 .rdt_TableHeadRow {
-  background-color: transparent !important;
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity)) !important;
   border: none !important;
 }
 .rdt_Pagination {
