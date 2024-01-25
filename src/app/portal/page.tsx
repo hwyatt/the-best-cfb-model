@@ -4,6 +4,7 @@ import DataTable from "react-data-table-component";
 import SeasonSelect from "../components/SeasonSelect";
 import Select from "react-select";
 import { GiAmericanFootballHelmet } from "react-icons/gi";
+import { FaStar } from "react-icons/fa";
 
 interface YearOption {
   label: string;
@@ -14,6 +15,28 @@ interface PositionOption {
   label: string;
   value: string;
 }
+
+const StarsColumn = ({ row }: any) => {
+  const renderStars = () => {
+    const stars = row.stars;
+    const totalStars = 5;
+
+    if (stars !== null) {
+      return (
+        <div className="flex">
+          {Array.from({ length: totalStars }).map((_, index) => (
+            <FaStar
+              key={index}
+              className={index < stars ? "text-yellow-600" : "text-gray-200"}
+            />
+          ))}
+        </div>
+      );
+    }
+  };
+
+  return <div>{renderStars()}</div>;
+};
 
 const getDate = (stringDate: string) => {
   const originalDate = new Date(stringDate);
@@ -90,43 +113,45 @@ export default function Portal() {
     );
   });
 
+  const paginationComponentOptions = {
+    rowsPerPageText: "Players per Page",
+    selectAllRowsItem: false,
+  };
+
   const columns = [
     {
-      name: "Name",
+      name: "Player",
       cell: (row: any) => (
-        <div className="">
-          {row.firstName} {row.lastName}
+        <div className="flex flex-col gap-2 py-2">
+          <div className="text-gray-600">
+            {row.firstName}{" "}
+            <p className="uppercase font-semibold text-gray-800">
+              {row.lastName}
+            </p>
+          </div>
+
+          <div className="flex gap-2">
+            <StarsColumn row={row} />
+            {row.rating !== null && (
+              <span className="text-xs font-semibold text-gray-600">
+                {row.rating}
+              </span>
+            )}
+          </div>
         </div>
       ),
+      maxWidth: "15%",
     },
     {
-      name: "Position",
+      name: "Pos",
       selector: (row: any) => row.position,
-    },
-    {
-      name: "Stars",
-      selector: (row: any) =>
-        row.stars !== null ? (
-          row.stars
-        ) : (
-          <span className="text-gray-600 text-xl">-</span>
-        ),
-      sortable: true,
-    },
-    {
-      name: "Rating",
-      cell: (row: any) =>
-        row.rating !== null ? (
-          row.rating
-        ) : (
-          <span className="text-gray-600 text-xl">-</span>
-        ),
-      sortable: true,
+      maxWidth: "5%",
     },
     {
       name: "Transfer Date",
-      cell: (row: any) => getDate(row.transferDate),
+      selector: (row: any) => getDate(row.transferDate),
       sortable: true,
+      maxWidth: "15%",
     },
     {
       name: "Origin",
@@ -143,15 +168,17 @@ export default function Portal() {
                 <img
                   src={teamLogo}
                   alt="Team Logo"
-                  style={{ width: "30px", height: "30px" }}
+                  style={{ width: "40px", height: "40px", minWidth: "40px" }}
                 />
               ) : (
                 <GiAmericanFootballHelmet
-                  style={{ width: "30px", height: "30px" }}
+                  style={{ width: "40px", height: "40px", minWidth: "40px" }}
                 />
               )}
             </div>
-            <span>{row.origin}</span>
+            <span className="font-semibold uppercase text-gray-800">
+              {row.origin}
+            </span>
           </div>
         );
       },
@@ -171,14 +198,20 @@ export default function Portal() {
                 <img
                   src={teamLogo}
                   alt="Team Logo"
-                  style={{ width: "30px", height: "30px" }}
+                  style={{ width: "40px", height: "40px", minWidth: "40px" }}
                 />
               ) : null}
             </div>
             {row.destination !== null ? (
-              <span>{row.destination}</span>
+              <span className="font-semibold uppercase text-gray-800">
+                {row.destination}
+              </span>
             ) : (
-              <span className="text-gray-600 text-xl">-</span>
+              <div className="bg-gray-200 rounded-full p-2">
+                <div className="flex items-center justify-center w-6 h-6 font-semibold">
+                  ?
+                </div>
+              </div>
             )}
           </div>
         );
@@ -322,6 +355,7 @@ export default function Portal() {
             data={filteredData}
             pagination
             fixedHeader
+            paginationComponentOptions={paginationComponentOptions}
           />
         </div>
       )}
