@@ -192,7 +192,7 @@ export default function Bracket() {
     </div>
   );
 
-  const TeamByIndex = ({ index, seed }: any) => {
+  const TeamByIndex = ({ index, seed, lastGame }: any) => {
     const team = playoffTeams[index - 1];
 
     if (!team || team.id === null) {
@@ -200,31 +200,42 @@ export default function Bracket() {
       return <BlankTeam index={index} seed={seed} />;
     }
 
-    return (
-      <div
-        className="flex items-center justify-between max-h-16 gap-2 bg-white border-2 border-gray-400 rounded p-4 w-full shadow-md"
-        style={{
-          backgroundColor: `${
-            playoffTeams[index - 1]?.color !== "#ffffff"
-              ? playoffTeams[index - 1]?.color
-              : playoffTeams[index - 1]?.alt_color
-          }`,
-        }}
-      >
-        <div className="flex gap-2 items-center">
-          <div className="bg-gray-200 rounded-full p-2">
-            <img
-              src={playoffTeams[index - 1]?.logos[0]}
-              alt={`${playoffTeams[index - 1]?.school} Logo`}
-              className="w-8 h-auto object-contain"
-            />
-          </div>
+    const isChampion = index === game11Winner.index && lastGame;
 
-          <p className="text-white font-semibold">
-            {playoffTeams[index - 1]?.school}
-          </p>
+    return (
+      <div>
+        <div
+          className={`flex items-center justify-between max-h-16 gap-2 bg-white border-2 border-gray-400 rounded p-4 w-full shadow-md ${
+            isChampion && `rounded-b-none`
+          }`}
+          style={{
+            backgroundColor: `${
+              playoffTeams[index - 1]?.color !== "#ffffff"
+                ? playoffTeams[index - 1]?.color
+                : playoffTeams[index - 1]?.alt_color
+            }`,
+          }}
+        >
+          <div className="flex gap-2 items-center">
+            <div className="bg-gray-200 rounded-full p-2">
+              <img
+                src={playoffTeams[index - 1]?.logos[0]}
+                alt={`${playoffTeams[index - 1]?.school} Logo`}
+                className="w-8 h-auto object-contain"
+              />
+            </div>
+
+            <p className="text-white font-semibold">
+              {playoffTeams[index - 1]?.school}
+            </p>
+          </div>
+          <p className="text-white font-semibold">{seed}</p>
         </div>
-        <p className="text-white font-semibold">{seed}</p>
+        {isChampion && (
+          <div className="font-bold bg-yellow-600	p-2 border-2 border-t-0 border-gray-400">
+            NATIONAL CHAMPION
+          </div>
+        )}
       </div>
     );
   };
@@ -529,6 +540,7 @@ export default function Bracket() {
                 <TeamByIndex
                   index={game9Winner.index}
                   seed={game9Winner.seed}
+                  lastGame={true}
                 />
               </button>
             ) : (
@@ -546,6 +558,7 @@ export default function Bracket() {
                 <TeamByIndex
                   index={game10Winner.index}
                   seed={game10Winner.seed}
+                  lastGame={true}
                 />
               </button>
             ) : (
