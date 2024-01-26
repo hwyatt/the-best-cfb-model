@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { FaBars } from "react-icons/fa";
+import { MdOutlineArrowForwardIos } from "react-icons/md";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,9 +11,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white py-4 px-8">
+    <nav className={`bg-white py-4 px-8 ${isOpen && `h-screen`}`}>
       <div
-        className="container mx-auto flex justify-between items-center w-full"
+        className={`container mx-auto flex justify-between items-center w-full ${
+          isOpen && `mb-16 md:mb-0`
+        }`}
         style={{ maxWidth: "1312px" }}
       >
         <div className="text-gray-800 font-bold text-xl">
@@ -23,7 +26,7 @@ const Navbar = () => {
             <FaBars className="font-semibold text-gray-800 text-2xl" />
           </button>
         </div>
-        <div className={`md:flex md:gap-8 ${isOpen ? "block" : "hidden"}`}>
+        <div className={`md:flex md:gap-8 hidden`}>
           <a href="/teams" className="font-semibold text-gray-800">
             Teams
           </a>
@@ -38,6 +41,38 @@ const Navbar = () => {
           </a>
         </div>
       </div>
+      {isOpen && (
+        <div className={`flex flex-col w-full md:hidden`}>
+          <a
+            href="/teams"
+            className="flex items-center justify-between text-2xl font-semibold text-gray-800 border-y-2 py-4"
+          >
+            <div>Teams</div>
+            <MdOutlineArrowForwardIos />
+          </a>
+          <a
+            href="/compare"
+            className="flex items-center justify-between text-2xl font-semibold text-gray-800 border-b-2 py-4"
+          >
+            <div>Model</div>
+            <MdOutlineArrowForwardIos />
+          </a>
+          <a
+            href="/bracket"
+            className="flex items-center justify-between text-2xl font-semibold text-gray-800 border-b-2 py-4"
+          >
+            <div>Bracket</div>
+            <MdOutlineArrowForwardIos />
+          </a>
+          <a
+            href="/portal"
+            className="flex items-center justify-between text-2xl font-semibold text-gray-800 border-b-2 py-4"
+          >
+            <div>Portal</div>
+            <MdOutlineArrowForwardIos />
+          </a>
+        </div>
+      )}
     </nav>
   );
 };
