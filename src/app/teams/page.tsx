@@ -8,6 +8,8 @@ import TeamHero from "../components/TeamHero";
 import TeamImg from "../components/TeamImg";
 import SeasonSelect from "../components/SeasonSelect";
 import { useSearchParams } from "next/navigation";
+import { stat } from "fs";
+import DataTable from "react-data-table-component";
 
 interface YearOption {
   label: string;
@@ -20,10 +22,10 @@ export default function Team() {
 
   const [data, setData] = useState([]);
   const [games, setGames] = useState<any[]>();
-  const [stats, setStats] = useState();
+  const [stats, setStats] = useState([]);
   const [gamesLoading, setGamesLoading] = useState(false);
   const [statsLoading, setStatsLoading] = useState(false);
-  const [year, setYear] = useState("");
+  const [year, setYear] = useState<null | string>(null);
   const [yearOpts, setYearOpts] = useState<YearOption[]>([]);
 
   useEffect(() => {
@@ -50,6 +52,7 @@ export default function Team() {
     }));
 
     setYearOpts(formattedYears);
+    handleGetStats(currentYear);
   }, []);
 
   const handleGetTeams = async () => {
@@ -147,14 +150,25 @@ export default function Team() {
 
     setGames(games);
     setGamesLoading(false);
+    handleGetStats(year);
+  };
 
+  const handleGetStats = async (currentYear: any) => {
     setStatsLoading(true);
-    const getStats = await fetch(
-      `/api/stats?year=${year}&${
-        foundTeam.school && `team=${foundTeam.school}`
-      }`
-    );
 
+    let url = `/api/stats`;
+
+    if (year !== null) {
+      url += `?year=${year}`;
+    } else {
+      url += `?year=${currentYear}`;
+    }
+
+    if (selectedTeam.school) {
+      url += `${year !== null ? "&" : "?"}team=${selectedTeam.school}`;
+    }
+
+    const getStats = await fetch(url);
     const stats = await getStats.json();
 
     setStats(stats);
@@ -174,17 +188,7 @@ export default function Team() {
     setGames(games);
     setGamesLoading(false);
 
-    setStatsLoading(true);
-    const getStats = await fetch(
-      `/api/stats?year=${year.value}&${
-        selectedTeam.school && `team=${selectedTeam.school}`
-      }`
-    );
-
-    const stats = await getStats.json();
-
-    setStats(stats);
-    setStatsLoading(false);
+    handleGetStats(year);
   };
 
   const getOpponentImage = (name: string) => {
@@ -197,6 +201,34 @@ export default function Team() {
     return oppponent?.color;
   };
 
+  const sortByPPO = (data: any) => {
+    return data.sort((a: any, b: any) => {
+      return b.offense.pointsPerOpportunity - a.offense.pointsPerOpportunity;
+    });
+  };
+
+  // const sortedStatsOffensePPO = sortByKey(
+  //   stats,
+  //   "offense.pointsPerOpportunity"
+  // );
+
+  const columnsOffensePPO = [
+    {
+      name: "Team",
+      selector: (row: any) => row.team,
+    },
+    {
+      name: "Points Per Opportunity",
+      selector: (row: any) => row.offense.pointsPerOpportunity.toFixed(3),
+    },
+  ];
+
+  const [activeTab, setActiveTab] = useState("offensePPO");
+
+  const handleTabChange = (tab: any) => {
+    setActiveTab(tab);
+  };
+
   return (
     <div className="flex flex-col gap-8 w-full">
       <div className="flex flex-col gap-4">
@@ -206,9 +238,7 @@ export default function Team() {
         </p>
       </div>
       <div className="flex flex-col gap-2 md:max-w-md">
-        <label className="font-semibold text-gray-600">
-          Select or Search a Team
-        </label>
+        <label className="font-semibold text-gray-600">Select a Team</label>
         <TeamSelect
           teams={teams}
           selectedTeam={selectedTeam}
@@ -325,34 +355,53 @@ export default function Team() {
                 </>
               )}
             </div>
-            {/* {stats && !statsLoading && (
-              <div className="flex flex-col gap-4">
-                <div className="flex gap-2">
-                  <p className="text-lg font-semibold text-gray-600">Stats</p>
-                </div>
-                <div className="grid gap-4 grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
-                  {stats.map((stat: any) => {
-                    console.log(stat);
-                    return (
-                      <div
-                        className="flex flex-col items-center p-4 bg-white rounded-md shadow-md"
-                        key={stat.statName}
-                      >
-                        <p className="text-4xl font-bold mb-4">
-                          {stat.statValue}
-                        </p>
-                        <p className="capitalize font-semibold text-gray-600">
-                          {stat.statName.split(/(?=[A-Z])/)}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )} */}
           </div>
         </div>
       )}
+      {/* <div>
+        {stats && (
+          <DataTable
+            data={sortByPPO(stats)}
+            columns={columnsOffensePPO}
+            pagination
+          />
+        )}
+      </div> */}
+      <div className="flex flex-col gap-2">
+        <label className="font-semibold text-gray-600">Select a Stat</label>
+        <div className="flex gap-2">
+          <button
+            className={`${
+              activeTab === "offensePPO"
+                ? "bg-gray-600 hover:bg-gray-700 text-white"
+                : "bg-transparent hover:bg-gray-300 text-gray-600"
+            } w-full md:w-auto font-semibold py-2 px-4 rounded self-end transition-all duration-100`}
+            onClick={() => handleTabChange("offensePPO")}
+          >
+            Offense PPO
+          </button>
+          <button
+            className={`${
+              activeTab === "Rushing"
+                ? "bg-gray-600 hover:bg-gray-700 text-white"
+                : "bg-transparent hover:bg-gray-300 text-gray-600"
+            } w-full md:w-auto font-semibold py-2 px-4 rounded self-end transition-all duration-100`}
+            onClick={() => handleTabChange("Rushing")}
+          >
+            Rushing
+          </button>
+        </div>
+        <div>
+          {stats && activeTab === "offensePPO" && (
+            <DataTable
+              data={sortByPPO(stats)}
+              columns={columnsOffensePPO}
+              pagination
+            />
+          )}
+          {stats && activeTab === "Rushing" && <div>Rushin'</div>}
+        </div>
+      </div>
     </div>
   );
 }
