@@ -358,15 +358,6 @@ export default function Team() {
           </div>
         </div>
       )}
-      {/* <div>
-        {stats && (
-          <DataTable
-            data={sortByPPO(stats)}
-            columns={columnsOffensePPO}
-            pagination
-          />
-        )}
-      </div> */}
       <div className="flex flex-col gap-2">
         <label className="font-semibold text-gray-600">Select a Stat</label>
         <div className="flex gap-2">
