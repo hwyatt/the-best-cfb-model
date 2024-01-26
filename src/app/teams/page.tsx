@@ -390,7 +390,7 @@ export default function Team() {
               pagination
             />
           )}
-          {stats && activeTab === "Rushing" && <div>Rushin'</div>}
+          {stats && activeTab === "Rushing" && <div>Rushing</div>}
         </div>
       </div>
     </div>
