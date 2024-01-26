@@ -150,7 +150,6 @@ export default function Portal() {
     {
       name: "Transfer Date",
       selector: (row: any) => getDate(row.transferDate),
-      sortable: true,
       maxWidth: "15%",
     },
     {
