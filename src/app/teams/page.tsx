@@ -551,7 +551,7 @@ export default function Team() {
       ) : (
         <div className="flex flex-col gap-2">
           <label className="font-semibold text-gray-600">Select a Stat</label>
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             <button
               className={`${
                 activeTab === "offensePPO"
