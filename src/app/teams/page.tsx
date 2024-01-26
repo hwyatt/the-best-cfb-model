@@ -207,19 +207,175 @@ export default function Team() {
     });
   };
 
-  // const sortedStatsOffensePPO = sortByKey(
-  //   stats,
-  //   "offense.pointsPerOpportunity"
-  // );
-
   const columnsOffensePPO = [
     {
       name: "Team",
       selector: (row: any) => row.team,
     },
     {
-      name: "Points Per Opportunity",
+      name: "PPO",
       selector: (row: any) => row.offense.pointsPerOpportunity.toFixed(3),
+    },
+    {
+      name: "PPA",
+      selector: (row: any) => row.offense.ppa.toFixed(3),
+    },
+    {
+      name: "Success Rate",
+      selector: (row: any) => row.offense.successRate.toFixed(3),
+    },
+    {
+      name: "Explosiveness",
+      selector: (row: any) => row.offense.explosiveness.toFixed(3),
+    },
+    {
+      name: "Plays",
+      selector: (row: any) => row.offense.plays,
+    },
+    {
+      name: "Drives",
+      selector: (row: any) => row.offense.drives,
+    },
+  ];
+
+  const sortByRushing = (data: any) => {
+    return data.sort((a: any, b: any) => {
+      return b.offense.rushingPlays.ppa - a.offense.rushingPlays.ppa;
+    });
+  };
+
+  const columnsRushing = [
+    {
+      name: "Team",
+      selector: (row: any) => row.team,
+    },
+    {
+      name: "PPA",
+      selector: (row: any) => row.offense.rushingPlays.ppa.toFixed(3),
+    },
+    {
+      name: "Success Rate",
+      selector: (row: any) => row.offense.rushingPlays.successRate.toFixed(3),
+    },
+    {
+      name: "Explosiveness",
+      selector: (row: any) => row.offense.rushingPlays.explosiveness.toFixed(3),
+    },
+    // {
+    //   name: "Power Success",
+    //   selector: (row: any) => row.offense.powerSuccess,
+    // },
+    // {
+    //   name: "Stuff Rate",
+    //   selector: (row: any) => row.offense.stuffRate,
+    // },
+    // {
+    //   name: "Line Yards per Rush",
+    //   selector: (row: any) => row.offense.lineYards.toFixed(3),
+    // },
+    // {
+    //   name: "Second Level Yards per Rush",
+    //   selector: (row: any) => row.offense.secondLevelYards.toFixed(3),
+    // },
+    // {
+    //   name: "Open Field Yards per Rush",
+    //   selector: (row: any) => row.offense.openFieldYards.toFixed(3),
+    // },
+  ];
+
+  const sortByPassing = (data: any) => {
+    return data.sort((a: any, b: any) => {
+      return b.offense.passingPlays.ppa - a.offense.passingPlays.ppa;
+    });
+  };
+
+  const columnsPassing = [
+    {
+      name: "Team",
+      selector: (row: any) => row.team,
+    },
+    {
+      name: "PPA",
+      selector: (row: any) => row.offense.passingPlays.ppa.toFixed(3),
+    },
+    {
+      name: "Success Rate",
+      selector: (row: any) => row.offense.passingPlays.successRate.toFixed(3),
+    },
+    {
+      name: "Explosiveness",
+      selector: (row: any) => row.offense.passingPlays.explosiveness.toFixed(3),
+    },
+  ];
+
+  const sortByDefense = (data: any) => {
+    return data.sort((a: any, b: any) => {
+      return b.defense.havoc.total - a.defense.havoc.total;
+    });
+  };
+
+  const columnsDefense = [
+    {
+      name: "Team",
+      selector: (row: any) => row.team,
+    },
+    {
+      name: "PPO",
+      selector: (row: any) => row.defense.pointsPerOpportunity.toFixed(3),
+    },
+    {
+      name: "PPA",
+      selector: (row: any) => row.defense.ppa.toFixed(3),
+    },
+    {
+      name: "Success Rate",
+      selector: (row: any) => row.defense.successRate.toFixed(3),
+    },
+    {
+      name: "Explosiveness",
+      selector: (row: any) => row.defense.explosiveness.toFixed(3),
+    },
+    {
+      name: "Plays",
+      selector: (row: any) => row.defense.plays,
+    },
+    {
+      name: "Drives",
+      selector: (row: any) => row.defense.drives,
+    },
+  ];
+
+  const sortByFieldPos = (data: any) => {
+    return data.sort((a: any, b: any) => {
+      return (
+        a.offense.fieldPosition.averageStart -
+        b.offense.fieldPosition.averageStart
+      );
+    });
+  };
+
+  const columnsFieldPos = [
+    {
+      name: "Team",
+      selector: (row: any) => row.team,
+    },
+    {
+      name: "Offense Avg Start",
+      selector: (row: any) => row.offense.fieldPosition.averageStart.toFixed(1),
+    },
+    {
+      name: "Offense Avg Predicted Points",
+      selector: (row: any) =>
+        row.offense.fieldPosition.averagePredictedPoints.toFixed(3),
+    },
+    {
+      name: "Defense Avg Start",
+      selector: (row: any) => row.defense.fieldPosition.averageStart.toFixed(3),
+    },
+    {
+      name: "Defense Avg Predicted Points",
+      selector: (row: any) =>
+        row.defense.fieldPosition.averagePredictedPoints.toFixed(3),
     },
   ];
 
@@ -358,41 +514,102 @@ export default function Team() {
           </div>
         </div>
       )}
-      <div className="flex flex-col gap-2">
-        <label className="font-semibold text-gray-600">Select a Stat</label>
-        <div className="flex gap-2">
-          <button
-            className={`${
-              activeTab === "offensePPO"
-                ? "bg-gray-600 hover:bg-gray-700 text-white"
-                : "bg-transparent hover:bg-gray-300 text-gray-600"
-            } w-full md:w-auto font-semibold py-2 px-4 rounded self-end transition-all duration-100`}
-            onClick={() => handleTabChange("offensePPO")}
-          >
-            Offense PPO
-          </button>
-          <button
-            className={`${
-              activeTab === "Rushing"
-                ? "bg-gray-600 hover:bg-gray-700 text-white"
-                : "bg-transparent hover:bg-gray-300 text-gray-600"
-            } w-full md:w-auto font-semibold py-2 px-4 rounded self-end transition-all duration-100`}
-            onClick={() => handleTabChange("Rushing")}
-          >
-            Rushing
-          </button>
+      {stats.length === 0 || statsLoading ? (
+        <div>Loading Stats...</div>
+      ) : (
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold text-gray-600">Select a Stat</label>
+          <div className="flex gap-2">
+            <button
+              className={`${
+                activeTab === "offensePPO"
+                  ? "bg-gray-600 hover:bg-gray-700 text-white"
+                  : "bg-transparent hover:bg-gray-300 text-gray-600"
+              } w-full md:w-auto font-semibold py-2 px-4 rounded self-end transition-all duration-100`}
+              onClick={() => handleTabChange("offensePPO")}
+            >
+              Offense
+            </button>
+            <button
+              className={`${
+                activeTab === "Passing"
+                  ? "bg-gray-600 hover:bg-gray-700 text-white"
+                  : "bg-transparent hover:bg-gray-300 text-gray-600"
+              } w-full md:w-auto font-semibold py-2 px-4 rounded self-end transition-all duration-100`}
+              onClick={() => handleTabChange("Passing")}
+            >
+              Passing
+            </button>
+            <button
+              className={`${
+                activeTab === "Rushing"
+                  ? "bg-gray-600 hover:bg-gray-700 text-white"
+                  : "bg-transparent hover:bg-gray-300 text-gray-600"
+              } w-full md:w-auto font-semibold py-2 px-4 rounded self-end transition-all duration-100`}
+              onClick={() => handleTabChange("Rushing")}
+            >
+              Rushing
+            </button>
+            <button
+              className={`${
+                activeTab === "Defense"
+                  ? "bg-gray-600 hover:bg-gray-700 text-white"
+                  : "bg-transparent hover:bg-gray-300 text-gray-600"
+              } w-full md:w-auto font-semibold py-2 px-4 rounded self-end transition-all duration-100`}
+              onClick={() => handleTabChange("Defense")}
+            >
+              Defense
+            </button>
+            <button
+              className={`${
+                activeTab === "FieldPos"
+                  ? "bg-gray-600 hover:bg-gray-700 text-white"
+                  : "bg-transparent hover:bg-gray-300 text-gray-600"
+              } w-full md:w-auto font-semibold py-2 px-4 rounded self-end transition-all duration-100`}
+              onClick={() => handleTabChange("FieldPos")}
+            >
+              Field Position
+            </button>
+          </div>
+          <div>
+            {stats && activeTab === "offensePPO" && (
+              <DataTable
+                data={sortByPPO(stats)}
+                columns={columnsOffensePPO}
+                pagination
+              />
+            )}
+            {stats && activeTab === "Passing" && (
+              <DataTable
+                data={sortByPassing(stats)}
+                columns={columnsPassing}
+                pagination
+              />
+            )}
+            {stats && activeTab === "Rushing" && (
+              <DataTable
+                data={sortByRushing(stats)}
+                columns={columnsRushing}
+                pagination
+              />
+            )}
+            {stats && activeTab === "Defense" && (
+              <DataTable
+                data={sortByDefense(stats)}
+                columns={columnsDefense}
+                pagination
+              />
+            )}
+            {stats && activeTab === "FieldPos" && (
+              <DataTable
+                data={sortByFieldPos(stats)}
+                columns={columnsFieldPos}
+                pagination
+              />
+            )}
+          </div>
         </div>
-        <div>
-          {stats && activeTab === "offensePPO" && (
-            <DataTable
-              data={sortByPPO(stats)}
-              columns={columnsOffensePPO}
-              pagination
-            />
-          )}
-          {stats && activeTab === "Rushing" && <div>Rushing</div>}
-        </div>
-      </div>
+      )}
     </div>
   );
 }
