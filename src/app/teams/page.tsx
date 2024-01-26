@@ -15,7 +15,6 @@ interface YearOption {
   label: string;
   value: string;
 }
-
 export default function Team() {
   const searchParams = useSearchParams();
   const teamParam = searchParams.get("team");
@@ -239,7 +238,7 @@ export default function Team() {
     {
       name: "Team",
       minWidth: "20%",
-      selector: (row: any) => teamCol(row),
+      cell: (row: any) => teamCol(row),
     },
     {
       name: "PPO",
@@ -276,7 +275,8 @@ export default function Team() {
   const columnsRushing = [
     {
       name: "Team",
-      selector: (row: any) => teamCol(row),
+      cell: (row: any) => teamCol(row),
+      minWidth: "20%",
     },
     {
       name: "PPA",
@@ -321,7 +321,8 @@ export default function Team() {
   const columnsPassing = [
     {
       name: "Team",
-      selector: (row: any) => teamCol(row),
+      cell: (row: any) => teamCol(row),
+      minWidth: "20%",
     },
     {
       name: "PPA",
@@ -346,7 +347,8 @@ export default function Team() {
   const columnsDefense = [
     {
       name: "Team",
-      selector: (row: any) => teamCol(row),
+      cell: (row: any) => teamCol(row),
+      minWidth: "20%",
     },
     {
       name: "PPO",
@@ -386,7 +388,8 @@ export default function Team() {
   const columnsFieldPos = [
     {
       name: "Team",
-      selector: (row: any) => teamCol(row),
+      cell: (row: any) => teamCol(row),
+      minWidth: "20%",
     },
     {
       name: "Offense Avg Start",
