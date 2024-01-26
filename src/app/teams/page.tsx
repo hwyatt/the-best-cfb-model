@@ -201,6 +201,30 @@ export default function Team() {
     return oppponent?.color;
   };
 
+  const teamCol = (row: any) => {
+    const matchingTeam = teams.find((team) => team?.school === row.team);
+    const teamLogo = matchingTeam?.logos?.[0];
+
+    return (
+      <div className="flex items-center gap-2">
+        <div>
+          {teamLogo ? (
+            <img
+              src={teamLogo}
+              alt="Team Logo"
+              style={{ width: "40px", height: "40px", minWidth: "40px" }}
+            />
+          ) : (
+            <GiAmericanFootballHelmet />
+          )}
+        </div>
+        <span className="font-semibold uppercase text-gray-800">
+          {row.team}
+        </span>
+      </div>
+    );
+  };
+
   const sortByPPO = (data: any) => {
     return data.sort((a: any, b: any) => {
       return b.offense.pointsPerOpportunity - a.offense.pointsPerOpportunity;
@@ -208,9 +232,14 @@ export default function Team() {
   };
 
   const columnsOffensePPO = [
+    // {
+    //   name: "",
+    //   selector: (row: any, index: any) => index + 1,
+    // },
     {
       name: "Team",
-      selector: (row: any) => row.team,
+      minWidth: "20%",
+      selector: (row: any) => teamCol(row),
     },
     {
       name: "PPO",
@@ -247,7 +276,7 @@ export default function Team() {
   const columnsRushing = [
     {
       name: "Team",
-      selector: (row: any) => row.team,
+      selector: (row: any) => teamCol(row),
     },
     {
       name: "PPA",
@@ -292,7 +321,7 @@ export default function Team() {
   const columnsPassing = [
     {
       name: "Team",
-      selector: (row: any) => row.team,
+      selector: (row: any) => teamCol(row),
     },
     {
       name: "PPA",
@@ -317,7 +346,7 @@ export default function Team() {
   const columnsDefense = [
     {
       name: "Team",
-      selector: (row: any) => row.team,
+      selector: (row: any) => teamCol(row),
     },
     {
       name: "PPO",
@@ -357,7 +386,7 @@ export default function Team() {
   const columnsFieldPos = [
     {
       name: "Team",
-      selector: (row: any) => row.team,
+      selector: (row: any) => teamCol(row),
     },
     {
       name: "Offense Avg Start",
