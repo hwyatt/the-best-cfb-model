@@ -111,7 +111,7 @@ const TeamForCompare = ({ teams, onSelectTeam }: any) => {
         )}
       </div>
       {selectedTeam && selectedTeam.id !== null && (
-        <div className="hidden md:block">
+        <div className="">
           <TeamHero selectedTeam={selectedTeam} />
           <div>
             <h2 className="text-2xl font-bold text-gray-800">
