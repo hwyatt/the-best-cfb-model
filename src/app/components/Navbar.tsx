@@ -11,7 +11,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`bg-white py-4 px-8 ${isOpen && `fixed inset-0`}`}>
+    <nav
+      className={`bg-white py-4 px-8 ${isOpen && `fixed inset-0`}`}
+      style={{ zIndex: 1000 }}
+    >
       <div
         className={`container mx-auto flex justify-between items-center w-full ${
           isOpen && `mb-16 md:mb-0`
