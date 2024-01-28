@@ -706,7 +706,7 @@ export default function Bracket() {
       </div>
       {game11Winner.index !== null && (
         <span className="text-center self-center text-xs text-gray-600">
-          If sharing your bracket to X, you'll still need to download the
+          If sharing your bracket to X, you will still need to download the
           bracket and upload it to the tweet/post.
         </span>
       )}
