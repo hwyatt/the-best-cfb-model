@@ -27,6 +27,7 @@ function TeamSelectMulti({
   selectedTeam,
   handleSelect,
   playoffTeams,
+  isDisabled,
 }: any) {
   const options = teams?.map((team: any) => ({
     value: team.school,
@@ -49,6 +50,7 @@ function TeamSelectMulti({
         Option: Option,
         MultiValue: MultiValue,
       }}
+      isDisabled={isDisabled}
     />
   );
 }
@@ -150,6 +152,10 @@ export default function Bracket() {
     },
   ]);
 
+  const [isSelectDisabled, setIsSelectDisabled] = useState(false);
+  const [isUseTop12Disabled, setIsUseTop12Disabled] = useState(false);
+  const [isDownloadDisabled, setIsDownloadDisabled] = useState(true);
+
   useEffect(() => {
     handleGetTeams();
 
@@ -210,6 +216,9 @@ export default function Bracket() {
     const playoffTeams = filteredRankedTeams.slice(0, 12);
 
     setPlayoffTeams(playoffTeams);
+
+    setIsSelectDisabled(true);
+    setIsUseTop12Disabled(true);
   };
 
   const teams = data;
@@ -388,11 +397,15 @@ export default function Bracket() {
             selectedTeam={selectedTeam}
             handleSelect={handleSelect}
             playoffTeams={playoffTeams} // Pass playoffTeams prop
+            isDisabled={isSelectDisabled}
           />
         </div>
         <button
           onClick={setCurrentTop12}
-          className="w-full md:max-w-48 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded self-end transition-all duration-100"
+          disabled={isUseTop12Disabled}
+          className={`w-full md:max-w-48 ${
+            isUseTop12Disabled ? "bg-gray-400" : "bg-gray-600 hover:bg-gray-700"
+          } text-white font-semibold py-2 px-4 rounded self-end transition-all duration-100`}
         >
           Use Current Top 12
         </button>
@@ -632,12 +645,13 @@ export default function Bracket() {
               {/* GAME 11 */}
               {game9Winner.index !== null ? (
                 <button
-                  onClick={() =>
+                  onClick={() => {
                     setGame11Winner({
                       index: game9Winner.index,
                       seed: game9Winner.seed,
-                    })
-                  }
+                    });
+                    setIsDownloadDisabled(false);
+                  }}
                 >
                   <TeamByIndex
                     index={game9Winner.index}
@@ -650,12 +664,13 @@ export default function Bracket() {
               )}
               {game10Winner.index !== null ? (
                 <button
-                  onClick={() =>
+                  onClick={() => {
                     setGame11Winner({
                       index: game10Winner.index,
                       seed: game10Winner.seed,
-                    })
-                  }
+                    });
+                    setIsDownloadDisabled(false);
+                  }}
                 >
                   <TeamByIndex
                     index={game10Winner.index}
@@ -673,21 +688,28 @@ export default function Bracket() {
       <div className="flex flex-col md:flex-row gap-4 self-center w-full justify-center">
         <button
           onClick={onButtonClick}
-          className="w-full md:w-auto bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded self-center transition-all duration-100"
+          disabled={isDownloadDisabled}
+          className={`w-full md:w-auto ${
+            isDownloadDisabled ? "bg-gray-400" : "bg-gray-600 hover:bg-gray-700"
+          } text-white font-semibold py-2 px-4 rounded self-center transition-all duration-100`}
         >
           Download Bracket
         </button>
-        <a
-          className="text-center bg-transparent hover:bg-gray-300 text-gray-600 w-full md:w-auto font-semibold py-2 px-4 rounded self-center transition-all duration-100"
-          href="https://twitter.com/intent/tweet?text=Check%20out%20this%20CFP%20bracket%20I%20made%20on%20saturdaystats.com!"
-        >
-          Share to X
-        </a>
+        {game11Winner.index !== null && (
+          <a
+            className="text-center bg-transparent hover:bg-gray-300 text-gray-600 w-full md:w-auto font-semibold py-2 px-4 rounded self-center transition-all duration-100"
+            href="https://twitter.com/intent/tweet?text=Check%20out%20this%20CFP%20bracket%20I%20made%20on%20saturdaystats.com!"
+          >
+            Share to X
+          </a>
+        )}
       </div>
-      <span className="text-center self-center text-xs text-gray-600">
-        *If sharing your bracket to X, you'll still need to download the bracket
-        and upload it to the tweet/post.
-      </span>
+      {game11Winner.index !== null && (
+        <span className="text-center self-center text-xs text-gray-600">
+          *If sharing your bracket to X, you'll still need to download the
+          bracket and upload it to the tweet/post.
+        </span>
+      )}
     </div>
   );
 }
