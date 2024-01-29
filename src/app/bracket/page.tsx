@@ -79,64 +79,27 @@ export default function Bracket() {
   const [year, setYear] = useState<null | string>(null);
   const ref = useRef<HTMLDivElement>(null);
 
-  const onButtonClick = async () => {
+  const onButtonClick = useCallback(() => {
     if (ref.current === null) {
       return;
     }
 
-    try {
-      const dataUrl = await toPng(ref.current, {
-        cacheBust: true,
-        backgroundColor: "#e5e7eb",
-        width: 1312 + 32,
-        height: 776 + 32,
-      });
-
-      const link = document.createElement("a");
-      link.download = "CFP-Bracket.png";
-      link.href = dataUrl;
-      link.click();
-    } catch (err) {
-      console.error(err);
-      try {
-        const dataUrl = await toPng(ref.current, {
-          cacheBust: true,
-          backgroundColor: "#e5e7eb",
-          width: 1312 + 32,
-          height: 776 + 32,
-        });
-
+    toPng(ref.current, {
+      cacheBust: true,
+      backgroundColor: "#e5e7eb",
+      width: 1312 + 32,
+      height: 776 + 32,
+    })
+      .then((dataUrl) => {
         const link = document.createElement("a");
         link.download = "CFP-Bracket.png";
         link.href = dataUrl;
         link.click();
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  };
-
-  // const onButtonClick = useCallback(() => {
-  //   if (ref.current === null) {
-  //     return;
-  //   }
-
-  //   toPng(ref.current, {
-  //     cacheBust: true,
-  //     backgroundColor: "#e5e7eb",
-  //     width: 1312 + 32,
-  //     height: 776 + 32,
-  //   })
-  //     .then((dataUrl) => {
-  //       const link = document.createElement("a");
-  //       link.download = "CFP-Bracket.png";
-  //       link.href = dataUrl;
-  //       link.click();
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, [ref]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [ref]);
 
   // const onButtonClick = () => {
   //   const bracketElement = document.querySelector("#bracket");
