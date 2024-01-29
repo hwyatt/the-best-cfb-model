@@ -96,7 +96,10 @@ export default function Bracket() {
       height: 776 + 32,
     })
       .then((dataUrl) => {
-        saveAs(dataUrl, "CFP-Bracket.jpg");
+        const link = document.createElement("a");
+        link.download = "CFP-Bracket.jpg";
+        link.href = dataUrl;
+        link.click();
       })
       .catch((err) => {
         console.log(err);
