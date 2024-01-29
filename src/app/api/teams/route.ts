@@ -60,7 +60,7 @@ export async function GET(request: any) {
             ...team,
             base64Logo,
           };
-        } catch (error: any) {
+        } catch (error) {
           console.error(
             `Error fetching or converting logo for team ${team.id}:`,
             error
@@ -71,7 +71,7 @@ export async function GET(request: any) {
     );
 
     return NextResponse.json(teamsWithBase64Logos, { status: 200 });
-  } catch (err: any) {
+  } catch (err) {
     console.log(err);
   }
 }
@@ -89,6 +89,9 @@ const convertImageToBase64 = async (imageUrl: string) => {
 
     return { base64Logo };
   } catch (error: any) {
-    throw new Error(`Error converting image to base64: ${error.message}`);
+    // Explicitly type the error as `Error`
+    throw new Error(
+      `Error converting image to base64: ${(error as Error).message}`
+    );
   }
 };
