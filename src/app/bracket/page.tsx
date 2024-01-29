@@ -300,8 +300,15 @@ export default function Bracket() {
     );
 
     const playoffTeams = filteredRankedTeams.slice(0, 12);
-
-    setPlayoffTeams(playoffTeams);
+    const base64Res = await fetch(`/api/playoffTeams`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ playoffTeams }),
+    });
+    const base64Teams = await base64Res.json();
+    setPlayoffTeams(base64Teams);
 
     setIsSelectDisabled(true);
     setIsUseTop12Disabled(true);
@@ -406,7 +413,10 @@ export default function Bracket() {
             <div className="bg-gray-200 rounded-full p-2">
               <img
                 // src={playoffTeams[index - 1]?.logos[0]}
-                src={playoffTeams[index - 1]?.base64Logo}
+                src={
+                  playoffTeams[index - 1]?.base64Logo ||
+                  playoffTeams[index - 1]?.logos[0]
+                }
                 alt={`${playoffTeams[index - 1]?.school} Logo`}
                 className="w-8 h-auto object-contain"
                 crossOrigin="anonymous"
