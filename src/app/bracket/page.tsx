@@ -77,10 +77,14 @@ function TeamSelectMulti({
 }
 
 export default function Bracket() {
+  const [png, setPng] = useState<{ url: string | null; name: string | null }>({
+    url: null,
+    name: null,
+  });
   const [year, setYear] = useState<null | string>(null);
   const ref = useRef<HTMLDivElement>(null);
 
-  const onButtonClick = useCallback(() => {
+  const handlePng = useCallback(() => {
     if (ref.current === null) {
       return;
     }
@@ -92,12 +96,20 @@ export default function Bracket() {
       height: 776 + 32,
     })
       .then((dataUrl) => {
-        saveAs(dataUrl, "CFP-Bracket.jpg");
+        setPng({ url: dataUrl, name: "CFP-Bracket.jpg" });
       })
       .catch((err) => {
         console.log(err);
       });
   }, [ref]);
+
+  const onButtonClick = () => {
+    if (png.url !== null && png.name !== null) {
+      saveAs(png.url, png.name);
+    } else {
+      console.log("err downloading image");
+    }
+  };
 
   // const onButtonClick = () => {
   //   const bracketElement = document.querySelector("#bracket");
@@ -913,6 +925,7 @@ export default function Bracket() {
                         index: game9Winner.index,
                         seed: game9Winner.seed,
                       });
+                      handlePng();
                       setIsDownloadDisabled(false);
                     }}
                   >
@@ -941,6 +954,7 @@ export default function Bracket() {
                         index: game10Winner.index,
                         seed: game10Winner.seed,
                       });
+                      handlePng();
                       setIsDownloadDisabled(false);
                     }}
                   >
