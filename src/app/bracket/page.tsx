@@ -4,6 +4,24 @@ import Select, { components } from "react-select";
 import { toPng } from "html-to-image";
 import { useCallback } from "react";
 
+const BracketLines1 = () => (
+  <div className="h-[4.5rem] w-16 md:border-y-2 md:border-r-2 md:border-l-0 md:border-gray-800 flex items-center relative">
+    <div
+      className="h-[2px] w-16 md:bg-gray-800 absolute"
+      style={{ right: "-4rem;" }}
+    ></div>
+  </div>
+);
+
+const BracketLines2 = () => (
+  <div className="h-48 w-16 md:border-y-2 md:border-r-2 md:border-l-0 md:border-gray-800 flex items-center relative">
+    <div
+      className="h-[2px] w-16 md:bg-gray-800 absolute"
+      style={{ right: "-4rem;" }}
+    ></div>
+  </div>
+);
+
 const Option = (props: any) => (
   <components.Option {...props}>
     <div className="flex gap-2">
@@ -420,7 +438,7 @@ export default function Bracket() {
           </span>
         </div>
         <div className="grid md:grid-cols-4 w-full gap-8">
-          <div className="flex flex-col gap-8 md:mt-12">
+          <div className="flex flex-col gap-8 md:mt-12 md:z-10">
             <span className="md:hidden font-semibold text-gray-600">
               ROUND ONE
             </span>
@@ -432,8 +450,11 @@ export default function Bracket() {
               <button onClick={() => setGame1Winner({ index: 9, seed: 9 })}>
                 <TeamByIndex index={9} seed={9} />
               </button>
+              <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
+                <BracketLines1 />
+              </div>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 relative">
               {/* GAME 2 */}
               <button onClick={() => setGame2Winner({ index: 5, seed: 5 })}>
                 <TeamByIndex index={5} seed={5} />
@@ -441,8 +462,11 @@ export default function Bracket() {
               <button onClick={() => setGame2Winner({ index: 12, seed: 12 })}>
                 <TeamByIndex index={12} seed={12} />{" "}
               </button>
+              <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
+                <BracketLines1 />
+              </div>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 relative">
               {/* GAME 3 */}
               <button onClick={() => setGame3Winner({ index: 6, seed: 6 })}>
                 <TeamByIndex index={6} seed={6} />
@@ -450,8 +474,11 @@ export default function Bracket() {
               <button onClick={() => setGame3Winner({ index: 11, seed: 11 })}>
                 <TeamByIndex index={11} seed={11} />
               </button>
+              <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
+                <BracketLines1 />
+              </div>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 relative">
               {/* GAME 4 */}
               <button onClick={() => setGame4Winner({ index: 7, seed: 7 })}>
                 <TeamByIndex index={7} seed={7} />
@@ -459,13 +486,16 @@ export default function Bracket() {
               <button onClick={() => setGame4Winner({ index: 10, seed: 10 })}>
                 <TeamByIndex index={10} seed={10} />
               </button>
+              <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
+                <BracketLines1 />
+              </div>
             </div>
           </div>
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-8 md:z-10">
             <span className="md:hidden font-semibold text-gray-600">
               QUARTERFINALS
             </span>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 relative">
               {/* GAME 5 */}
               <button onClick={() => setGame5Winner({ index: 1, seed: 1 })}>
                 <TeamByIndex index={1} seed={1} />
@@ -487,8 +517,11 @@ export default function Bracket() {
               ) : (
                 <BlankTeam />
               )}
+              <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
+                <BracketLines1 />
+              </div>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 relative">
               {/* GAME 6 */}
               <button onClick={() => setGame6Winner({ index: 4, seed: 4 })}>
                 <TeamByIndex index={4} seed={4} />
@@ -510,8 +543,11 @@ export default function Bracket() {
               ) : (
                 <BlankTeam />
               )}
+              <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
+                <BracketLines1 />
+              </div>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 relative">
               {/* GAME 7 */}
               <button onClick={() => setGame7Winner({ index: 3, seed: 3 })}>
                 <TeamByIndex index={3} seed={3} />
@@ -533,8 +569,11 @@ export default function Bracket() {
               ) : (
                 <BlankTeam />
               )}
+              <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
+                <BracketLines1 />
+              </div>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 relative">
               {/* GAME 8 */}
               <button onClick={() => setGame8Winner({ index: 2, seed: 2 })}>
                 <TeamByIndex index={2} seed={2} />
@@ -556,13 +595,16 @@ export default function Bracket() {
               ) : (
                 <BlankTeam />
               )}
+              <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
+                <BracketLines1 />
+              </div>
             </div>
           </div>
-          <div className="flex flex-col gap-8 md:gap-24 md:mt-8">
+          <div className="flex flex-col gap-8 md:gap-24 md:mt-8 md:z-10">
             <span className="md:hidden font-semibold text-gray-600">
               SEMIFINALS
             </span>
-            <div className="flex flex-col gap-4 md:gap-32">
+            <div className="flex flex-col gap-4 md:gap-32 relative">
               {/* GAME 9 */}
               {game5Winner.index !== null ? (
                 <button
@@ -598,8 +640,11 @@ export default function Bracket() {
               ) : (
                 <BlankTeam />
               )}
+              <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
+                <BracketLines2 />
+              </div>
             </div>
-            <div className="flex flex-col gap-4 md:gap-32">
+            <div className="flex flex-col gap-4 md:gap-32 relative">
               {/* GAME 10 */}
               {game7Winner.index !== null ? (
                 <button
@@ -635,9 +680,12 @@ export default function Bracket() {
               ) : (
                 <BlankTeam />
               )}
+              <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
+                <BracketLines2 />
+              </div>
             </div>
           </div>
-          <div className="flex flex-col gap-8 md:mt-32">
+          <div className="flex flex-col gap-8 md:mt-32 md:z-10">
             <span className="md:hidden font-semibold text-gray-600">
               NATIONAL CHAMPIONSHIP
             </span>
