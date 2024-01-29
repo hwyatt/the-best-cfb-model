@@ -451,6 +451,7 @@ export default function Bracket() {
         </div>
         <button
           onClick={setCurrentTop12}
+          onTouchStart={onButtonClick}
           disabled={isUseTop12Disabled}
           className={`w-full md:max-w-48 ${
             isUseTop12Disabled ? "bg-gray-400" : "bg-gray-600 hover:bg-gray-700"
