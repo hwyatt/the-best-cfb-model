@@ -335,6 +335,7 @@ export default function Bracket() {
       body: JSON.stringify({ playoffTeams }),
     });
     const base64Teams = await base64Res.json();
+    console.log(base64Teams);
     setPlayoffTeams(base64Teams);
 
     setIsSelectDisabled(true);
@@ -378,10 +379,19 @@ export default function Bracket() {
   });
 
   const handleSelect = async (selectedOption: any) => {
-    const filteredTeams = selectedOption.map((opt: any) => {
+    const playoffTeams = selectedOption.map((opt: any) => {
       return teams.find((team: any) => team?.school === opt.value);
     });
-    setPlayoffTeams(filteredTeams);
+
+    const base64Res = await fetch(`/api/playoffTeams`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ playoffTeams }),
+    });
+    const base64Teams = await base64Res.json();
+    setPlayoffTeams(base64Teams);
   };
 
   const BlankTeam = ({ index, seed }: any) => (
