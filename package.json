@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "file-saver": "^2.0.5",
     "html-to-image": "^1.11.11",
     "modern-screenshot": "^4.4.37",
     "next": "14.0.4",
@@ -20,6 +21,7 @@
     "tinycolor2": "^1.6.0"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

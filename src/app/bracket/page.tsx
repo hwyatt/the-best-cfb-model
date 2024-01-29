@@ -5,6 +5,7 @@ import { toPng } from "html-to-image";
 // import { domToPng } from "modern-screenshot";
 import { useCallback } from "react";
 var tinycolor = require("tinycolor2");
+import { saveAs } from "file-saver";
 
 const BracketLines1 = () => (
   <div className="h-[4.5rem] w-16 border-y-2 border-r-2 border-l-0 border-gray-400 flex items-center relative">
@@ -91,10 +92,7 @@ export default function Bracket() {
       height: 776 + 32,
     })
       .then((dataUrl) => {
-        const link = document.createElement("a");
-        link.download = "CFP-Bracket.png";
-        link.href = dataUrl;
-        link.click();
+        saveAs(dataUrl, "CFP-Bracket.jpg");
       })
       .catch((err) => {
         console.log(err);
