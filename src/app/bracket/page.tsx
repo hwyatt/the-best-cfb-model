@@ -406,6 +406,7 @@ export default function Bracket() {
                 src={playoffTeams[index - 1]?.logos[0]}
                 alt={`${playoffTeams[index - 1]?.school} Logo`}
                 className="w-8 h-auto object-contain"
+                crossOrigin="anonymous"
               />
             </div>
 
