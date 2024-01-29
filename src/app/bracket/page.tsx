@@ -129,22 +129,41 @@ export default function Bracket() {
   //   }
   // };
 
-  const onButtonClick = () => {
-    const bracketElement = document.querySelector("#bracket");
+  // const onButtonClick = () => {
+  //   const bracketElement = document.querySelector("#bracket");
 
-    if (bracketElement) {
-      domToPng(bracketElement, {
-        backgroundColor: "#e5e7eb",
-      }).then((dataUrl) => {
-        const link = document.createElement("a");
-        link.download = "CFP-Bracket.png";
-        link.href = dataUrl;
-        link.click();
-      });
-    } else {
-      console.error("Bracket element not found");
+  //   if (bracketElement) {
+  //     domToPng(bracketElement, {
+  //       backgroundColor: "#e5e7eb",
+  //       width: 1312 + 32,
+  //       height: 776 + 32,
+  //     }).then((dataUrl) => {
+  //       const link = document.createElement("a");
+  //       link.download = "CFP-Bracket.png";
+  //       link.href = dataUrl;
+  //       link.click();
+  //     });
+  //   } else {
+  //     console.error("Bracket element not found");
+  //   }
+  // };
+
+  const onButtonClick = useCallback(() => {
+    if (ref.current === null) {
+      return;
     }
-  };
+
+    domToPng(ref.current, {
+      backgroundColor: "#e5e7eb",
+      width: 1312,
+      height: 776,
+    }).then((dataUrl) => {
+      const link = document.createElement("a");
+      link.download = "CFP-Bracket.png";
+      link.href = dataUrl;
+      link.click();
+    });
+  }, [ref]);
 
   const [data, setData] = useState([
     {
