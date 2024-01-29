@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useId, useRef, useState } from "react";
 import Select, { components } from "react-select";
-import { toPng } from "html-to-image";
+// import { toPng } from "html-to-image";
+import { domToPng } from "modern-screenshot";
 import { useCallback } from "react";
 var tinycolor = require("tinycolor2");
 
@@ -78,27 +79,44 @@ export default function Bracket() {
   const [year, setYear] = useState<null | string>(null);
   const ref = useRef<HTMLDivElement>(null);
 
-  const onButtonClick = useCallback(() => {
-    if (ref.current === null) {
-      return;
-    }
+  // const onButtonClick = useCallback(() => {
+  //   if (ref.current === null) {
+  //     return;
+  //   }
 
-    toPng(ref.current, {
-      cacheBust: true,
-      backgroundColor: "#e5e7eb",
-      width: 1312 + 32,
-      height: 776 + 32,
-    })
-      .then((dataUrl) => {
+  //   toPng(ref.current, {
+  //     cacheBust: true,
+  //     backgroundColor: "#e5e7eb",
+  //     width: 1312 + 32,
+  //     height: 776 + 32,
+  //   })
+  //     .then((dataUrl) => {
+  //       const link = document.createElement("a");
+  //       link.download = "CFP-Bracket.png";
+  //       link.href = dataUrl;
+  //       link.click();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [ref]);
+
+  const onButtonClick = () => {
+    const bracketElement = document.querySelector("#bracket");
+
+    if (bracketElement) {
+      domToPng(bracketElement, {
+        backgroundColor: "#e5e7eb",
+      }).then((dataUrl) => {
         const link = document.createElement("a");
         link.download = "CFP-Bracket.png";
         link.href = dataUrl;
         link.click();
-      })
-      .catch((err) => {
-        console.log(err);
       });
-  }, [ref]);
+    } else {
+      console.error("Bracket element not found");
+    }
+  };
 
   const [data, setData] = useState([
     {
@@ -441,7 +459,7 @@ export default function Bracket() {
           Use Current Top 12
         </button>
       </div>
-      <div ref={ref} className="overflow-x-auto pb-4">
+      <div ref={ref} className="overflow-x-auto pb-4" id="bracket">
         <div style={{ width: "1312px" }}>
           <div className="grid grid-cols-4 w-full gap-8 mb-8">
             <span className="font-semibold text-gray-600">ROUND ONE</span>
