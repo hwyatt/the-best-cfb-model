@@ -261,56 +261,10 @@ export default function Bracket() {
     handleGetRankings();
   };
 
-  // const handleGetTeams = async () => {
-  //   const getTeams = await fetch(`/api/teams`);
-  //   const teams = await getTeams.json();
-  //   setData(teams);
-  // };
-
   const handleGetTeams = async () => {
-    try {
-      const getTeams = await fetch(`/api/teams`);
-      const teams = await getTeams.json();
-
-      // Encode logos before setting the data
-      const teamsWithBase64Logos = await Promise.all(
-        teams.map(async (team: any) => {
-          const logoUrl = team.logos[0]; // Assuming logos is an array with at least one element
-
-          try {
-            const response = await fetch(logoUrl);
-            const blob = await response.blob();
-            const base64Logo = await convertBlobToBase64(blob);
-
-            return {
-              ...team,
-              base64Logo,
-            };
-          } catch (error) {
-            console.error(
-              `Error fetching or converting logo for team ${team.id}:`,
-              error
-            );
-            return team; // Return the original team data in case of an error
-          }
-        })
-      );
-
-      setData(teamsWithBase64Logos);
-    } catch (error) {
-      console.error("Error fetching teams:", error);
-    }
-  };
-
-  const convertBlobToBase64 = (blob: any) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        resolve(reader.result);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
+    const getTeams = await fetch(`/api/teams`);
+    const teams = await getTeams.json();
+    setData(teams);
   };
 
   const handleGetRankings = async () => {
@@ -451,15 +405,8 @@ export default function Bracket() {
           <div className="flex gap-2 items-center">
             <div className="bg-gray-200 rounded-full p-2">
               <img
-                // src={
-                //   isDownloadDisabled
-                //     ? playoffTeams[index - 1]?.logos[0]
-                //     : playoffTeams[index - 1]?.base64Logo
-                // }
-                src={
-                  playoffTeams[index - 1]?.logos[0] ||
-                  playoffTeams[index - 1]?.base64Logo
-                }
+                // src={playoffTeams[index - 1]?.logos[0]}
+                src={playoffTeams[index - 1]?.base64Logo}
                 alt={`${playoffTeams[index - 1]?.school} Logo`}
                 className="w-8 h-auto object-contain"
                 crossOrigin="anonymous"
