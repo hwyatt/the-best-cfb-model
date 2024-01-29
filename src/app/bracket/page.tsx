@@ -148,22 +148,47 @@ export default function Bracket() {
   //   }
   // };
 
+  // const onButtonClick = useCallback(() => {
+  //   if (ref.current === null) {
+  //     return;
+  //   }
+  //   setIsDownloading(true);
+
+  //   domToPng(ref.current, {
+  //     backgroundColor: "#e5e7eb",
+  //     width: 1312,
+  //     height: 776,
+  //   }).then((dataUrl) => {
+  //     const link = document.createElement("a");
+  //     link.download = "CFP-Bracket.png";
+  //     link.href = dataUrl;
+  //     link.click();
+  //   });
+  // }, [ref]);
+
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  useEffect(() => {
+    if (isDownloading && ref.current !== null) {
+      domToPng(ref.current, {
+        backgroundColor: "#e5e7eb",
+        width: 1312,
+        height: 776,
+      }).then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = "CFP-Bracket.png";
+        link.href = dataUrl;
+        link.click();
+        setIsDownloading(false); // Reset isDownloading after the download is complete
+      });
+    }
+  }, [isDownloading, ref]);
+
   const onButtonClick = useCallback(() => {
     if (ref.current === null) {
       return;
     }
     setIsDownloading(true);
-
-    domToPng(ref.current, {
-      backgroundColor: "#e5e7eb",
-      width: 1312,
-      height: 776,
-    }).then((dataUrl) => {
-      const link = document.createElement("a");
-      link.download = "CFP-Bracket.png";
-      link.href = dataUrl;
-      link.click();
-    });
   }, [ref]);
 
   const [data, setData] = useState<any>([
@@ -242,7 +267,6 @@ export default function Bracket() {
   const [isSelectDisabled, setIsSelectDisabled] = useState(false);
   const [isUseTop12Disabled, setIsUseTop12Disabled] = useState(false);
   const [isDownloadDisabled, setIsDownloadDisabled] = useState(true);
-  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     handleGetTeams();
