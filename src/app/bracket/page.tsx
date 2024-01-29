@@ -175,10 +175,11 @@ export default function Bracket() {
         width: 1312,
         height: 776,
       }).then((dataUrl) => {
-        const link = document.createElement("a");
-        link.download = "CFP-Bracket.png";
-        link.href = dataUrl;
-        link.click();
+        // const link = document.createElement("a");
+        // link.download = "CFP-Bracket.png";
+        // link.href = dataUrl;
+        // link.click();
+        saveAs(dataUrl, "CFP-Bracket.png");
         setIsDownloading(false); // Reset isDownloading after the download is complete
       });
     }
