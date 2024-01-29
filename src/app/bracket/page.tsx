@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useId, useRef, useState } from "react";
 import Select, { components } from "react-select";
-import { toPng } from "html-to-image";
-// import { domToPng } from "modern-screenshot";
+// import { toPng } from "html-to-image";
+import { domToPng } from "modern-screenshot";
 import { useCallback } from "react";
 var tinycolor = require("tinycolor2");
 import { saveAs } from "file-saver";
@@ -77,34 +77,30 @@ function TeamSelectMulti({
 }
 
 export default function Bracket() {
-  const [png, setPng] = useState<{ url: string | null; name: string | null }>({
-    url: null,
-    name: null,
-  });
   const [year, setYear] = useState<null | string>(null);
   const ref = useRef<HTMLDivElement>(null);
 
-  const onButtonClick = useCallback(() => {
-    if (ref.current === null) {
-      return;
-    }
+  // const onButtonClick = useCallback(() => {
+  //   if (ref.current === null) {
+  //     return;
+  //   }
 
-    toPng(ref.current, {
-      cacheBust: true,
-      backgroundColor: "#e5e7eb",
-      width: 1312 + 32,
-      height: 776 + 32,
-    })
-      .then((dataUrl) => {
-        const link = document.createElement("a");
-        link.download = "CFP-Bracket.jpg";
-        link.href = dataUrl;
-        link.click();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [ref]);
+  //   toPng(ref.current, {
+  //     cacheBust: true,
+  //     backgroundColor: "#e5e7eb",
+  //     width: 1312 + 32,
+  //     height: 776 + 32,
+  //   })
+  //     .then((dataUrl) => {
+  //       const link = document.createElement("a");
+  //       link.download = "CFP-Bracket.jpg";
+  //       link.href = dataUrl;
+  //       link.click();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [ref]);
 
   // const handlePng = useCallback(() => {
   //   if (ref.current === null) {
@@ -133,22 +129,22 @@ export default function Bracket() {
   //   }
   // };
 
-  // const onButtonClick = () => {
-  //   const bracketElement = document.querySelector("#bracket");
+  const onButtonClick = () => {
+    const bracketElement = document.querySelector("#bracket");
 
-  //   if (bracketElement) {
-  //     domToPng(bracketElement, {
-  //       backgroundColor: "#e5e7eb",
-  //     }).then((dataUrl) => {
-  //       const link = document.createElement("a");
-  //       link.download = "CFP-Bracket.png";
-  //       link.href = dataUrl;
-  //       link.click();
-  //     });
-  //   } else {
-  //     console.error("Bracket element not found");
-  //   }
-  // };
+    if (bracketElement) {
+      domToPng(bracketElement, {
+        backgroundColor: "#e5e7eb",
+      }).then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = "CFP-Bracket.png";
+        link.href = dataUrl;
+        link.click();
+      });
+    } else {
+      console.error("Bracket element not found");
+    }
+  };
 
   const [data, setData] = useState([
     {
