@@ -152,6 +152,7 @@ export default function Bracket() {
     if (ref.current === null) {
       return;
     }
+    setIsDownloading(true);
 
     domToPng(ref.current, {
       backgroundColor: "#e5e7eb",
@@ -241,6 +242,7 @@ export default function Bracket() {
   const [isSelectDisabled, setIsSelectDisabled] = useState(false);
   const [isUseTop12Disabled, setIsUseTop12Disabled] = useState(false);
   const [isDownloadDisabled, setIsDownloadDisabled] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     handleGetTeams();
@@ -413,9 +415,14 @@ export default function Bracket() {
             <div className="bg-gray-200 rounded-full p-2">
               <img
                 // src={playoffTeams[index - 1]?.logos[0]}
+                // src={
+                //   playoffTeams[index - 1]?.base64Logo ||
+                //   playoffTeams[index - 1]?.logos[0]
+                // }
                 src={
-                  playoffTeams[index - 1]?.base64Logo ||
-                  playoffTeams[index - 1]?.logos[0]
+                  isDownloading
+                    ? playoffTeams[index - 1]?.base64Logo
+                    : playoffTeams[index - 1]?.logos[0]
                 }
                 alt={`${playoffTeams[index - 1]?.school} Logo`}
                 className="w-8 h-auto object-contain"
