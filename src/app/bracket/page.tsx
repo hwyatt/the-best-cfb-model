@@ -451,7 +451,6 @@ export default function Bracket() {
         </div>
         <button
           onClick={setCurrentTop12}
-          onTouchStart={onButtonClick}
           disabled={isUseTop12Disabled}
           className={`w-full md:max-w-48 ${
             isUseTop12Disabled ? "bg-gray-400" : "bg-gray-600 hover:bg-gray-700"
@@ -968,6 +967,7 @@ export default function Bracket() {
       <div className="flex flex-col md:flex-row gap-4 self-center w-full justify-center">
         <button
           onClick={onButtonClick}
+          onTouchStart={onButtonClick}
           disabled={isDownloadDisabled}
           className={`w-full md:w-auto ${
             isDownloadDisabled ? "bg-gray-400" : "bg-gray-600 hover:bg-gray-700"
