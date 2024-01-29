@@ -3,6 +3,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import Select, { components } from "react-select";
 import { toPng } from "html-to-image";
 import { useCallback } from "react";
+var tinycolor = require("tinycolor2");
 
 const BracketLines1 = () => (
   <div className="h-[4.5rem] w-16 border-y-2 border-r-2 border-l-0 border-gray-400 flex items-center relative">
@@ -299,6 +300,7 @@ export default function Bracket() {
   );
 
   const TeamByIndex = ({ index, seed, lastGame }: any) => {
+    const [isHovered, setIsHovered] = useState(false);
     const team = playoffTeams[index - 1];
 
     if (!team || team.id === null) {
@@ -308,19 +310,30 @@ export default function Bracket() {
 
     const isChampion = index === game11Winner.index && lastGame;
 
+    const darkenColor = (color: any, percentage: any) => {
+      // Implement your logic to darken the color here
+      // For simplicity, you can use a library like tinycolor2 for color manipulation
+      return tinycolor(color).darken(percentage).toString();
+    };
+
     return (
       <div className="relative">
         <div
           className={`flex items-center justify-between max-h-16 gap-2 bg-white border-2 border-gray-400 rounded p-4 w-full shadow-md ${
             isChampion && `rounded-b-none`
-          }`}
+          } hover:shadow-xl transition-all transition-100`}
           style={{
             backgroundColor: `${
               playoffTeams[index - 1]?.color !== "#ffffff"
-                ? playoffTeams[index - 1]?.color
+                ? isHovered
+                  ? darkenColor(playoffTeams[index - 1]?.color, 5)
+                  : playoffTeams[index - 1]?.color
                 : playoffTeams[index - 1]?.alt_color
             }`,
+            transition: "background-color 100ms ease",
           }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
           <div className="flex gap-2 items-center">
             <div className="bg-gray-200 rounded-full p-2">
