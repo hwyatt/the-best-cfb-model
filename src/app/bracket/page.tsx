@@ -10,7 +10,7 @@ const BracketLines1 = () => (
   <div className="h-[4.5rem] w-16 border-y-2 border-r-2 border-l-0 border-gray-400 flex items-center relative">
     <div
       className="h-[2px] w-16 bg-gray-400 absolute"
-      style={{ right: "-4rem;" }}
+      style={{ right: "-4rem" }}
     ></div>
   </div>
 );
@@ -19,7 +19,7 @@ const BracketLines2 = () => (
   <div className="h-48 w-16 border-y-2 border-r-2 border-l-0 border-gray-400 flex items-center relative">
     <div
       className="h-[2px] w-16 bg-gray-400 absolute"
-      style={{ right: "-4rem;" }}
+      style={{ right: "-4rem" }}
     ></div>
   </div>
 );
@@ -79,27 +79,64 @@ export default function Bracket() {
   const [year, setYear] = useState<null | string>(null);
   const ref = useRef<HTMLDivElement>(null);
 
-  const onButtonClick = useCallback(() => {
+  const onButtonClick = async () => {
     if (ref.current === null) {
       return;
     }
 
-    toPng(ref.current, {
-      cacheBust: true,
-      backgroundColor: "#e5e7eb",
-      width: 1312 + 32,
-      height: 776 + 32,
-    })
-      .then((dataUrl) => {
+    try {
+      const dataUrl = await toPng(ref.current, {
+        cacheBust: true,
+        backgroundColor: "#e5e7eb",
+        width: 1312 + 32,
+        height: 776 + 32,
+      });
+
+      const link = document.createElement("a");
+      link.download = "CFP-Bracket.png";
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error(err);
+      try {
+        const dataUrl = await toPng(ref.current, {
+          cacheBust: true,
+          backgroundColor: "#e5e7eb",
+          width: 1312 + 32,
+          height: 776 + 32,
+        });
+
         const link = document.createElement("a");
         link.download = "CFP-Bracket.png";
         link.href = dataUrl;
         link.click();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [ref]);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  // const onButtonClick = useCallback(() => {
+  //   if (ref.current === null) {
+  //     return;
+  //   }
+
+  //   toPng(ref.current, {
+  //     cacheBust: true,
+  //     backgroundColor: "#e5e7eb",
+  //     width: 1312 + 32,
+  //     height: 776 + 32,
+  //   })
+  //     .then((dataUrl) => {
+  //       const link = document.createElement("a");
+  //       link.download = "CFP-Bracket.png";
+  //       link.href = dataUrl;
+  //       link.click();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [ref]);
 
   // const onButtonClick = () => {
   //   const bracketElement = document.querySelector("#bracket");
