@@ -5,18 +5,18 @@ import { toPng } from "html-to-image";
 import { useCallback } from "react";
 
 const BracketLines1 = () => (
-  <div className="h-[4.5rem] w-16 md:border-y-2 md:border-r-2 md:border-l-0 md:border-gray-800 flex items-center relative">
+  <div className="h-[4.5rem] w-16 md:border-y-2 md:border-r-2 md:border-l-0 md:border-gray-400 flex items-center relative">
     <div
-      className="h-[2px] w-16 md:bg-gray-800 absolute"
+      className="h-[2px] w-16 md:bg-gray-400 absolute"
       style={{ right: "-4rem;" }}
     ></div>
   </div>
 );
 
 const BracketLines2 = () => (
-  <div className="h-48 w-16 md:border-y-2 md:border-r-2 md:border-l-0 md:border-gray-800 flex items-center relative">
+  <div className="h-48 w-16 md:border-y-2 md:border-r-2 md:border-l-0 md:border-gray-400 flex items-center relative">
     <div
-      className="h-[2px] w-16 md:bg-gray-800 absolute"
+      className="h-[2px] w-16 md:bg-gray-400 absolute"
       style={{ right: "-4rem;" }}
     ></div>
   </div>
