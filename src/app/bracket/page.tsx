@@ -84,7 +84,7 @@ export default function Bracket() {
   const [year, setYear] = useState<null | string>(null);
   const ref = useRef<HTMLDivElement>(null);
 
-  const handlePng = useCallback(() => {
+  const onButtonClick = useCallback(() => {
     if (ref.current === null) {
       return;
     }
@@ -96,20 +96,39 @@ export default function Bracket() {
       height: 776 + 32,
     })
       .then((dataUrl) => {
-        setPng({ url: dataUrl, name: "CFP-Bracket.jpg" });
+        saveAs(dataUrl, "CFP-Bracket.jpg");
       })
       .catch((err) => {
         console.log(err);
       });
   }, [ref]);
 
-  const onButtonClick = () => {
-    if (png.url !== null && png.name !== null) {
-      saveAs(png.url, png.name);
-    } else {
-      console.log("err downloading image");
-    }
-  };
+  // const handlePng = useCallback(() => {
+  //   if (ref.current === null) {
+  //     return;
+  //   }
+
+  //   toPng(ref.current, {
+  //     cacheBust: true,
+  //     backgroundColor: "#e5e7eb",
+  //     width: 1312 + 32,
+  //     height: 776 + 32,
+  //   })
+  //     .then((dataUrl) => {
+  //       setPng({ url: dataUrl, name: "CFP-Bracket.jpg" });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [ref]);
+
+  // const onButtonClick = () => {
+  //   if (png.url !== null && png.name !== null) {
+  //     saveAs(png.url, png.name);
+  //   } else {
+  //     console.log("err downloading image");
+  //   }
+  // };
 
   // const onButtonClick = () => {
   //   const bracketElement = document.querySelector("#bracket");
@@ -925,7 +944,6 @@ export default function Bracket() {
                         index: game9Winner.index,
                         seed: game9Winner.seed,
                       });
-                      handlePng();
                       setIsDownloadDisabled(false);
                     }}
                   >
@@ -954,7 +972,6 @@ export default function Bracket() {
                         index: game10Winner.index,
                         seed: game10Winner.seed,
                       });
-                      handlePng();
                       setIsDownloadDisabled(false);
                     }}
                   >
