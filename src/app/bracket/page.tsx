@@ -444,10 +444,24 @@ export default function Bracket() {
             </span>
             <div className="flex flex-col gap-4 relative">
               {/* GAME 1 */}
-              <button onClick={() => setGame1Winner({ index: 8, seed: 8 })}>
+              <button
+                className="relative"
+                disabled={game1Winner.index !== null && game1Winner.index !== 8}
+                onClick={() => setGame1Winner({ index: 8, seed: 8 })}
+              >
+                {game1Winner.index !== null && game1Winner.index !== 8 && (
+                  <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                )}
                 <TeamByIndex index={8} seed={8} />
               </button>
-              <button onClick={() => setGame1Winner({ index: 9, seed: 9 })}>
+              <button
+                className="relative"
+                disabled={game1Winner.index !== null && game1Winner.index !== 9}
+                onClick={() => setGame1Winner({ index: 9, seed: 9 })}
+              >
+                {game1Winner.index !== null && game1Winner.index !== 9 && (
+                  <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                )}
                 <TeamByIndex index={9} seed={9} />
               </button>
               <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
@@ -456,11 +470,27 @@ export default function Bracket() {
             </div>
             <div className="flex flex-col gap-4 relative">
               {/* GAME 2 */}
-              <button onClick={() => setGame2Winner({ index: 5, seed: 5 })}>
+              <button
+                className="relative"
+                disabled={game2Winner.index !== null && game2Winner.index !== 5}
+                onClick={() => setGame2Winner({ index: 5, seed: 5 })}
+              >
+                {game2Winner.index !== null && game2Winner.index !== 5 && (
+                  <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                )}
                 <TeamByIndex index={5} seed={5} />
               </button>
-              <button onClick={() => setGame2Winner({ index: 12, seed: 12 })}>
-                <TeamByIndex index={12} seed={12} />{" "}
+              <button
+                className="relative"
+                disabled={
+                  game2Winner.index !== null && game2Winner.index !== 12
+                }
+                onClick={() => setGame2Winner({ index: 12, seed: 12 })}
+              >
+                {game2Winner.index !== null && game2Winner.index !== 12 && (
+                  <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                )}
+                <TeamByIndex index={12} seed={12} />
               </button>
               <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
                 <BracketLines1 />
@@ -468,10 +498,26 @@ export default function Bracket() {
             </div>
             <div className="flex flex-col gap-4 relative">
               {/* GAME 3 */}
-              <button onClick={() => setGame3Winner({ index: 6, seed: 6 })}>
+              <button
+                className="relative"
+                disabled={game3Winner.index !== null && game3Winner.index !== 6}
+                onClick={() => setGame3Winner({ index: 6, seed: 6 })}
+              >
+                {game3Winner.index !== null && game3Winner.index !== 6 && (
+                  <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                )}
                 <TeamByIndex index={6} seed={6} />
               </button>
-              <button onClick={() => setGame3Winner({ index: 11, seed: 11 })}>
+              <button
+                className="relative"
+                disabled={
+                  game3Winner.index !== null && game3Winner.index !== 11
+                }
+                onClick={() => setGame3Winner({ index: 11, seed: 11 })}
+              >
+                {game3Winner.index !== null && game3Winner.index !== 11 && (
+                  <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                )}
                 <TeamByIndex index={11} seed={11} />
               </button>
               <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
@@ -480,10 +526,26 @@ export default function Bracket() {
             </div>
             <div className="flex flex-col gap-4 relative">
               {/* GAME 4 */}
-              <button onClick={() => setGame4Winner({ index: 7, seed: 7 })}>
+              <button
+                className="relative"
+                disabled={game4Winner.index !== null && game4Winner.index !== 7}
+                onClick={() => setGame4Winner({ index: 7, seed: 7 })}
+              >
+                {game4Winner.index !== null && game4Winner.index !== 7 && (
+                  <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                )}
                 <TeamByIndex index={7} seed={7} />
               </button>
-              <button onClick={() => setGame4Winner({ index: 10, seed: 10 })}>
+              <button
+                className="relative"
+                disabled={
+                  game4Winner.index !== null && game4Winner.index !== 10
+                }
+                onClick={() => setGame4Winner({ index: 10, seed: 10 })}
+              >
+                {game4Winner.index !== null && game4Winner.index !== 10 && (
+                  <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                )}
                 <TeamByIndex index={10} seed={10} />
               </button>
               <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
@@ -497,11 +559,23 @@ export default function Bracket() {
             </span>
             <div className="flex flex-col gap-4 relative">
               {/* GAME 5 */}
-              <button onClick={() => setGame5Winner({ index: 1, seed: 1 })}>
+              <button
+                className="relative"
+                disabled={game5Winner.index !== null && game5Winner.index !== 1}
+                onClick={() => setGame5Winner({ index: 1, seed: 1 })}
+              >
+                {game5Winner.index !== null && game5Winner.index !== 1 && (
+                  <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                )}
                 <TeamByIndex index={1} seed={1} />
               </button>
               {game1Winner.index !== null ? (
                 <button
+                  className="relative"
+                  disabled={
+                    game5Winner.index !== null &&
+                    game5Winner.index !== game1Winner.index
+                  }
                   onClick={() =>
                     setGame5Winner({
                       index: game1Winner.index,
@@ -509,6 +583,10 @@ export default function Bracket() {
                     })
                   }
                 >
+                  {game5Winner.index !== null &&
+                    game5Winner.index !== game1Winner.index && (
+                      <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                    )}
                   <TeamByIndex
                     index={game1Winner.index}
                     seed={game1Winner.seed}
@@ -523,11 +601,23 @@ export default function Bracket() {
             </div>
             <div className="flex flex-col gap-4 relative">
               {/* GAME 6 */}
-              <button onClick={() => setGame6Winner({ index: 4, seed: 4 })}>
+              <button
+                className="relative"
+                disabled={game6Winner.index !== null && game6Winner.index !== 4}
+                onClick={() => setGame6Winner({ index: 4, seed: 4 })}
+              >
+                {game6Winner.index !== null && game6Winner.index !== 4 && (
+                  <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                )}
                 <TeamByIndex index={4} seed={4} />
               </button>
               {game2Winner.index !== null ? (
                 <button
+                  className="relative"
+                  disabled={
+                    game6Winner.index !== null &&
+                    game6Winner.index !== game2Winner.index
+                  }
                   onClick={() =>
                     setGame6Winner({
                       index: game2Winner.index,
@@ -535,6 +625,10 @@ export default function Bracket() {
                     })
                   }
                 >
+                  {game6Winner.index !== null &&
+                    game6Winner.index !== game2Winner.index && (
+                      <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                    )}
                   <TeamByIndex
                     index={game2Winner.index}
                     seed={game2Winner.seed}
@@ -549,11 +643,23 @@ export default function Bracket() {
             </div>
             <div className="flex flex-col gap-4 relative">
               {/* GAME 7 */}
-              <button onClick={() => setGame7Winner({ index: 3, seed: 3 })}>
+              <button
+                className="relative"
+                disabled={game7Winner.index !== null && game7Winner.index !== 3}
+                onClick={() => setGame7Winner({ index: 3, seed: 3 })}
+              >
+                {game7Winner.index !== null && game7Winner.index !== 3 && (
+                  <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                )}
                 <TeamByIndex index={3} seed={3} />
               </button>
               {game3Winner.index !== null ? (
                 <button
+                  className="relative"
+                  disabled={
+                    game7Winner.index !== null &&
+                    game7Winner.index !== game3Winner.index
+                  }
                   onClick={() =>
                     setGame7Winner({
                       index: game3Winner.index,
@@ -561,6 +667,10 @@ export default function Bracket() {
                     })
                   }
                 >
+                  {game7Winner.index !== null &&
+                    game7Winner.index !== game3Winner.index && (
+                      <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                    )}
                   <TeamByIndex
                     index={game3Winner.index}
                     seed={game3Winner.seed}
@@ -575,11 +685,23 @@ export default function Bracket() {
             </div>
             <div className="flex flex-col gap-4 relative">
               {/* GAME 8 */}
-              <button onClick={() => setGame8Winner({ index: 2, seed: 2 })}>
+              <button
+                className="relative"
+                disabled={game8Winner.index !== null && game8Winner.index !== 2}
+                onClick={() => setGame8Winner({ index: 2, seed: 2 })}
+              >
+                {game8Winner.index !== null && game8Winner.index !== 2 && (
+                  <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                )}
                 <TeamByIndex index={2} seed={2} />
               </button>
               {game4Winner.index !== null ? (
                 <button
+                  className="relative"
+                  disabled={
+                    game8Winner.index !== null &&
+                    game8Winner.index !== game4Winner.index
+                  }
                   onClick={() =>
                     setGame8Winner({
                       index: game4Winner.index,
@@ -587,12 +709,29 @@ export default function Bracket() {
                     })
                   }
                 >
+                  {game8Winner.index !== null &&
+                    game8Winner.index !== game4Winner.index && (
+                      <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                    )}
                   <TeamByIndex
                     index={game4Winner.index}
                     seed={game4Winner.seed}
                   />
                 </button>
               ) : (
+                // <button
+                //   onClick={() =>
+                //     setGame8Winner({
+                //       index: game4Winner.index,
+                //       seed: game4Winner.seed,
+                //     })
+                //   }
+                // >
+                //   <TeamByIndex
+                //     index={game4Winner.index}
+                //     seed={game4Winner.seed}
+                //   />
+                // </button>
                 <BlankTeam />
               )}
               <div className="absolute top-[2.25rem] right-[-1rem] -z-10">
@@ -608,6 +747,11 @@ export default function Bracket() {
               {/* GAME 9 */}
               {game5Winner.index !== null ? (
                 <button
+                  className="relative"
+                  disabled={
+                    game9Winner.index !== null &&
+                    game9Winner.index !== game5Winner.index
+                  }
                   onClick={() =>
                     setGame9Winner({
                       index: game5Winner.index,
@@ -615,6 +759,10 @@ export default function Bracket() {
                     })
                   }
                 >
+                  {game9Winner.index !== null &&
+                    game9Winner.index !== game5Winner.index && (
+                      <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                    )}
                   <TeamByIndex
                     index={game5Winner.index}
                     seed={game5Winner.seed}
@@ -625,6 +773,11 @@ export default function Bracket() {
               )}
               {game6Winner.index !== null ? (
                 <button
+                  className="relative"
+                  disabled={
+                    game9Winner.index !== null &&
+                    game9Winner.index !== game6Winner.index
+                  }
                   onClick={() =>
                     setGame9Winner({
                       index: game6Winner.index,
@@ -632,6 +785,10 @@ export default function Bracket() {
                     })
                   }
                 >
+                  {game9Winner.index !== null &&
+                    game9Winner.index !== game6Winner.index && (
+                      <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                    )}
                   <TeamByIndex
                     index={game6Winner.index}
                     seed={game6Winner.seed}
@@ -648,6 +805,11 @@ export default function Bracket() {
               {/* GAME 10 */}
               {game7Winner.index !== null ? (
                 <button
+                  className="relative"
+                  disabled={
+                    game10Winner.index !== null &&
+                    game10Winner.index !== game7Winner.index
+                  }
                   onClick={() =>
                     setGame10Winner({
                       index: game7Winner.index,
@@ -655,6 +817,10 @@ export default function Bracket() {
                     })
                   }
                 >
+                  {game10Winner.index !== null &&
+                    game10Winner.index !== game7Winner.index && (
+                      <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                    )}
                   <TeamByIndex
                     index={game7Winner.index}
                     seed={game7Winner.seed}
@@ -665,6 +831,11 @@ export default function Bracket() {
               )}
               {game8Winner.index !== null ? (
                 <button
+                  className="relative"
+                  disabled={
+                    game10Winner.index !== null &&
+                    game10Winner.index !== game8Winner.index
+                  }
                   onClick={() =>
                     setGame10Winner({
                       index: game8Winner.index,
@@ -672,6 +843,10 @@ export default function Bracket() {
                     })
                   }
                 >
+                  {game10Winner.index !== null &&
+                    game10Winner.index !== game8Winner.index && (
+                      <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                    )}
                   <TeamByIndex
                     index={game8Winner.index}
                     seed={game8Winner.seed}
@@ -690,9 +865,36 @@ export default function Bracket() {
               NATIONAL CHAMPIONSHIP
             </span>
             <div className="flex flex-col gap-8 md:gap-72">
+              {/* <button
+                  className="relative"
+                  disabled={
+                    game10Winner.index !== null &&
+                    game10Winner.index !== game7Winner.index
+                  }
+                  onClick={() =>
+                    setGame10Winner({
+                      index: game7Winner.index,
+                      seed: game7Winner.seed,
+                    })
+                  }
+                >
+                  {game10Winner.index !== null &&
+                    game10Winner.index !== game7Winner.index && (
+                      <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                    )}
+                  <TeamByIndex
+                    index={game7Winner.index}
+                    seed={game7Winner.seed}
+                  />
+                </button> */}
               {/* GAME 11 */}
               {game9Winner.index !== null ? (
                 <button
+                  className="relative"
+                  disabled={
+                    game11Winner.index !== null &&
+                    game11Winner.index !== game9Winner.index
+                  }
                   onClick={() => {
                     setGame11Winner({
                       index: game9Winner.index,
@@ -701,6 +903,10 @@ export default function Bracket() {
                     setIsDownloadDisabled(false);
                   }}
                 >
+                  {game11Winner.index !== null &&
+                    game11Winner.index !== game9Winner.index && (
+                      <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                    )}
                   <TeamByIndex
                     index={game9Winner.index}
                     seed={game9Winner.seed}
@@ -712,6 +918,11 @@ export default function Bracket() {
               )}
               {game10Winner.index !== null ? (
                 <button
+                  className="relative"
+                  disabled={
+                    game11Winner.index !== null &&
+                    game11Winner.index !== game10Winner.index
+                  }
                   onClick={() => {
                     setGame11Winner({
                       index: game10Winner.index,
@@ -720,6 +931,10 @@ export default function Bracket() {
                     setIsDownloadDisabled(false);
                   }}
                 >
+                  {game11Winner.index !== null &&
+                    game11Winner.index !== game10Winner.index && (
+                      <div className="absolute inset-0 bg-black z-10 opacity-50"></div>
+                    )}
                   <TeamByIndex
                     index={game10Winner.index}
                     seed={game10Winner.seed}
