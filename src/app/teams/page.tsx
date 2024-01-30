@@ -576,9 +576,10 @@ export default function Team() {
   return (
     <div className="flex flex-col gap-8 w-full">
       <div className="flex flex-col gap-4">
-        <h1 className="text-4xl font-bold text-gray-800">Team Stats</h1>
+        <h1 className="text-4xl font-bold text-gray-800">Stats</h1>
         <p className="text-gray-800">
-          See stats, schedule, and more for a team any given season.
+          See high level stats for every part of the game, or choose a team to
+          see their stats any given season.
         </p>
       </div>
       <div className="flex flex-col gap-2 md:max-w-md">

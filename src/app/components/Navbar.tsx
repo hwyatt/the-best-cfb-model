@@ -31,17 +31,17 @@ const Navbar = () => {
             <FaBars className="font-semibold text-gray-800 text-2xl" />
           </button>
         </div>
-        <div className={`md:flex md:gap-8 hidden`}>
-          <a href="/teams" className="font-semibold text-gray-800">
-            Teams
+        <div className={`md:flex md:gap-8 hidden text-lg`}>
+          <a href="/teams" className="font-bold text-gray-800">
+            Stats
           </a>
-          <a href="/compare" className="font-semibold text-gray-800">
+          <a href="/compare" className="font-bold text-gray-800">
             Model
           </a>
-          <a href="/bracket" className="font-semibold text-gray-800">
+          <a href="/bracket" className="font-bold text-gray-800">
             Bracket
           </a>
-          <a href="/portal" className="font-semibold text-gray-800">
+          <a href="/portal" className="font-bold text-gray-800">
             Portal
           </a>
         </div>
@@ -50,28 +50,28 @@ const Navbar = () => {
         <div className={`flex flex-col w-full md:hidden`}>
           <a
             href="/teams"
-            className="flex items-center justify-between text-2xl font-semibold text-gray-800 border-y-2 py-4"
+            className="flex items-center justify-between text-2xl font-bold text-gray-800 border-y-2 py-4"
           >
             <div>Teams</div>
             <MdOutlineArrowForwardIos />
           </a>
           <a
             href="/compare"
-            className="flex items-center justify-between text-2xl font-semibold text-gray-800 border-b-2 py-4"
+            className="flex items-center justify-between text-2xl font-bold text-gray-800 border-b-2 py-4"
           >
             <div>Model</div>
             <MdOutlineArrowForwardIos />
           </a>
           <a
             href="/bracket"
-            className="flex items-center justify-between text-2xl font-semibold text-gray-800 border-b-2 py-4"
+            className="flex items-center justify-between text-2xl font-bold text-gray-800 border-b-2 py-4"
           >
             <div>Bracket</div>
             <MdOutlineArrowForwardIos />
           </a>
           <a
             href="/portal"
-            className="flex items-center justify-between text-2xl font-semibold text-gray-800 border-b-2 py-4"
+            className="flex items-center justify-between text-2xl font-bold text-gray-800 border-b-2 py-4"
           >
             <div>Portal</div>
             <MdOutlineArrowForwardIos />

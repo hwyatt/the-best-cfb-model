@@ -582,7 +582,8 @@ export default function Bracket() {
                 <button
                   className="relative"
                   disabled={
-                    game1Winner.index !== null && game1Winner.index !== 8
+                    (game1Winner.index !== null && game1Winner.index !== 8) ||
+                    playoffTeams.length < 12
                   }
                   onClick={() => setGame1Winner({ index: 8, seed: 8 })}
                 >
@@ -594,7 +595,8 @@ export default function Bracket() {
                 <button
                   className="relative"
                   disabled={
-                    game1Winner.index !== null && game1Winner.index !== 9
+                    (game1Winner.index !== null && game1Winner.index !== 9) ||
+                    playoffTeams.length < 12
                   }
                   onClick={() => setGame1Winner({ index: 9, seed: 9 })}
                 >
@@ -612,7 +614,8 @@ export default function Bracket() {
                 <button
                   className="relative"
                   disabled={
-                    game2Winner.index !== null && game2Winner.index !== 5
+                    (game2Winner.index !== null && game2Winner.index !== 5) ||
+                    playoffTeams.length < 12
                   }
                   onClick={() => setGame2Winner({ index: 5, seed: 5 })}
                 >
@@ -624,7 +627,8 @@ export default function Bracket() {
                 <button
                   className="relative"
                   disabled={
-                    game2Winner.index !== null && game2Winner.index !== 12
+                    (game2Winner.index !== null && game2Winner.index !== 12) ||
+                    playoffTeams.length < 12
                   }
                   onClick={() => setGame2Winner({ index: 12, seed: 12 })}
                 >
@@ -642,7 +646,8 @@ export default function Bracket() {
                 <button
                   className="relative"
                   disabled={
-                    game3Winner.index !== null && game3Winner.index !== 6
+                    (game3Winner.index !== null && game3Winner.index !== 6) ||
+                    playoffTeams.length < 12
                   }
                   onClick={() => setGame3Winner({ index: 6, seed: 6 })}
                 >
@@ -654,7 +659,8 @@ export default function Bracket() {
                 <button
                   className="relative"
                   disabled={
-                    game3Winner.index !== null && game3Winner.index !== 11
+                    (game3Winner.index !== null && game3Winner.index !== 11) ||
+                    playoffTeams.length < 12
                   }
                   onClick={() => setGame3Winner({ index: 11, seed: 11 })}
                 >
@@ -672,7 +678,8 @@ export default function Bracket() {
                 <button
                   className="relative"
                   disabled={
-                    game4Winner.index !== null && game4Winner.index !== 7
+                    (game4Winner.index !== null && game4Winner.index !== 7) ||
+                    playoffTeams.length < 12
                   }
                   onClick={() => setGame4Winner({ index: 7, seed: 7 })}
                 >
@@ -684,7 +691,8 @@ export default function Bracket() {
                 <button
                   className="relative"
                   disabled={
-                    game4Winner.index !== null && game4Winner.index !== 10
+                    (game4Winner.index !== null && game4Winner.index !== 10) ||
+                    playoffTeams.length < 12
                   }
                   onClick={() => setGame4Winner({ index: 10, seed: 10 })}
                 >
@@ -707,7 +715,8 @@ export default function Bracket() {
                 <button
                   className="relative"
                   disabled={
-                    game5Winner.index !== null && game5Winner.index !== 1
+                    (game5Winner.index !== null && game5Winner.index !== 1) ||
+                    playoffTeams.length < 12
                   }
                   onClick={() => setGame5Winner({ index: 1, seed: 1 })}
                 >
@@ -720,8 +729,9 @@ export default function Bracket() {
                   <button
                     className="relative"
                     disabled={
-                      game5Winner.index !== null &&
-                      game5Winner.index !== game1Winner.index
+                      (game5Winner.index !== null &&
+                        game5Winner.index !== game1Winner.index) ||
+                      playoffTeams.length < 12
                     }
                     onClick={() =>
                       setGame5Winner({
@@ -751,7 +761,8 @@ export default function Bracket() {
                 <button
                   className="relative"
                   disabled={
-                    game6Winner.index !== null && game6Winner.index !== 4
+                    (game6Winner.index !== null && game6Winner.index !== 4) ||
+                    playoffTeams.length < 12
                   }
                   onClick={() => setGame6Winner({ index: 4, seed: 4 })}
                 >
@@ -764,8 +775,9 @@ export default function Bracket() {
                   <button
                     className="relative"
                     disabled={
-                      game6Winner.index !== null &&
-                      game6Winner.index !== game2Winner.index
+                      (game6Winner.index !== null &&
+                        game6Winner.index !== game2Winner.index) ||
+                      playoffTeams.length < 12
                     }
                     onClick={() =>
                       setGame6Winner({
@@ -795,7 +807,8 @@ export default function Bracket() {
                 <button
                   className="relative"
                   disabled={
-                    game7Winner.index !== null && game7Winner.index !== 3
+                    (game7Winner.index !== null && game7Winner.index !== 3) ||
+                    playoffTeams.length < 12
                   }
                   onClick={() => setGame7Winner({ index: 3, seed: 3 })}
                 >
@@ -808,8 +821,9 @@ export default function Bracket() {
                   <button
                     className="relative"
                     disabled={
-                      game7Winner.index !== null &&
-                      game7Winner.index !== game3Winner.index
+                      (game7Winner.index !== null &&
+                        game7Winner.index !== game3Winner.index) ||
+                      playoffTeams.length < 12
                     }
                     onClick={() =>
                       setGame7Winner({
@@ -839,7 +853,8 @@ export default function Bracket() {
                 <button
                   className="relative"
                   disabled={
-                    game8Winner.index !== null && game8Winner.index !== 2
+                    (game8Winner.index !== null && game8Winner.index !== 2) ||
+                    playoffTeams.length < 12
                   }
                   onClick={() => setGame8Winner({ index: 2, seed: 2 })}
                 >
@@ -852,8 +867,9 @@ export default function Bracket() {
                   <button
                     className="relative"
                     disabled={
-                      game8Winner.index !== null &&
-                      game8Winner.index !== game4Winner.index
+                      (game8Winner.index !== null &&
+                        game8Winner.index !== game4Winner.index) ||
+                      playoffTeams.length < 12
                     }
                     onClick={() =>
                       setGame8Winner({
