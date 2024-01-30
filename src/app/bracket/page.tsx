@@ -1082,6 +1082,7 @@ export default function Bracket() {
           <a
             className="text-center bg-transparent hover:bg-gray-300 text-gray-600 w-full md:w-auto font-semibold py-2 px-4 rounded self-center transition-all duration-100"
             href="https://twitter.com/intent/tweet?text=Check%20out%20this%20CFP%20bracket%20I%20made%20on%20saturdaystats.com!"
+            target="_blank"
           >
             Share to X
           </a>
