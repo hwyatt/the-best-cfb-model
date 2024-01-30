@@ -15,6 +15,44 @@ interface YearOption {
   label: string;
   value: string;
 }
+
+type StatDataMap = Record<string, Record<string, number | string>>;
+
+const processStatData = <
+  T extends { team: string; statName: string; statValue: number }
+>(
+  data: T[],
+  targetStatNames: string[],
+  sortCol: string
+): Record<string, number | string>[] => {
+  const statDataMap: StatDataMap = {};
+
+  data.forEach((item) => {
+    const { team, statName, statValue } = item;
+
+    if (targetStatNames.includes(statName)) {
+      if (!statDataMap[team]) {
+        statDataMap[team] = { team };
+      }
+
+      statDataMap[team][statName] = statValue;
+    }
+  });
+
+  const statDataArray = Object.values(statDataMap);
+
+  const sortedStatData = statDataArray.sort((a, b) => {
+    return (Number(b[sortCol]) || 0) - (Number(a[sortCol]) || 0);
+  });
+
+  // Add rank property to each object
+  sortedStatData.forEach((item, index) => {
+    item.rank = index + 1;
+  });
+
+  return sortedStatData;
+};
+
 export default function Team() {
   const searchParams = useSearchParams();
   const teamParam = searchParams.get("team");
@@ -206,6 +244,9 @@ export default function Team() {
 
     return (
       <div className="flex items-center gap-2">
+        <span className="font-semibold uppercase text-gray-800">
+          {row.rank}
+        </span>
         <div>
           {teamLogo ? (
             <img
@@ -224,194 +265,258 @@ export default function Team() {
     );
   };
 
-  const sortByPPO = (data: any) => {
-    return data.sort((a: any, b: any) => {
-      return b.offense.pointsPerOpportunity - a.offense.pointsPerOpportunity;
-    });
-  };
-
-  const columnsOffensePPO = [
-    // {
-    //   name: "",
-    //   selector: (row: any, index: any) => index + 1,
-    // },
-    {
-      name: "Team",
-      minWidth: "20%",
-      cell: (row: any) => teamCol(row),
-    },
-    {
-      name: "PPO",
-      selector: (row: any) => row.offense.pointsPerOpportunity.toFixed(3),
-    },
-    {
-      name: "PPA",
-      selector: (row: any) => row.offense.ppa.toFixed(3),
-    },
-    {
-      name: "Success Rate",
-      selector: (row: any) => row.offense.successRate.toFixed(3),
-    },
-    {
-      name: "Explosiveness",
-      selector: (row: any) => row.offense.explosiveness.toFixed(3),
-    },
-    {
-      name: "Plays",
-      selector: (row: any) => row.offense.plays,
-    },
-    {
-      name: "Drives",
-      selector: (row: any) => row.offense.drives,
-    },
+  const passingStatNames = [
+    "netPassingYards",
+    "passesIntercepted",
+    "passingTDs",
+    "passAttempts",
+    "passCompletions",
   ];
-
-  const sortByRushing = (data: any) => {
-    return data.sort((a: any, b: any) => {
-      return b.offense.rushingPlays.ppa - a.offense.rushingPlays.ppa;
-    });
-  };
-
-  const columnsRushing = [
-    {
-      name: "Team",
-      cell: (row: any) => teamCol(row),
-      minWidth: "20%",
-    },
-    {
-      name: "PPA",
-      selector: (row: any) => row.offense.rushingPlays.ppa.toFixed(3),
-    },
-    {
-      name: "Success Rate",
-      selector: (row: any) => row.offense.rushingPlays.successRate.toFixed(3),
-    },
-    {
-      name: "Explosiveness",
-      selector: (row: any) => row.offense.rushingPlays.explosiveness.toFixed(3),
-    },
-    // {
-    //   name: "Power Success",
-    //   selector: (row: any) => row.offense.powerSuccess,
-    // },
-    // {
-    //   name: "Stuff Rate",
-    //   selector: (row: any) => row.offense.stuffRate,
-    // },
-    // {
-    //   name: "Line Yards per Rush",
-    //   selector: (row: any) => row.offense.lineYards.toFixed(3),
-    // },
-    // {
-    //   name: "Second Level Yards per Rush",
-    //   selector: (row: any) => row.offense.secondLevelYards.toFixed(3),
-    // },
-    // {
-    //   name: "Open Field Yards per Rush",
-    //   selector: (row: any) => row.offense.openFieldYards.toFixed(3),
-    // },
-  ];
-
-  const sortByPassing = (data: any) => {
-    return data.sort((a: any, b: any) => {
-      return b.offense.passingPlays.ppa - a.offense.passingPlays.ppa;
-    });
-  };
+  const passingData = processStatData(
+    stats,
+    passingStatNames,
+    "netPassingYards"
+  );
 
   const columnsPassing = [
     {
       name: "Team",
       cell: (row: any) => teamCol(row),
-      minWidth: "20%",
+      minWidth: "25%",
     },
     {
-      name: "PPA",
-      selector: (row: any) => row.offense.passingPlays.ppa.toFixed(3),
+      name: "Yards",
+      selector: (row: any) => row.netPassingYards,
     },
     {
-      name: "Success Rate",
-      selector: (row: any) => row.offense.passingPlays.successRate.toFixed(3),
+      name: "Touchdowns",
+      selector: (row: any) => row.passingTDs,
     },
     {
-      name: "Explosiveness",
-      selector: (row: any) => row.offense.passingPlays.explosiveness.toFixed(3),
+      name: "Attempts",
+      selector: (row: any) => row.passAttempts,
+    },
+    {
+      name: "Completions",
+      selector: (row: any) => row.passCompletions,
+    },
+    {
+      name: "Completion %",
+      cell: (row: any) => {
+        const attempts = row.passAttempts || 0;
+        const completions = row.passCompletions || 0;
+
+        if (attempts === 0) {
+          return "-";
+        }
+
+        const completionPercentage =
+          ((completions / attempts) * 100).toFixed(2) + "%";
+        return completionPercentage;
+      },
+    },
+    {
+      name: "Interceptions",
+      selector: (row: any) => row.passesIntercepted,
     },
   ];
 
-  const sortByDefense = (data: any) => {
-    return data.sort((a: any, b: any) => {
-      return b.defense.havoc.total - a.defense.havoc.total;
-    });
-  };
+  const rushingStatNames = ["rushingYards", "rushingTDs", "rushingAttempts"];
+  const rushingData = processStatData(stats, rushingStatNames, "rushingYards");
+
+  const columnsRushing = [
+    {
+      name: "Team",
+      cell: (row: any) => teamCol(row),
+      minWidth: "25%",
+    },
+    {
+      name: "Yards",
+      selector: (row: any) => row.rushingYards,
+    },
+    {
+      name: "Touchdowns",
+      selector: (row: any) => row.rushingTDs,
+    },
+    {
+      name: "Attempts",
+      selector: (row: any) => row.rushingAttempts,
+    },
+    {
+      name: "Yards per Attempt",
+      cell: (row: any) => {
+        const rushingYards = row.rushingYards || 0;
+        const rushingAttempts = row.rushingAttempts || 0;
+
+        if (rushingAttempts === 0) {
+          return "-";
+        }
+
+        const yardsPerAttempt = (rushingYards / rushingAttempts).toFixed(2);
+        return yardsPerAttempt;
+      },
+    },
+  ];
+
+  const defenseStatNames = [
+    "interceptions",
+    "interceptionTDs",
+    "interceptionYards",
+    "sacks",
+    "tacklesForLoss",
+  ];
+  const defenseData = processStatData(stats, defenseStatNames, "interceptions");
 
   const columnsDefense = [
     {
       name: "Team",
       cell: (row: any) => teamCol(row),
-      minWidth: "20%",
+      minWidth: "25%",
     },
     {
-      name: "PPO",
-      selector: (row: any) => row.defense.pointsPerOpportunity.toFixed(3),
+      name: "Interceptions",
+      selector: (row: any) => row.interceptions,
     },
     {
-      name: "PPA",
-      selector: (row: any) => row.defense.ppa.toFixed(3),
+      name: "Interception TDs",
+      selector: (row: any) => row.interceptionTDs,
     },
     {
-      name: "Success Rate",
-      selector: (row: any) => row.defense.successRate.toFixed(3),
+      name: "Interception Yards",
+      selector: (row: any) => row.interceptionYards,
     },
     {
-      name: "Explosiveness",
-      selector: (row: any) => row.defense.explosiveness.toFixed(3),
+      name: "Sacks",
+      selector: (row: any) => row.sacks,
     },
     {
-      name: "Plays",
-      selector: (row: any) => row.defense.plays,
-    },
-    {
-      name: "Drives",
-      selector: (row: any) => row.defense.drives,
+      name: "Tackles For Loss",
+      selector: (row: any) => row.tacklesForLoss,
     },
   ];
 
-  const sortByFieldPos = (data: any) => {
-    return data.sort((a: any, b: any) => {
-      return (
-        a.offense.fieldPosition.averageStart -
-        b.offense.fieldPosition.averageStart
-      );
-    });
-  };
+  const stStatNames = [
+    "kickReturnYards",
+    "kickReturnTDs",
+    "kickReturns",
+    "puntReturnYards",
+    "puntReturnTDs",
+    "puntReturns",
+  ];
+  const stData = processStatData(stats, stStatNames, "kickReturnYards");
 
-  const columnsFieldPos = [
+  const columnsST = [
     {
       name: "Team",
       cell: (row: any) => teamCol(row),
-      minWidth: "20%",
+      minWidth: "25%",
     },
     {
-      name: "Offense Avg Start",
-      selector: (row: any) => row.offense.fieldPosition.averageStart.toFixed(1),
+      name: "Kick Return Yards",
+      selector: (row: any) => row.kickReturnYards,
     },
     {
-      name: "Offense Avg Predicted Points",
-      selector: (row: any) =>
-        row.offense.fieldPosition.averagePredictedPoints.toFixed(3),
+      name: "Kick Return TDs",
+      selector: (row: any) => row.kickReturnTDs,
     },
     {
-      name: "Defense Avg Start",
-      selector: (row: any) => row.defense.fieldPosition.averageStart.toFixed(3),
+      name: "Kick Returns",
+      selector: (row: any) => row.kickReturns,
     },
     {
-      name: "Defense Avg Predicted Points",
-      selector: (row: any) =>
-        row.defense.fieldPosition.averagePredictedPoints.toFixed(3),
+      name: "Punt Return Yards",
+      selector: (row: any) => row.puntReturnYards,
+    },
+    {
+      name: "Punt Return TDs",
+      selector: (row: any) => row.puntReturnTDs,
+    },
+    {
+      name: "Punt Returns",
+      selector: (row: any) => row.puntReturns,
     },
   ];
 
-  const [activeTab, setActiveTab] = useState("offensePPO");
+  const downsStatNames = [
+    "firstDowns",
+    "thirdDowns",
+    "thirdDownConversions",
+    "fourthDowns",
+    "fourthDownConversions",
+  ];
+  const downsData = processStatData(stats, downsStatNames, "firstDowns");
+
+  const columnsDowns = [
+    {
+      name: "Team",
+      cell: (row: any) => teamCol(row),
+      minWidth: "25%",
+    },
+    {
+      name: "First Downs",
+      selector: (row: any) => row.firstDowns,
+    },
+    {
+      name: "Third Downs",
+      selector: (row: any) => row.thirdDowns,
+    },
+    {
+      name: "Third Down Conv",
+      selector: (row: any) => row.thirdDownConversions,
+    },
+    {
+      name: "Fourth Downs",
+      selector: (row: any) => row.fourthDowns,
+    },
+    {
+      name: "Fourth Down Conv",
+      selector: (row: any) => row.fourthDownConversions,
+    },
+  ];
+
+  const etcStatNames = [
+    "possessionTime",
+    "penalties",
+    "penaltyYards",
+    "fumblesLost",
+    "fumblesRecovered",
+    "turnovers",
+  ];
+  const etcData = processStatData(stats, etcStatNames, "possessionTime");
+
+  const columnsETC = [
+    {
+      name: "Team",
+      cell: (row: any) => teamCol(row),
+      minWidth: "25%",
+    },
+    {
+      name: "Possession Time",
+      selector: (row: any) => row.possessionTime,
+    },
+    {
+      name: "Penalties",
+      selector: (row: any) => row.penalties,
+    },
+    {
+      name: "Penalty Yards",
+      selector: (row: any) => row.penaltyYards,
+    },
+    {
+      name: "Fumbles Lost",
+      selector: (row: any) => row.fumblesLost,
+    },
+    {
+      name: "Fumbles Recovered",
+      selector: (row: any) => row.fumblesRecovered,
+    },
+    {
+      name: "Turnovers",
+      selector: (row: any) => row.turnovers,
+    },
+  ];
+
+  const [activeTab, setActiveTab] = useState("Passing");
 
   const handleTabChange = (tab: any) => {
     setActiveTab(tab);
@@ -554,16 +659,6 @@ export default function Team() {
           <div className="flex flex-col md:flex-row gap-2">
             <button
               className={`${
-                activeTab === "offensePPO"
-                  ? "bg-gray-600 hover:bg-gray-700 text-white"
-                  : "bg-transparent hover:bg-gray-300 text-gray-600"
-              } w-full md:w-auto font-semibold py-2 px-4 rounded self-end transition-all duration-100`}
-              onClick={() => handleTabChange("offensePPO")}
-            >
-              Offense
-            </button>
-            <button
-              className={`${
                 activeTab === "Passing"
                   ? "bg-gray-600 hover:bg-gray-700 text-white"
                   : "bg-transparent hover:bg-gray-300 text-gray-600"
@@ -594,6 +689,36 @@ export default function Team() {
             </button>
             <button
               className={`${
+                activeTab === "Special Teams"
+                  ? "bg-gray-600 hover:bg-gray-700 text-white"
+                  : "bg-transparent hover:bg-gray-300 text-gray-600"
+              } w-full md:w-auto font-semibold py-2 px-4 rounded self-end transition-all duration-100`}
+              onClick={() => handleTabChange("Special Teams")}
+            >
+              Special Teams
+            </button>
+            <button
+              className={`${
+                activeTab === "Downs"
+                  ? "bg-gray-600 hover:bg-gray-700 text-white"
+                  : "bg-transparent hover:bg-gray-300 text-gray-600"
+              } w-full md:w-auto font-semibold py-2 px-4 rounded self-end transition-all duration-100`}
+              onClick={() => handleTabChange("Downs")}
+            >
+              Downs
+            </button>
+            <button
+              className={`${
+                activeTab === "Etc"
+                  ? "bg-gray-600 hover:bg-gray-700 text-white"
+                  : "bg-transparent hover:bg-gray-300 text-gray-600"
+              } w-full md:w-auto font-semibold py-2 px-4 rounded self-end transition-all duration-100`}
+              onClick={() => handleTabChange("Etc")}
+            >
+              Etc
+            </button>
+            {/* <button
+              className={`${
                 activeTab === "FieldPos"
                   ? "bg-gray-600 hover:bg-gray-700 text-white"
                   : "bg-transparent hover:bg-gray-300 text-gray-600"
@@ -601,43 +726,38 @@ export default function Team() {
               onClick={() => handleTabChange("FieldPos")}
             >
               Field Position
-            </button>
+            </button> */}
           </div>
           <div>
-            {stats && activeTab === "offensePPO" && (
-              <DataTable
-                data={sortByPPO(stats)}
-                columns={columnsOffensePPO}
-                pagination
-              />
-            )}
             {stats && activeTab === "Passing" && (
               <DataTable
-                data={sortByPassing(stats)}
+                data={passingData}
                 columns={columnsPassing}
                 pagination
               />
             )}
             {stats && activeTab === "Rushing" && (
               <DataTable
-                data={sortByRushing(stats)}
+                data={rushingData}
                 columns={columnsRushing}
                 pagination
               />
             )}
             {stats && activeTab === "Defense" && (
               <DataTable
-                data={sortByDefense(stats)}
+                data={defenseData}
                 columns={columnsDefense}
                 pagination
               />
             )}
-            {stats && activeTab === "FieldPos" && (
-              <DataTable
-                data={sortByFieldPos(stats)}
-                columns={columnsFieldPos}
-                pagination
-              />
+            {stats && activeTab === "Special Teams" && (
+              <DataTable data={stData} columns={columnsST} pagination />
+            )}
+            {stats && activeTab === "Downs" && (
+              <DataTable data={downsData} columns={columnsDowns} pagination />
+            )}
+            {stats && activeTab === "Etc" && (
+              <DataTable data={etcData} columns={columnsETC} pagination />
             )}
           </div>
         </div>
