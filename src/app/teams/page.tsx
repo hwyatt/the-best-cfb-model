@@ -7,7 +7,6 @@ import TeamHero from "../components/TeamHero";
 import TeamImg from "../components/TeamImg";
 import SeasonSelect from "../components/SeasonSelect";
 import { useSearchParams } from "next/navigation";
-import { stat } from "fs";
 import DataTable from "react-data-table-component";
 
 interface YearOption {
@@ -16,41 +15,6 @@ interface YearOption {
 }
 
 type StatDataMap = Record<string, Record<string, number | string>>;
-
-// const processStatData = <
-//   T extends { team: string; statName: string; statValue: number }
-// >(
-//   data: T[],
-//   targetStatNames: string[],
-//   sortCol: string
-// ): Record<string, number | string>[] => {
-//   const statDataMap: StatDataMap = {};
-
-//   data.forEach((item) => {
-//     const { team, statName, statValue } = item;
-
-//     if (targetStatNames.includes(statName)) {
-//       if (!statDataMap[team]) {
-//         statDataMap[team] = { team };
-//       }
-
-//       statDataMap[team][statName] = statValue;
-//     }
-//   });
-
-//   const statDataArray = Object.values(statDataMap);
-
-//   const sortedStatData = statDataArray.sort((a, b) => {
-//     return (Number(b[sortCol]) || 0) - (Number(a[sortCol]) || 0);
-//   });
-
-//   // Add rank property to each object
-//   sortedStatData.forEach((item, index) => {
-//     item.rank = index + 1;
-//   });
-
-//   return sortedStatData;
-// };
 
 const processStatData = <
   T extends { team: string; statName: string; statValue: number }
@@ -90,6 +54,40 @@ const processStatData = <
 
   return sortedStatData;
 };
+
+const StatCard = ({ statName, statValue, statRank }: any) => (
+  <div className="flex items-center justify-between gap-2 bg-white border-2 border-gray-400 rounded p-4 w-full shadow-lg">
+    <div className="w-full flex gap-2 items-center flex-row-reverse justify-between">
+      {/* bg-green-200 border-2 border-green-600 */}
+      {/* bg-red-200 border-2 border-red-600 */}
+      {/* bg-yellow-200 border-2 border-yellow-600 */}
+      {/* bg-blue-200 border-2 border-blue-600 */}
+      <div
+        className={`${
+          statRank <= 25
+            ? `bg-green-200 border-2 border-green-600`
+            : statRank >= 26 && statRank < 51
+            ? `bg-blue-200 border-2 border-blue-600`
+            : statRank >= 51 && statRank < 76
+            ? `bg-yellow-200 border-2 border-yellow-600`
+            : statRank >= 76 && statRank < 100
+            ? `bg-orange-200 border-2 border-orange-600`
+            : statRank >= 100
+            ? `bg-red-200 border-2 border-red-600`
+            : `bg-gray-200`
+        } rounded-full p-2`}
+      >
+        <div className="flex items-center justify-center w-8 h-8 font-semibold">
+          {statRank}
+        </div>
+      </div>
+      <div className="flex flex-col">
+        <p className="text-gray-800 font-semibold mr-1">{statValue}</p>
+        <p className="text-gray-800">{statName}</p>
+      </div>
+    </div>
+  </div>
+);
 
 export default function Team() {
   const searchParams = useSearchParams();
@@ -704,9 +702,186 @@ export default function Team() {
       {stats.length === 0 || statsLoading ? (
         <div>Loading Stats...</div>
       ) : selectedTeam && selectedTeam.id && !statsLoading ? (
-        <div className="flex flex-col gap-2">
-          <p className="text-lg font-semibold text-gray-600">Stats</p>
-          <div className="grid grid-cols-4 md:grid-cols-8"></div>
+        <div className="flex flex-col gap-4">
+          <p className="text-lg font-semibold text-gray-600">Passing</p>
+          <div className="">
+            {passingData
+              .filter((stat: any) => stat.team === selectedTeam.school)
+              .map((teamPassingData: any, index: number) => {
+                return (
+                  <div key={index} className="grid md:grid-cols-4 gap-4 mb-4">
+                    <StatCard
+                      statName={"Total Yards"}
+                      statValue={teamPassingData.netPassingYards}
+                      statRank={teamPassingData.ranknetPassingYards}
+                    />
+                    <StatCard
+                      statName={"Touchdowns"}
+                      statValue={teamPassingData.passingTDs}
+                      statRank={teamPassingData.rankpassingTDs}
+                    />
+                    <StatCard
+                      statName={"Attempts"}
+                      statValue={teamPassingData.passAttempts}
+                      statRank={teamPassingData.rankpassAttempts}
+                    />
+                    <StatCard
+                      statName={"Conversions"}
+                      statValue={teamPassingData.passCompletions}
+                      statRank={teamPassingData.rankpassCompletions}
+                    />
+                  </div>
+                );
+              })}
+          </div>
+          <p className="text-lg font-semibold text-gray-600">Rushing</p>
+          <div className="">
+            {rushingData
+              .filter((stat: any) => stat.team === selectedTeam.school)
+              .map((teamRushingData: any, index: number) => {
+                return (
+                  <div key={index} className="grid md:grid-cols-4 gap-4 mb-4">
+                    <StatCard
+                      statName={"Total Yards"}
+                      statValue={teamRushingData.rushingYards}
+                      statRank={teamRushingData.rankrushingYards}
+                    />
+                    <StatCard
+                      statName={"Touchdowns"}
+                      statValue={teamRushingData.rushingTDs}
+                      statRank={teamRushingData.rankrushingTDs}
+                    />
+                    <StatCard
+                      statName={"Attempts"}
+                      statValue={teamRushingData.rushingAttempts}
+                      statRank={teamRushingData.rankrushingAttempts}
+                    />
+                  </div>
+                );
+              })}
+          </div>
+          <p className="text-lg font-semibold text-gray-600">Defense</p>
+          <div className="">
+            {defenseData
+              .filter((stat: any) => stat.team === selectedTeam.school)
+              .map((teamDefenseData: any, index: number) => {
+                return (
+                  <div key={index} className="grid md:grid-cols-4 gap-4 mb-4">
+                    <StatCard
+                      statName={"Interceptions"}
+                      statValue={teamDefenseData.interceptions}
+                      statRank={teamDefenseData.rankinterceptions}
+                    />
+                    <StatCard
+                      statName={"Interception Touchdowns"}
+                      statValue={teamDefenseData.interceptionTDs}
+                      statRank={teamDefenseData.rankinterceptionTDs}
+                    />
+                    <StatCard
+                      statName={"Sacks"}
+                      statValue={teamDefenseData.sacks}
+                      statRank={teamDefenseData.ranksacks}
+                    />
+                    <StatCard
+                      statName={"Tackles for Loss"}
+                      statValue={teamDefenseData.tacklesForLoss}
+                      statRank={teamDefenseData.ranktacklesForLoss}
+                    />
+                  </div>
+                );
+              })}
+          </div>
+          <p className="text-lg font-semibold text-gray-600">Special Teams</p>
+          <div className="">
+            {stData
+              .filter((stat: any) => stat.team === selectedTeam.school)
+              .map((teamSTData: any, index: number) => {
+                return (
+                  <div key={index} className="grid md:grid-cols-4 gap-4 mb-4">
+                    <StatCard
+                      statName={"Kick Return Yards"}
+                      statValue={teamSTData.kickReturnYards}
+                      statRank={teamSTData.rankkickReturnYards}
+                    />
+                    <StatCard
+                      statName={"Kick Return Touchdowns"}
+                      statValue={teamSTData.kickReturnTDs}
+                      statRank={teamSTData.rankkickReturnTDs}
+                    />
+
+                    <StatCard
+                      statName={"Punt Return Yards"}
+                      statValue={teamSTData.puntReturnYards}
+                      statRank={teamSTData.rankpuntReturnYards}
+                    />
+                    <StatCard
+                      statName={"Punt Return Touchdowns"}
+                      statValue={teamSTData.puntReturnTDs}
+                      statRank={teamSTData.rankpuntReturnTDs}
+                    />
+                  </div>
+                );
+              })}
+          </div>
+          <p className="text-lg font-semibold text-gray-600">Downs</p>
+          <div className="">
+            {downsData
+              .filter((stat: any) => stat.team === selectedTeam.school)
+              .map((teamDownsData: any, index: number) => {
+                return (
+                  <div key={index} className="grid md:grid-cols-4 gap-4 mb-4">
+                    <StatCard
+                      statName={"Third Downs"}
+                      statValue={teamDownsData.thirdDowns}
+                      statRank={teamDownsData.rankthirdDowns}
+                    />
+                    <StatCard
+                      statName={"Third Down Conversions"}
+                      statValue={teamDownsData.thirdDownConversions}
+                      statRank={teamDownsData.rankthirdDownConversions}
+                    />
+
+                    <StatCard
+                      statName={"Fourth Downs"}
+                      statValue={teamDownsData.fourthDowns}
+                      statRank={teamDownsData.rankfourthDowns}
+                    />
+                    <StatCard
+                      statName={"Fourth Down Conversions"}
+                      statValue={teamDownsData.fourthDownConversions}
+                      statRank={teamDownsData.rankfourthDownConversions}
+                    />
+                  </div>
+                );
+              })}
+          </div>
+          <p className="text-lg font-semibold text-gray-600">Etc</p>
+          <div className="">
+            {etcData
+              .filter((stat: any) => stat.team === selectedTeam.school)
+              .map((teamETCData: any, index: number) => {
+                return (
+                  <div key={index} className="grid md:grid-cols-4 gap-4 mb-4">
+                    <StatCard
+                      statName={"Possession Time"}
+                      statValue={teamETCData.possessionTime}
+                      statRank={teamETCData.rankpossessionTime}
+                    />
+                    <StatCard
+                      statName={"Penalties"}
+                      statValue={teamETCData.penalties}
+                      statRank={teamETCData.rankpenalties}
+                    />
+
+                    <StatCard
+                      statName={"Penalty Yards"}
+                      statValue={teamETCData.penaltyYards}
+                      statRank={teamETCData.rankpenaltyYards}
+                    />
+                  </div>
+                );
+              })}
+          </div>
         </div>
       ) : (
         <div className="flex flex-col gap-2">
