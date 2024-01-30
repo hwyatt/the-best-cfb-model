@@ -22,7 +22,9 @@ const Navbar = () => {
         style={{ maxWidth: "1312px" }}
       >
         <div className="text-gray-800 font-bold text-xl">
-          <a href="/">Saturday Stats</a>
+          <a href="/">
+            <img src="Saturday Stats.png" className="max-h-10" />
+          </a>
         </div>
         <div className="md:hidden">
           <button onClick={toggleMenu}>
