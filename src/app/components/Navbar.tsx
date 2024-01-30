@@ -26,7 +26,7 @@ const Navbar = () => {
             <img src="Saturday Stats.png" className="max-h-10" />
           </a>
         </div>
-        <div className="md:hidden">
+        <div className="flex items-center md:hidden">
           <button onClick={toggleMenu}>
             <FaBars className="font-semibold text-gray-800 text-2xl" />
           </button>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useId, useEffect } from "react";
-import { GiAmericanFootballHelmet } from "react-icons/gi";
 import { teamStadiumImages } from "../teamStadiumImages";
 import TeamSelect from "../components/TeamSelect";
 import TeamHero from "../components/TeamHero";
@@ -17,6 +16,41 @@ interface YearOption {
 }
 
 type StatDataMap = Record<string, Record<string, number | string>>;
+
+// const processStatData = <
+//   T extends { team: string; statName: string; statValue: number }
+// >(
+//   data: T[],
+//   targetStatNames: string[],
+//   sortCol: string
+// ): Record<string, number | string>[] => {
+//   const statDataMap: StatDataMap = {};
+
+//   data.forEach((item) => {
+//     const { team, statName, statValue } = item;
+
+//     if (targetStatNames.includes(statName)) {
+//       if (!statDataMap[team]) {
+//         statDataMap[team] = { team };
+//       }
+
+//       statDataMap[team][statName] = statValue;
+//     }
+//   });
+
+//   const statDataArray = Object.values(statDataMap);
+
+//   const sortedStatData = statDataArray.sort((a, b) => {
+//     return (Number(b[sortCol]) || 0) - (Number(a[sortCol]) || 0);
+//   });
+
+//   // Add rank property to each object
+//   sortedStatData.forEach((item, index) => {
+//     item.rank = index + 1;
+//   });
+
+//   return sortedStatData;
+// };
 
 const processStatData = <
   T extends { team: string; statName: string; statValue: number }
@@ -41,13 +75,17 @@ const processStatData = <
 
   const statDataArray = Object.values(statDataMap);
 
+  // Sort by the specified column (or 'rank' by default)
   const sortedStatData = statDataArray.sort((a, b) => {
     return (Number(b[sortCol]) || 0) - (Number(a[sortCol]) || 0);
   });
 
-  // Add rank property to each object
-  sortedStatData.forEach((item, index) => {
-    item.rank = index + 1;
+  // Add rank property for each stat
+  targetStatNames.forEach((statName) => {
+    const rankProp = `rank${statName}`;
+    sortedStatData.forEach((item, index) => {
+      item[rankProp] = index + 1;
+    });
   });
 
   return sortedStatData;
@@ -89,8 +127,27 @@ export default function Team() {
     }));
 
     setYearOpts(formattedYears);
-    handleGetStats(currentYear);
+    handleGetStats();
   }, []);
+
+  const handleGetStats = async () => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+
+    // If we are not yet in August of the current year, set the current football year to the previous year
+    const currentYear =
+      currentMonth >= 7
+        ? currentDate.getFullYear()
+        : currentDate.getFullYear() - 1;
+
+    setStatsLoading(true);
+    const getStats = await fetch(
+      `/api/stats?year=${year !== null ? year : currentYear}`
+    );
+    const stats = await getStats.json();
+    setStats(stats);
+    setStatsLoading(false);
+  };
 
   const handleGetTeams = async () => {
     const getTeams = await fetch(`/api/teams`);
@@ -170,44 +227,25 @@ export default function Team() {
     // Update the URL
     window.history.replaceState({}, "", url.toString());
 
-    const getRoster = await fetch(
-      `/api/roster?${
-        foundTeam.school && `team=${foundTeam.school}&`
-      }year=${year}`
-    );
-    const roster = await getRoster.json();
+    // const getRoster = await fetch(
+    //   `/api/roster?${
+    //     foundTeam.school && `team=${foundTeam.school}&`
+    //   }year=${year}`
+    // );
+    // const roster = await getRoster.json();
 
     const getGames = await fetch(
       `/api/games?year=${year}&${
         foundTeam.school && `team=${foundTeam.school}`
       }`
     );
-
     const games = await getGames.json();
-
     setGames(games);
     setGamesLoading(false);
-    handleGetStats(year);
-  };
 
-  const handleGetStats = async (currentYear: any) => {
     setStatsLoading(true);
-
-    let url = `/api/stats`;
-
-    if (year !== null) {
-      url += `?year=${year}`;
-    } else {
-      url += `?year=${currentYear}`;
-    }
-
-    if (selectedTeam.school) {
-      url += `${year !== null ? "&" : "?"}team=${selectedTeam.school}`;
-    }
-
-    const getStats = await fetch(url);
+    const getStats = await fetch(`/api/stats?year=${year}`);
     const stats = await getStats.json();
-
     setStats(stats);
     setStatsLoading(false);
   };
@@ -225,7 +263,11 @@ export default function Team() {
     setGames(games);
     setGamesLoading(false);
 
-    handleGetStats(year);
+    setStatsLoading(true);
+    const getStats = await fetch(`/api/stats?year=${year}`);
+    const stats = await getStats.json();
+    setStats(stats);
+    setStatsLoading(false);
   };
 
   const getOpponentImage = (name: string) => {
@@ -238,24 +280,24 @@ export default function Team() {
     return oppponent?.color;
   };
 
-  const teamCol = (row: any) => {
+  const teamCol = (row: any, rankName: any) => {
     const matchingTeam = teams.find((team) => team?.school === row.team);
     const teamLogo = matchingTeam?.logos?.[0];
 
     return (
       <div className="flex items-center gap-2">
         <span className="font-semibold uppercase text-gray-800">
-          {row.rank}
+          {row[rankName]}
         </span>
         <div>
           {teamLogo ? (
             <img
               src={teamLogo}
               alt="Team Logo"
-              style={{ width: "40px", height: "40px", minWidth: "40px" }}
+              className="w-10 h-10 min-w-10"
             />
           ) : (
-            <GiAmericanFootballHelmet />
+            <img src={"icon.png"} className="w-10 h-10 min-w-10" />
           )}
         </div>
         <span className="font-semibold uppercase text-gray-800">
@@ -281,24 +323,28 @@ export default function Team() {
   const columnsPassing = [
     {
       name: "Team",
-      cell: (row: any) => teamCol(row),
+      cell: (row: any) => teamCol(row, "ranknetPassingYards"),
       minWidth: "25%",
     },
     {
       name: "Yards",
       selector: (row: any) => row.netPassingYards,
+      sortable: true,
     },
     {
-      name: "Touchdowns",
+      name: "TDs",
       selector: (row: any) => row.passingTDs,
+      sortable: true,
     },
     {
       name: "Attempts",
       selector: (row: any) => row.passAttempts,
+      sortable: true,
     },
     {
       name: "Completions",
       selector: (row: any) => row.passCompletions,
+      sortable: true,
     },
     {
       name: "Completion %",
@@ -318,6 +364,7 @@ export default function Team() {
     {
       name: "Interceptions",
       selector: (row: any) => row.passesIntercepted,
+      sortable: true,
     },
   ];
 
@@ -327,20 +374,23 @@ export default function Team() {
   const columnsRushing = [
     {
       name: "Team",
-      cell: (row: any) => teamCol(row),
+      cell: (row: any) => teamCol(row, "rankrushingYards"),
       minWidth: "25%",
     },
     {
       name: "Yards",
       selector: (row: any) => row.rushingYards,
+      sortable: true,
     },
     {
-      name: "Touchdowns",
+      name: "TDs",
       selector: (row: any) => row.rushingTDs,
+      sortable: true,
     },
     {
       name: "Attempts",
       selector: (row: any) => row.rushingAttempts,
+      sortable: true,
     },
     {
       name: "Yards per Attempt",
@@ -355,6 +405,7 @@ export default function Team() {
         const yardsPerAttempt = (rushingYards / rushingAttempts).toFixed(2);
         return yardsPerAttempt;
       },
+      sortable: true,
     },
   ];
 
@@ -370,7 +421,7 @@ export default function Team() {
   const columnsDefense = [
     {
       name: "Team",
-      cell: (row: any) => teamCol(row),
+      cell: (row: any) => teamCol(row, "rankinterceptions"),
       minWidth: "25%",
     },
     {
@@ -408,7 +459,7 @@ export default function Team() {
   const columnsST = [
     {
       name: "Team",
-      cell: (row: any) => teamCol(row),
+      cell: (row: any) => teamCol(row, "rankkickReturnYards"),
       minWidth: "25%",
     },
     {
@@ -449,7 +500,7 @@ export default function Team() {
   const columnsDowns = [
     {
       name: "Team",
-      cell: (row: any) => teamCol(row),
+      cell: (row: any) => teamCol(row, "rankfirstDowns"),
       minWidth: "25%",
     },
     {
@@ -487,7 +538,7 @@ export default function Team() {
   const columnsETC = [
     {
       name: "Team",
-      cell: (row: any) => teamCol(row),
+      cell: (row: any) => teamCol(row, "rankpossessionTime"),
       minWidth: "25%",
     },
     {
@@ -615,11 +666,9 @@ export default function Team() {
                               className="w-24 h-auto mb-2"
                               fallback={
                                 <div className="w-24 h-auto mb-2">
-                                  <GiAmericanFootballHelmet
+                                  <img
+                                    src={"icon.png"}
                                     className="w-full h-auto"
-                                    style={{
-                                      fill: opponentColor,
-                                    }}
                                   />
                                 </div>
                               }
@@ -653,6 +702,11 @@ export default function Team() {
       )}
       {stats.length === 0 || statsLoading ? (
         <div>Loading Stats...</div>
+      ) : selectedTeam && selectedTeam.id && !statsLoading ? (
+        <div className="flex flex-col gap-2">
+          <p className="text-lg font-semibold text-gray-600">Stats</p>
+          <div className="grid grid-cols-4 md:grid-cols-8"></div>
+        </div>
       ) : (
         <div className="flex flex-col gap-2">
           <label className="font-semibold text-gray-600">Select a Stat</label>
