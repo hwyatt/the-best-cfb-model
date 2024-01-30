@@ -58,22 +58,14 @@ const processStatData = <
 const StatCard = ({ statName, statValue, statRank }: any) => (
   <div className="flex items-center justify-between gap-2 bg-white border-2 border-gray-400 rounded p-4 w-full shadow-lg">
     <div className="w-full flex gap-2 items-center flex-row-reverse justify-between">
-      {/* bg-green-200 border-2 border-green-600 */}
-      {/* bg-red-200 border-2 border-red-600 */}
-      {/* bg-yellow-200 border-2 border-yellow-600 */}
-      {/* bg-blue-200 border-2 border-blue-600 */}
       <div
         className={`${
           statRank <= 25
-            ? `bg-green-200 border-2 border-green-600`
-            : statRank >= 26 && statRank < 51
-            ? `bg-blue-200 border-2 border-blue-600`
-            : statRank >= 51 && statRank < 76
-            ? `bg-yellow-200 border-2 border-yellow-600`
-            : statRank >= 76 && statRank < 100
-            ? `bg-orange-200 border-2 border-orange-600`
-            : statRank >= 100
-            ? `bg-red-200 border-2 border-red-600`
+            ? `bg-green-200 border-2 border-green-600 text-green-600`
+            : statRank >= 26 && statRank < 75
+            ? `bg-blue-200 border-2 border-blue-600 text-blue-600`
+            : statRank >= 75
+            ? `bg-red-200 border-2 border-red-600 text-red-600`
             : `bg-gray-200`
         } rounded-full p-2`}
       >
