@@ -269,7 +269,7 @@ export default function Team() {
     setGamesLoading(false);
 
     setStatsLoading(true);
-    const getStats = await fetch(`/api/stats?year=${year}`);
+    const getStats = await fetch(`/api/stats?year=${year.value}`);
     const stats = await getStats.json();
     setStats(stats);
     setStatsLoading(false);

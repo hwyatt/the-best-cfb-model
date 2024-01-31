@@ -6,28 +6,28 @@ const BEARER_TOKEN =
 const STATS = "/stats/season";
 
 export async function GET(request: any) {
-  // const teamQS = request.nextUrl.searchParams.get(["team"]);
-  // const yearQS = request.nextUrl.searchParams.get(["year"]);
-  // const queryParams = new URLSearchParams();
-  // if (teamQS) queryParams.append("team", teamQS);
-  // if (yearQS) queryParams.append("year", yearQS);
+  const teamQS = request.nextUrl.searchParams.get(["team"]);
+  const yearQS = request.nextUrl.searchParams.get(["year"]);
+  const queryParams = new URLSearchParams();
+  if (teamQS) queryParams.append("team", teamQS);
+  if (yearQS) queryParams.append("year", yearQS);
 
-  // const ENDPOINT = `${BASE_URL}${STATS}?${queryParams.toString()}`;
+  const ENDPOINT = `${BASE_URL}${STATS}?${queryParams.toString()}`;
 
   try {
-    //   const res = await fetch(ENDPOINT, {
-    //     headers: {
-    //       Authorization: `Bearer ${BEARER_TOKEN}`,
-    //     },
-    //   });
+      const res = await fetch(ENDPOINT, {
+        headers: {
+          Authorization: `Bearer ${BEARER_TOKEN}`,
+        },
+      });
 
-    //   if (!res.ok) {
-    //     throw new Error("Failed to fetch data");
-    //   }
+      if (!res.ok) {
+        throw new Error("Failed to fetch data");
+      }
 
-    //   const json = await res.json();
+      const json = await res.json();
 
-    return NextResponse.json(mock, { status: 200 });
+    return NextResponse.json(json, { status: 200 });
   } catch (err) {
     console.log(err);
   }
