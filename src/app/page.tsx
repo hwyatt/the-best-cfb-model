@@ -32,7 +32,7 @@ export default async function Home() {
       </div>
       <div className="self-center md:mb-8 flex flex-col gap-4">
         <p className="text-gray-600 text-center max-w-3xl">
-          <span className="text-gray-800 font-semibold">Saturday Stats</span> $
+          <span className="text-gray-800 font-semibold">Saturday Stats</span>
           {`is
           the home of America's Next Top CFB Model`}{" "}
           and all your favorite CFB stats. <br className="hidden md:block" />
