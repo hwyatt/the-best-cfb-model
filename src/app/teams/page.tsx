@@ -47,8 +47,23 @@ const processStatData = <
   // Add rank property for each stat
   targetStatNames.forEach((statName) => {
     const rankProp = `rank${statName}`;
-    sortedStatData.forEach((item, index) => {
-      item[rankProp] = index + 1;
+
+    // Sort the data again for the current statName
+    const sortedStatDataForStat = statDataArray.slice().sort((a, b) => {
+      return (Number(b[statName]) || 0) - (Number(a[statName]) || 0);
+    });
+
+    // Find the team in the index (+1) of the sorted array based on the current stat
+    sortedStatDataForStat.forEach((item, index) => {
+      const team = item.team;
+      const rank = index + 1;
+      sortedStatData.find((dataItem) => {
+        if (dataItem.team === team) {
+          dataItem[rankProp] = rank;
+          return true; // Stop searching once the team is found
+        }
+        return false;
+      });
     });
   });
 
@@ -656,7 +671,7 @@ export default function Team() {
                               src={opponentImg}
                               className="w-24 h-auto mb-2"
                               fallback={
-                                <div className="w-24 h-auto mb-2">
+                                <div className="w-24 min-h-24 h-auto mb-2">
                                   <img
                                     src={"icon.png"}
                                     className="w-full h-auto"
