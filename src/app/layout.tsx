@@ -8,9 +8,9 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Saturday Stats",
-  description: `America's Next Top CFB Model`,
+  description: `America's Next Top CFB Model, and home for CFB stats.`,
   openGraph: {
-    images: "https://i.ibb.co/pR872L3/tbcfbm.png",
+    images: "https://i.ibb.co/F7HtK7j/SS-PP.png",
   },
 };
 
