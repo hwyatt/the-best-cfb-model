@@ -32,9 +32,10 @@ export default async function Home() {
       </div>
       <div className="self-center md:mb-8 flex flex-col gap-4">
         <p className="text-gray-600 text-center max-w-3xl">
-          <span className="text-gray-800 font-semibold">Saturday Stats</span> is
-          the home of America's Next Top CFB Model and all your favorite CFB
-          stats. <br className="hidden md:block" />
+          <span className="text-gray-800 font-semibold">Saturday Stats</span> $
+          {`is
+          the home of America's Next Top CFB Model`}{" "}
+          and all your favorite CFB stats. <br className="hidden md:block" />
           Explore stats for every area of the game and see how your favorite
           team ranks for each stat. Model two teams from any two seasons to
           settle the debate with your weird uncle. Build a bracket for the 12
@@ -50,7 +51,7 @@ export default async function Home() {
         <h2 className="text-lg font-semibold text-gray-600">Things to Do</h2>
         <div className="grid md:grid-cols-4 gap-8">
           <a href="/teams">
-            <div className="gmd:flex md:flex-col rounded border-2 border-gray-400">
+            <div className="md:flex md:flex-col rounded border-2 border-gray-400">
               <div className="object-fit-contain p-4 bg-white aspect-square">
                 <img src="icon.png" className="w-full h-auto" />
               </div>
