@@ -243,14 +243,14 @@ export default function Portal() {
             </p>
           </div>
 
-          <div className="flex gap-2">
-            <StarsColumn row={row} />
-            {row.rating !== null && (
-              <span className="text-xs font-semibold text-gray-600">
-                {row.rating}
-              </span>
-            )}
-          </div>
+          {row.stars !== null && (
+            <div className="flex gap-2">
+              <StarsColumn row={row} />
+              {row.rating !== null && (
+                <span className="text-xs ml-2">{`(${row.rating})`}</span>
+              )}
+            </div>
+          )}
         </div>
       ),
     },
@@ -457,27 +457,29 @@ export default function Portal() {
           all kinds of data.
         </p>
       </div>
-      <div className="flex flex-col gap-2">
-        <label className="font-semibold text-gray-600">
-          Portal Winners and Losers
-        </label>
+      {filteredData.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold text-gray-600">
+            Portal Winners and Losers
+          </label>
 
-        <div className="grid md:grid-cols-2  gap-4 md:gap-8">
-          <StatCard
-            team={mostFrequentDestination?.team}
-            winner
-            transfers={mostFrequentDestination?.count}
-            avgStars={mostFrequentDestination?.averageStars}
-            logo={destinationLogo}
-          />
-          <StatCard
-            team={mostFrequentOrigin?.team}
-            transfers={mostFrequentOrigin?.count}
-            avgStars={mostFrequentOrigin?.averageStars}
-            logo={originLogo}
-          />
+          <div className="grid md:grid-cols-2  gap-4 md:gap-8">
+            <StatCard
+              team={mostFrequentDestination?.team}
+              winner
+              transfers={mostFrequentDestination?.count}
+              avgStars={mostFrequentDestination?.averageStars}
+              logo={destinationLogo}
+            />
+            <StatCard
+              team={mostFrequentOrigin?.team}
+              transfers={mostFrequentOrigin?.count}
+              avgStars={mostFrequentOrigin?.averageStars}
+              logo={originLogo}
+            />
+          </div>
         </div>
-      </div>
+      )}
       <div className="flex flex-col md:flex-row gap-4 md:gap-8 justify-between">
         <div className="flex flex-col md:flex-row gap-4 md:gap-8">
           <div className="flex flex-col gap-2">
