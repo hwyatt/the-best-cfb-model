@@ -291,9 +291,7 @@ export default function Team() {
 
     return (
       <div className="flex items-center gap-2">
-        <span className="font-semibold uppercase text-gray-800">
-          {row[rankName]}
-        </span>
+        <span className="font-semibold text-gray-800">{row[rankName]}</span>
         <div>
           {teamLogo ? (
             <img
@@ -305,9 +303,7 @@ export default function Team() {
             <img src={"icon.png"} className="w-10 h-10 min-w-10" />
           )}
         </div>
-        <span className="font-semibold uppercase text-gray-800">
-          {row.team}
-        </span>
+        <span className="font-semibold text-gray-800">{row.team}</span>
       </div>
     );
   };

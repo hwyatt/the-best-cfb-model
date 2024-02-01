@@ -5,6 +5,8 @@ import SeasonSelect from "../components/SeasonSelect";
 import Select from "react-select";
 import { GiAmericanFootballHelmet } from "react-icons/gi";
 import { FaStar } from "react-icons/fa";
+import { BsArrowRight } from "react-icons/bs";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 interface YearOption {
   label: string;
@@ -146,6 +148,7 @@ const getDate = (stringDate: string) => {
 };
 
 export default function Portal() {
+  const { height, width } = useWindowDimensions();
   const [data, setData] = useState([]);
   const [teamsData, setTeamsData] = useState([
     {
@@ -220,7 +223,15 @@ export default function Portal() {
     selectAllRowsItem: false,
   };
 
-  const columns = [
+  interface TableColumn<T> {
+    name: string;
+    cell?: (row: T) => JSX.Element;
+    selector?: (row: T) => any;
+    maxWidth?: string;
+    hide?: any;
+  }
+
+  const columns: TableColumn<any>[] = [
     {
       name: "Player",
       cell: (row: any) => (
@@ -242,7 +253,6 @@ export default function Portal() {
           </div>
         </div>
       ),
-      maxWidth: "15%",
     },
     {
       name: "Pos",
@@ -251,11 +261,13 @@ export default function Portal() {
     },
     {
       name: "Transfer Date",
+      hide: "md",
       selector: (row: any) => getDate(row.transferDate),
       maxWidth: "15%",
     },
     {
       name: "Origin",
+      hide: "md",
       cell: (row: any) => {
         const matchingTeam = teamsData.find(
           (team) => team?.school === row.origin
@@ -284,6 +296,7 @@ export default function Portal() {
     },
     {
       name: "Destination",
+      hide: "md",
       cell: (row: any) => {
         const matchingTeam = teamsData.find(
           (team) => team?.school === row.destination
@@ -386,14 +399,54 @@ export default function Portal() {
   );
 
   const originMatch: any = teamsData.find(
-    (team) => team?.school === mostFrequentOrigin.team
+    (team) => team?.school === mostFrequentOrigin?.team
   );
   const originLogo = originMatch?.logos?.[0];
 
   const destinationMatch: any = teamsData.find(
-    (team) => team?.school === mostFrequentDestination.team
+    (team) => team?.school === mostFrequentDestination?.team
   );
   const destinationLogo = destinationMatch?.logos?.[0];
+
+  const ExpandedComponent = ({ data }: any) => {
+    const matchingDesTeam = teamsData.find(
+      (team) => team?.school === data.destination
+    );
+    const desLogo = matchingDesTeam?.logos?.[0] || undefined;
+
+    const matchingOriTeam = teamsData.find(
+      (team) => team?.school === data.origin
+    );
+    const oriLogo = matchingOriTeam?.logos?.[0] || undefined;
+
+    return (
+      <div className="flex flex-col gap-2 p-4">
+        <span className="font-semibold text-gray-600 text-sm">
+          Transfer Date: {getDate(data.transferDate)}
+        </span>
+        <div className="flex justify-center items-center gap-4">
+          <div className="flex items-center justify-center bg-gray-200 rounded-full p-2">
+            <img src={oriLogo} className="max-w-16 p-2" />
+          </div>
+          <BsArrowRight className="text-4xl" />
+
+          <div className="">
+            {desLogo ? (
+              <div className="flex items-center justify-center bg-gray-200 rounded-full p-2">
+                <img src={desLogo} className="max-w-16 p-2" />
+              </div>
+            ) : (
+              <div className="bg-gray-200 rounded-full p-2">
+                <div className="flex items-center justify-center w-16 h-16 font-semibold">
+                  ?
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="flex flex-col gap-8">
@@ -409,7 +462,7 @@ export default function Portal() {
           Portal Winners and Losers
         </label>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2  gap-4 md:gap-8">
           <StatCard
             team={mostFrequentDestination?.team}
             winner
@@ -489,6 +542,8 @@ export default function Portal() {
           <DataTable
             columns={columns}
             data={filteredData}
+            expandableRows={width < 768 ? true : false}
+            expandableRowsComponent={ExpandedComponent}
             pagination
             fixedHeader
             paginationComponentOptions={paginationComponentOptions}

@@ -44,7 +44,7 @@
 
 .rdt_Table {
   background-color: transparent !important;
-  min-width: 1150px !important;
+  /* min-width: 1150px !important; */
 }
 .rdt_TableCol_Sortable {
   --tw-text-opacity: 1;
@@ -127,4 +127,8 @@
   line-height: 1;
   stroke: #4b5563;
   stroke-width: 0;
+}
+
+.rdt_TableRow button:focus {
+  background-color: inherit;
 }
