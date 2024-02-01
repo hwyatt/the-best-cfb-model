@@ -1,22 +1,34 @@
-// const BASE_URL = "https://api.collegefootballdata.com";
-// const BEARER_TOKEN =
-//   "8474sJ42lQEtgWGBYsru+i6Ltl9k05P+Ohf/ZccNOMc7xow9G409Cm2QxLbJxyaw";
-// const TEAMS = "/teams/fbs";
-// const ROSTER = "/roster";
+import { PiChartLineUpBold } from "react-icons/pi";
+import { TbTournament } from "react-icons/tb";
+import { PiCircleDashedFill } from "react-icons/pi";
+import { GiAmericanFootballHelmet } from "react-icons/gi";
 
-// export async function getData() {
-//   const res = await fetch(`${BASE_URL}${TEAMS}`, {
-//     headers: {
-//       Authorization: `Bearer ${BEARER_TOKEN}`,
-//     },
-//   });
-
-//   if (!res.ok) {
-//     throw new Error("Failed to fetch data");
-//   }
-
-//   return res.json();
-// }
+const Card = ({ title, copy, icon, href }: any) => {
+  return (
+    <a
+      href={href}
+      className="hover-card hover:transform hover:scale-110 transition-transform duration-300"
+    >
+      <div className="flex items-center justify-between gap-2 bg-white border-2 border-gray-400 rounded p-4 w-full shadow-lg hover:shadow-xl">
+        <div className="w-full flex gap-2 items-center">
+          <div className={`bg-gray-200 rounded-full p-2`}>
+            <div className="flex items-center justify-center w-8 h-8 font-semibold">
+              {icon}
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex flex-col">
+              <p className="text-gray-800 font-semibold mr-1">{title}</p>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="mr-2">{copy}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  );
+};
 
 export default async function Home() {
   return (
@@ -43,71 +55,42 @@ export default async function Home() {
           top 12 each week. <br className="hidden md:block" /> Browse the
           transfer portal for players, teams, positions and other related data.
         </p>
-        <p className="text-lg text-center text-gray-800 font-semibold">
-          #doitforstats
-        </p>
+        <div className="flex gap-2 self-center">
+          <p className="text-lg text-center text-gray-800 font-semibold">
+            #hailstats
+          </p>
+          <p className="text-lg text-center text-gray-800 font-semibold">
+            #doitforstats
+          </p>
+        </div>
       </div>
       <div className="flex flex-col gap-2">
         <h2 className="text-lg font-semibold text-gray-600">Things to Do</h2>
-        <div className="grid md:grid-cols-4 gap-8">
-          <a href="/teams">
-            <div className="md:flex md:flex-col rounded border-2 border-gray-400">
-              <div className="object-fit-contain p-4 bg-white aspect-square">
-                <img src="icon.png" className="w-full h-auto" />
-              </div>
-              <div className="bg-gray-800 text-white p-4 flex flex-col gap-1">
-                <span className="font-semibold">Stats</span>
-                <span className="">
-                  See high level stats for every part of the game, or choose a
-                  team to see their stats any given season.
-                </span>
-              </div>
-            </div>
-          </a>
-          <a href="/compare">
-            <div className="md:flex md:flex-col rounded border-2 border-gray-400">
-              <div className="object-fit-contain p-4 bg-white">
-                <img src="H2H.png" className="w-full h-auto aspect-square" />
-              </div>
-              <div className="bg-gray-800 text-white p-4 flex flex-col gap-1">
-                <span className="font-semibold">Head to Head Model</span>
-                <span className="">
-                  See high level stats for every part of the game, or choose a
-                  team to see their stats any given season.
-                </span>
-              </div>
-            </div>
-          </a>
-          <a href="/bracket">
-            <div className="md:flex md:flex-col rounded border-2 border-gray-400">
-              <div className="object-fit-contain p-4 bg-white aspect-square">
-                <img src="Bracket.png" className="w-full h-auto" />
-              </div>
-              <div className="bg-gray-800 text-white p-4 flex flex-col gap-1">
-                <span className="font-semibold">Build a CFP Bracket</span>
-                <span className="">
-                  See high level stats for every part of the game, or choose a
-                  team to see their stats any given season.
-                </span>
-              </div>
-            </div>
-          </a>
-          <a href="/portal">
-            <div className="md:flex md:flex-col rounded border-2 border-gray-400">
-              <div className="object-fit-contain p-4 bg-white aspect-square">
-                <img src="Portal.png" className="w-full h-auto" />
-              </div>
-              <div className="bg-gray-800 text-white p-4 flex flex-col gap-1">
-                <span className="font-semibold">
-                  Traverse the Transfer Portal
-                </span>
-                <span className="">
-                  See high level stats for every part of the game, or choose a
-                  team to see their stats any given season.
-                </span>
-              </div>
-            </div>
-          </a>
+        <div className="grid md:grid-cols-4 gap-4 md:gap-8">
+          <Card
+            title={"Stats"}
+            copy={"See the Stats"}
+            icon={<PiChartLineUpBold className="text-4xl" />}
+            href={"/teams"}
+          />
+          <Card
+            title={"Model"}
+            copy={"Make a Matchup"}
+            icon={<GiAmericanFootballHelmet className="text-4xl" />}
+            href={"/compare"}
+          />
+          <Card
+            title={"Bracket"}
+            copy={"Build a CFP Bracket"}
+            icon={<TbTournament className="text-4xl" />}
+            href={"/bracket"}
+          />
+          <Card
+            title={"Portal"}
+            copy={"Traverse the Transfer Portal"}
+            icon={<PiCircleDashedFill className="text-4xl" />}
+            href={"/portal"}
+          />
         </div>
       </div>
     </div>
