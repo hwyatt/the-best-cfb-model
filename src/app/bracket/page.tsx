@@ -172,8 +172,8 @@ export default function Bracket() {
     if (isDownloading && ref.current !== null) {
       domToPng(ref.current, {
         backgroundColor: "#e5e7eb",
-        width: 1312,
-        height: 776,
+        width: 1332,
+        height: 938.688,
       }).then((dataUrl) => {
         // const link = document.createElement("a");
         // link.download = "CFP-Bracket.png";
@@ -562,8 +562,11 @@ export default function Bracket() {
           Use Current Top 12
         </button>
       </div>
-      <div ref={ref} className="overflow-x-auto pb-4" id="bracket">
-        <div style={{ width: "1312px" }}>
+      <div ref={ref} className="overflow-x-auto" id="bracket">
+        <div
+          className={`flex flex-col ${isDownloading && `p-8`}`}
+          style={{ width: "1312px" }}
+        >
           <div className="grid grid-cols-4 w-full gap-8 mb-8">
             <span className="font-semibold text-gray-600">ROUND ONE</span>
             <span className="font-semibold text-gray-600">QUARTERFINALS</span>
@@ -1080,6 +1083,14 @@ export default function Bracket() {
                 )}
               </div>
             </div>
+          </div>
+          <div
+            className={`${
+              isDownloading ? "flex" : "hidden"
+            } w-full justify-between items-center mt-8`}
+          >
+            <img src="Saturday Stats.png" className="max-w-72" />
+            <span className="">saturdaystats.com</span>
           </div>
         </div>
       </div>

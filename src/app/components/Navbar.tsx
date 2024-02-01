@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
-import { FaBars } from "react-icons/fa";
+import { MdOutlineMenu } from "react-icons/md";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
+import { MdOutlineClose } from "react-icons/md";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +29,16 @@ const Navbar = () => {
         </div>
         <div className="flex items-center md:hidden">
           <button onClick={toggleMenu}>
-            <FaBars className="font-semibold text-gray-800 text-2xl" />
+            <MdOutlineMenu
+              className={`${
+                isOpen ? "hidden" : "block"
+              } font-semibold text-gray-800 text-3xl`}
+            />
+            <MdOutlineClose
+              className={`${
+                isOpen ? "block" : "hidden"
+              } font-semibold text-gray-800 text-3xl`}
+            />
           </button>
         </div>
         <div className={`md:flex md:gap-8 hidden text-lg`}>
