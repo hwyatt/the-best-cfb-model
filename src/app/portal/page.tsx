@@ -38,6 +38,108 @@ const StarsColumn = ({ row }: any) => {
   return <div>{renderStars()}</div>;
 };
 
+function findMostFrequent(data: any, key: any) {
+  const countMap = new Map();
+  const starMap = new Map();
+
+  data.forEach((item: any) => {
+    const value = item[key];
+    const stars = item.stars;
+
+    // Skip null values
+    if (value !== null) {
+      countMap.set(value, (countMap.get(value) || 0) + 1);
+
+      if (stars !== null) {
+        starMap.set(value, (starMap.get(value) || 0) + stars);
+      }
+    }
+  });
+
+  let mostFrequentValue: any = null;
+  let maxCount = 0;
+
+  countMap.forEach((count, value) => {
+    const averageStars = starMap.has(value) ? starMap.get(value) / count : null;
+
+    if (
+      count > maxCount ||
+      (count === maxCount &&
+        averageStars !== null &&
+        averageStars > mostFrequentValue.averageStars)
+    ) {
+      mostFrequentValue = { team: value, count, averageStars };
+      maxCount = count;
+    }
+  });
+
+  return mostFrequentValue;
+}
+
+const StatCard = ({ team, winner, transfers, avgStars, logo }: any) => {
+  // Function to generate stars based on the avgStars value
+  const renderStars = () => {
+    const stars = [];
+    const roundedStars = Math.round(avgStars);
+
+    // Render colored stars up to the rounded value
+    for (let i = 0; i < roundedStars; i++) {
+      stars.push(<FaStar key={i} className="text-yellow-600" />);
+    }
+
+    // Render remaining empty stars
+    for (let i = roundedStars; i < 5; i++) {
+      stars.push(<FaStar key={`empty-${i}`} className="text-gray-200" />);
+    }
+
+    return stars;
+  };
+
+  return (
+    <div className="flex items-center justify-between gap-2 bg-white border-2 border-gray-400 rounded p-4 w-full shadow-lg">
+      <div className="w-full flex gap-2 items-center flex-row-reverse justify-between">
+        <div
+          className={`${
+            winner
+              ? `bg-green-200 border-2 border-green-600 text-green-600`
+              : `bg-red-200 border-2 border-red-600 text-red-600`
+          } rounded-full p-2`}
+        >
+          <div className="flex items-center justify-center w-8 h-8 font-semibold">
+            {winner ? "W" : "L"}
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          {logo && (
+            <div className="rounded-full p-2 bg-gray-200">
+              <img src={logo} alt={team + " " + logo} className="w-10 h-10" />
+            </div>
+          )}
+          <div className="flex flex-col">
+            <p className="text-gray-800 font-semibold mr-1">{team}</p>
+            <p className="text-sm text-gray-600">
+              {winner
+                ? `${transfers} Incoming Transfers`
+                : `${transfers} Outgoing Transfers`}
+            </p>
+            {avgStars && (
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="mr-2">
+                  Avg Star {winner ? `Coming` : `Leaving`}
+                </span>
+                {renderStars()}
+                <span className="text-xs ml-2">{`(${avgStars.toFixed(
+                  2
+                )})`}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const getDate = (stringDate: string) => {
   const originalDate = new Date(stringDate);
   return originalDate.toLocaleDateString();
@@ -175,9 +277,7 @@ export default function Portal() {
                 />
               )}
             </div>
-            <span className="font-semibold uppercase text-gray-800">
-              {row.origin}
-            </span>
+            <span className="font-semibold text-gray-800">{row.origin}</span>
           </div>
         );
       },
@@ -202,7 +302,7 @@ export default function Portal() {
               ) : null}
             </div>
             {row.destination !== null ? (
-              <span className="font-semibold uppercase text-gray-800">
+              <span className="font-semibold text-gray-800">
                 {row.destination}
               </span>
             ) : (
@@ -279,6 +379,22 @@ export default function Portal() {
 
   const isFiltered = position !== "" || searchTerm !== "";
 
+  const mostFrequentOrigin: any = findMostFrequent(data, "origin");
+  const mostFrequentDestination: any = findMostFrequent(
+    data.filter((item: any) => item.destination !== null),
+    "destination"
+  );
+
+  const originMatch: any = teamsData.find(
+    (team) => team?.school === mostFrequentOrigin.team
+  );
+  const originLogo = originMatch?.logos?.[0];
+
+  const destinationMatch: any = teamsData.find(
+    (team) => team?.school === mostFrequentDestination.team
+  );
+  const destinationLogo = destinationMatch?.logos?.[0];
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4">
@@ -287,6 +403,27 @@ export default function Portal() {
           Search the Transfer Portal for players and teams. Sort/filter based on
           all kinds of data.
         </p>
+      </div>
+      <div className="flex flex-col gap-2">
+        <label className="font-semibold text-gray-600">
+          Portal Winners and Losers
+        </label>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          <StatCard
+            team={mostFrequentDestination?.team}
+            winner
+            transfers={mostFrequentDestination?.count}
+            avgStars={mostFrequentDestination?.averageStars}
+            logo={destinationLogo}
+          />
+          <StatCard
+            team={mostFrequentOrigin?.team}
+            transfers={mostFrequentOrigin?.count}
+            avgStars={mostFrequentOrigin?.averageStars}
+            logo={originLogo}
+          />
+        </div>
       </div>
       <div className="flex flex-col md:flex-row gap-4 md:gap-8 justify-between">
         <div className="flex flex-col md:flex-row gap-4 md:gap-8">
