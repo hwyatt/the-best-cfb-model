@@ -52,10 +52,10 @@ export default async function Home() {
           transfer portal for players, teams, positions and other related data.
         </p>
         <div className="flex gap-2 self-center">
-          <p className="text-lg text-center text-gray-800 font-semibold">
+          <p className="text-md text-center text-gray-600 font-semibold">
             #hailstats
           </p>
-          <p className="text-lg text-center text-gray-800 font-semibold">
+          <p className="text-md text-center text-gray-600 font-semibold">
             #doitforstats
           </p>
         </div>
