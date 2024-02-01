@@ -1,26 +1,31 @@
 import { useState, useEffect } from "react";
 
-function getWindowDimensions() {
-  const { innerWidth: width, innerHeight: height } = window;
-  return {
-    width,
-    height,
-  };
-}
+const useWindowDimensions = () => {
+  const isClient = typeof window === "object";
 
-export default function useWindowDimensions() {
-  const [windowDimensions, setWindowDimensions] = useState(
-    getWindowDimensions()
-  );
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: isClient ? window.innerWidth : 0,
+    height: isClient ? window.innerHeight : 0,
+  });
+
+  const handleResize = () => {
+    setWindowDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  };
 
   useEffect(() => {
-    function handleResize() {
-      setWindowDimensions(getWindowDimensions());
-    }
+    if (isClient) {
+      window.addEventListener("resize", handleResize);
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }
+  }, [isClient]);
 
   return windowDimensions;
-}
+};
+
+export default useWindowDimensions;
