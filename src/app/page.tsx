@@ -33,16 +33,12 @@ const Card = ({ title, copy, icon, href }: any) => {
 export default async function Home() {
   return (
     <div className="flex flex-col gap-8 w-full md:mt-8">
-      <div className="flex flex-col gap-4 px-4 self-center max-w-64">
+      <div className="self-center flex flex-col gap-4">
         <div className="object-fit-contain">
-          <img src="icon.png" className="w-full h-auto" />
+          <h1 className="text-center font-bold uppercase text-4xl tracking-wide	">
+            Hail Stats
+          </h1>
         </div>
-        <div className="object-fit-contain">
-          <img src="HAILSTATS.png" className="w-full h-auto" />
-          <h1 className="hidden">Hail Stats</h1>
-        </div>
-      </div>
-      <div className="self-center md:mb-8 flex flex-col gap-4">
         <p className="text-gray-600 text-center max-w-3xl">
           <span className="text-gray-800 font-semibold">Saturday Stats</span>{" "}
           {`is
