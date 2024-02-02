@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import SeasonSelect from "../components/SeasonSelect";
 import TeamHero from "../components/TeamHero";
 import TeamSelect from "../components/TeamSelect";
@@ -9,6 +9,64 @@ interface YearOption {
   label: string;
   value: string;
 }
+
+const TeamCard = ({ team, score, reverse }: any) => {
+  let winner = true;
+  return (
+    <div className="relative">
+      <div
+        className={`flex ${
+          reverse && `flex-row-reverse`
+        } items-center justify-between max-h-16 gap-2 bg-white border-2 border-gray-400 rounded p-4 w-full shadow-md hover:shadow-xl transition-all transition-100`}
+        style={{
+          backgroundColor: `${
+            team?.color !== "#ffffff" ? team?.color : team?.alt_color
+          }`,
+        }}
+      >
+        <div
+          className={`flex ${reverse && `flex-row-reverse`} gap-2 items-center`}
+        >
+          <div className="bg-gray-200 rounded-full p-2">
+            <img
+              src={team?.logos[0]}
+              alt={`${team?.school} Logo`}
+              className="w-8 h-auto object-contain"
+              crossOrigin="anonymous"
+            />
+          </div>
+
+          <p className="hidden md:block text-white font-semibold">
+            {team?.school}
+          </p>
+        </div>
+        <p className="text-white font-semibold">{score}</p>
+      </div>
+    </div>
+  );
+};
+
+const fetchTeamRatings = async (year: string, team: string) => {
+  try {
+    const response = await fetch(`/api/ratings?year=${year}&team=${team}`);
+    const ratings = await response.json();
+    return ratings;
+  } catch (error) {
+    console.error(`Error fetching stats for ${team} in ${year}:`, error);
+    return null;
+  }
+};
+
+const compareTeams = (teamAData: any, teamBData: any) => {
+  const { rating: ratingA } = teamAData;
+  const { rating: ratingB } = teamBData;
+
+  const pointSpread = ratingA - ratingB;
+  const scoreA = 24 + pointSpread / 2;
+  const scoreB = 24 - pointSpread / 2;
+
+  return { teamAScore: scoreA.toFixed(2), teamBScore: scoreB.toFixed(2) };
+};
 
 const TeamForCompare = ({ teams, onSelectTeam }: any) => {
   useEffect(() => {
@@ -129,11 +187,20 @@ const TeamForCompare = ({ teams, onSelectTeam }: any) => {
 };
 
 const Compare = () => {
+  const gameResultsRef = useRef<any>(null);
   const [data, setData] = useState([]);
+  const [gameResults, setGameResults] = useState<any>([]);
 
   useEffect(() => {
     handleGetTeams();
   }, []);
+
+  useEffect(() => {
+    // Scroll to the #gameResults div when game results are ready
+    if (gameResultsRef.current) {
+      gameResultsRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [gameResults]);
 
   const handleGetTeams = async () => {
     const getTeams = await fetch(`/api/teams`);
@@ -152,28 +219,27 @@ const Compare = () => {
       )?.stadiumImg || null,
   }));
 
-  const [teamA, setTeamA] = useState({ team: null, year: null });
-  const [teamB, setTeamB] = useState({ team: null, year: null });
+  const [teamA, setTeamA] = useState({ team: "", year: "" });
+  const [teamB, setTeamB] = useState({ team: "", year: "" });
 
   const handleSelectTeamA = ({ team, year }: any) => {
-    // const foundTeam = teams.find((team: any) => team === team);
     setTeamA({ team, year });
   };
 
   const handleSelectTeamB = ({ team, year }: any) => {
-    // const foundTeam = teams.find((team: any) => team === team);
     setTeamB({ team, year });
   };
 
   const handleSimulateGame = async () => {
-    console.log(
-      "Simulating game between",
-      teamA.year,
-      teamA.team,
-      "and",
-      teamB.year,
-      teamB.team
-    );
+    if (teamA.team && teamA.year && teamB.team && teamB.year) {
+      const statsTeamA = await fetchTeamRatings(teamA.year, teamA.team);
+      const statsTeamB = await fetchTeamRatings(teamB.year, teamB.team);
+
+      if (statsTeamA && statsTeamB) {
+        const comparisonResult = compareTeams(statsTeamA[0], statsTeamB[0]);
+        setGameResults(comparisonResult);
+      }
+    }
   };
 
   return (
@@ -189,7 +255,7 @@ const Compare = () => {
       {teams.length > 0 && (
         <div className="flex flex-col gap-8">
           <div className="grid md:grid-cols-2 w-full gap-4 md:gap-8 relative">
-            {teamA.team !== null && teamB.team !== null && (
+            {teamA.team !== "" && teamB.team !== "" && (
               <div
                 className="hidden md:flex text-lg md:text-4xl text-gray-600 font-semibold items-center justify-center rounded-full border-gray-600 border-4 bg-white text-dark-800 absolute inset-x-0	inset-y-0	z-50 m-auto w-16 h-16 md:w-32 md:h-32"
                 style={{ bottom: "-15%" }}
@@ -210,7 +276,7 @@ const Compare = () => {
               <TeamForCompare teams={teams} onSelectTeam={handleSelectTeamB} />
             </div>
           </div>
-          {teamA.team !== null && teamB.team !== null && (
+          {teamA.team !== "" && teamB.team !== "" && (
             <button
               className="w-full md:w-auto bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 self-center rounded transition-all duration-100"
               onClick={handleSimulateGame}
@@ -218,6 +284,26 @@ const Compare = () => {
               Simulate Game
             </button>
           )}
+        </div>
+      )}
+      {gameResults.teamAScore && gameResults.teamBScore && (
+        <div
+          id="gameResults"
+          ref={gameResultsRef}
+          className="flex flex-col gap-2 w-full pt-8"
+        >
+          <label className="font-semibold text-gray-600">Game Results</label>
+          <div className="grid grid-cols-2 w-full gap-4 md:gap-8">
+            <TeamCard
+              team={teams.find((team) => team.school === teamA.team)}
+              score={gameResults.teamAScore}
+            />
+            <TeamCard
+              team={teams.find((team) => team.school === teamB.team)}
+              score={gameResults.teamBScore}
+              reverse
+            />
+          </div>
         </div>
       )}
     </div>

@@ -108,6 +108,7 @@ export default function Team() {
   const [statsLoading, setStatsLoading] = useState(false);
   const [year, setYear] = useState<null | string>(null);
   const [yearOpts, setYearOpts] = useState<YearOption[]>([]);
+  const [records, setRecords] = useState([]);
 
   useEffect(() => {
     handleGetTeams();
@@ -134,7 +135,51 @@ export default function Team() {
 
     setYearOpts(formattedYears);
     handleGetStats();
+    // handleGetRecords();
   }, []);
+
+  const handleGetRecords = async () => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+
+    // If we are not yet in August of the current year, set the current football year to the previous year
+    const currentYear =
+      currentMonth >= 7
+        ? currentDate.getFullYear()
+        : currentDate.getFullYear() - 1;
+
+    const getRecords = await fetch(
+      `/api/records?year=${year !== null ? year : currentYear}`
+    );
+    const records = await getRecords.json();
+    const conferenceRecords: any = [];
+
+    records.forEach((team: any) => {
+      const conference = team.conference;
+      const totalWins = team.total.wins;
+      const totalLosses = team.total.losses;
+      const conferenceWins = team.conferenceGames.wins;
+      const conferenceLosses = team.conferenceGames.losses;
+
+      // Subtract conference wins/losses from total wins/losses to get non-conference wins/losses
+      const nonConferenceWins = totalWins - conferenceWins;
+      const nonConferenceLosses = totalLosses - conferenceLosses;
+
+      // Aggregate the records for each conference
+      if (!conferenceRecords[conference]) {
+        conferenceRecords[conference] = {
+          wins: nonConferenceWins,
+          losses: nonConferenceLosses,
+        };
+      } else {
+        conferenceRecords[conference].wins += nonConferenceWins;
+        conferenceRecords[conference].losses += nonConferenceLosses;
+      }
+    });
+
+    setRecords(conferenceRecords);
+    console.log(conferenceRecords);
+  };
 
   const handleGetStats = async () => {
     const currentDate = new Date();
@@ -1006,6 +1051,7 @@ export default function Team() {
           </div>
         </div>
       )}
+      {/* {records && <div>Conf Records</div>} */}
     </div>
   );
 }
