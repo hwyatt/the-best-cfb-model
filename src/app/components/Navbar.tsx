@@ -42,10 +42,10 @@ const Navbar = () => {
           </button>
         </div>
         <div className={`md:flex md:gap-8 hidden text-lg`}>
-          <a href="/teams" className="font-bold text-gray-800">
+          <a href="/stats" className="font-bold text-gray-800">
             Stats
           </a>
-          <a href="/compare" className="font-bold text-gray-800">
+          <a href="/model" className="font-bold text-gray-800">
             Model
           </a>
           <a href="/bracket" className="font-bold text-gray-800">
@@ -59,14 +59,14 @@ const Navbar = () => {
       {isOpen && (
         <div className={`flex flex-col w-full md:hidden`}>
           <a
-            href="/teams"
+            href="/stats"
             className="flex items-center justify-between text-2xl font-bold text-gray-800 border-y-2 py-4"
           >
             <div>Teams</div>
             <MdOutlineArrowForwardIos />
           </a>
           <a
-            href="/compare"
+            href="/model"
             className="flex items-center justify-between text-2xl font-bold text-gray-800 border-b-2 py-4"
           >
             <div>Model</div>

@@ -67,13 +67,13 @@ export default async function Home() {
             title={"Stats"}
             copy={"See the Stats"}
             icon={<PiChartLineUpBold className="text-4xl" />}
-            href={"/teams"}
+            href={"/stats"}
           />
           <Card
             title={"Model"}
             copy={"Make a Matchup"}
             icon={<GiAmericanFootballHelmet className="text-4xl" />}
-            href={"/compare"}
+            href={"/model"}
           />
           <Card
             title={"Bracket"}
