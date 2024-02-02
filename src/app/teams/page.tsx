@@ -8,6 +8,7 @@ import TeamImg from "../components/TeamImg";
 import SeasonSelect from "../components/SeasonSelect";
 import { useSearchParams } from "next/navigation";
 import DataTable from "react-data-table-component";
+import { ThreeDots } from "react-loader-spinner";
 
 interface YearOption {
   label: string;
@@ -248,11 +249,13 @@ export default function Team() {
     setGames(games);
     setGamesLoading(false);
 
-    setStatsLoading(true);
-    const getStats = await fetch(`/api/stats?year=${year}`);
-    const stats = await getStats.json();
-    setStats(stats);
-    setStatsLoading(false);
+    if (stats.length === 0) {
+      setStatsLoading(true);
+      const getStats = await fetch(`/api/stats?year=${year}`);
+      const statsRes = await getStats.json();
+      setStats(statsRes);
+      setStatsLoading(false);
+    }
   };
 
   const handleYearChange = async (year: any) => {
@@ -292,18 +295,23 @@ export default function Team() {
     return (
       <div className="flex items-center gap-2">
         <span className="font-semibold text-gray-800">{row[rankName]}</span>
-        <div>
-          {teamLogo ? (
-            <img
-              src={teamLogo}
-              alt="Team Logo"
-              className="w-10 h-10 min-w-10"
-            />
-          ) : (
-            <img src={"icon.png"} className="w-10 h-10 min-w-10" />
-          )}
-        </div>
-        <span className="font-semibold text-gray-800">{row.team}</span>
+        <button
+          onClick={() => handleSelect({ option: row.team, value: row.team })}
+          className="flex items-center gap-2"
+        >
+          <div>
+            {teamLogo ? (
+              <img
+                src={teamLogo}
+                alt="Team Logo"
+                className="w-10 h-10 min-w-10"
+              />
+            ) : (
+              <img src={"icon.png"} className="w-10 h-10 min-w-10" />
+            )}
+          </div>
+          <span className="font-semibold text-gray-800">{row.team}</span>
+        </button>
       </div>
     );
   };
@@ -703,7 +711,10 @@ export default function Team() {
         </div>
       )}
       {stats.length === 0 || statsLoading ? (
-        <div>Loading Stats...</div>
+        <div className="self-center flex flex-col gap-2 items-center justify-center">
+          <ThreeDots height="80" width="80" color="#202838" />
+          <span className="font-semibold">Loading Stats</span>
+        </div>
       ) : selectedTeam && selectedTeam.id && !statsLoading ? (
         <div className="flex flex-col gap-4">
           <p className="text-lg font-semibold text-gray-600">Passing</p>
