@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Inter } from "next/font/google";
 import Container from "./components/Container";
-import Footer from "./components/Footer";
-import Navbar from "./components/Navbar";
+// import Footer from "./components/Footer";
+// import Navbar from "./components/Navbar";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -24,13 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-gray-200`}>
-        <Navbar />
-        <Container>
-          <div className="w-full mx-auto" style={{ maxWidth: "1312px" }}>
-            {children}
-          </div>
-        </Container>
-        <Footer />
+        {/* <Navbar /> */}
+        <Container>{children}</Container>
+        {/* <Footer /> */}
         <GoogleAnalytics gaId="G-R026BHKTYS" />
       </body>
     </html>
