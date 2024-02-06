@@ -21,17 +21,17 @@ const ScoreboardPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseGames = await fetch(`/api/scoreboard`);
+        // const responseGames = await fetch(`/api/scoreboard`);
         const responseTeams = await fetch(`/api/teams`);
         const responseRankings = await fetch(
           `/api/rankings?year=${currentYear}`
         );
 
-        const gamesData = await responseGames.json();
+        // const gamesData = await responseGames.json();
         const teamsData = await responseTeams.json();
         const rankingsData = await responseRankings.json();
 
-        setGames(gamesData);
+        // setGames(gamesData);
         setTeams(teamsData);
         setRankings(rankingsData);
       } catch (error) {
@@ -42,15 +42,37 @@ const ScoreboardPage = () => {
     fetchData();
   }, []); // Run only once on mount
 
+  useEffect(() => {
+    const fetchScoreboardData = async () => {
+      try {
+        const response = await fetch(`/api/scoreboard`);
+        const scoreboardData = await response.json();
+        setGames(scoreboardData);
+      } catch (error) {
+        console.error("Error fetching scoreboard data:", error);
+      }
+    };
+
+    fetchScoreboardData();
+
+    // 5 seconds FOR TESTING
+    // const interval = setInterval(fetchScoreboardData, 5000);
+
+    // 60 seconds
+    // const interval = setInterval(fetchScoreboardData, 60000);
+
+    // return () => clearInterval(interval);
+  }, []);
+
   const matchingHomeTeam: any = (game: any) =>
     teams.find((team: any) => team.school === game.homeTeam.name);
   const matchingAwayTeam: any = (game: any) =>
     teams.find((team: any) => team.school === game.awayTeam.name);
 
   const matchingHomeRank: any = (game: any) =>
-    rankings?.ranks.find((rank: any) => rank.school === game.homeTeam.name);
+    rankings?.ranks?.find((rank: any) => rank.school === game.homeTeam.name);
   const matchingAwayRank: any = (game: any) =>
-    rankings?.ranks.find((rank: any) => rank.school === game.awayTeam.name);
+    rankings?.ranks?.find((rank: any) => rank.school === game.awayTeam.name);
 
   const periodText = (period: number) => {
     if (period === 1) {
