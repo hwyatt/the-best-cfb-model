@@ -212,8 +212,8 @@ const mock = [
     conferenceGame: true,
     status: "string",
     period: 4,
-    clock: "2:20",
-    situation: "string",
+    clock: "15:00",
+    situation: "1st & 10 at NEB 18",
     possession: "away",
     venue: {
       name: "string",
@@ -257,7 +257,7 @@ const mock = [
     status: "string",
     period: 4,
     clock: "2:20",
-    situation: "string",
+    situation: "MICH - Rushing Touchdown",
     possession: "away",
     venue: {
       name: "string",
