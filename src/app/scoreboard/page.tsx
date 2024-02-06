@@ -149,7 +149,7 @@ const ScoreboardPage = () => {
                 </div>
               </div>
               {/* CLOCK */}
-              <div className="flex items-center justify-between px-2 gap-2">
+              <div className="flex items-center justify-evenly">
                 <span className="font-semibold uppercase">
                   {game.period}
                   <span className="text-xs">{periodText(game.period)}</span>
