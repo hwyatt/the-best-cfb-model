@@ -148,7 +148,10 @@ const ScoreboardPage = () => {
           </div>
         ))}
       </div>
-      <Marquee className="bg-gray-800 text-white py-2">
+      <Marquee
+        className="bg-gray-800 text-white py-2 bottom-0 left-0 right-0"
+        style={{ position: "fixed" }}
+      >
         {scrollingTextContent}
       </Marquee>
     </div>
