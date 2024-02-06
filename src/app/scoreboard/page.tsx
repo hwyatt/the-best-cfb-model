@@ -52,6 +52,12 @@ const ScoreboardPage = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <div className="flex justify-between items-center mb-4">
+        <img src={"Saturday Stats.png"} className="max-h-10 w-auto" />
+        <h2 className="font-semibold uppercase text-gray-600">
+          Live College Football Scoreboard
+        </h2>
+      </div>
       <div className="grid grid-cols-2 gap-4">
         {games.map((game: any) => (
           <div key={game.id} className="flex bg-gray-800 rounded shadow-lg">
