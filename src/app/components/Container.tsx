@@ -10,7 +10,6 @@ interface ContainerProps {
 
 const Container: React.FC<ContainerProps> = ({ children }) => {
   const pathname = usePathname();
-  console.log(pathname);
 
   if (pathname === "/scoreboard") {
     return (

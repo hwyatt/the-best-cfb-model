@@ -6,23 +6,34 @@ import { FaCircle } from "react-icons/fa";
 const scrollingTextContent =
   "Thanks for tuning in to the Saturday Stats scoreboard presented by SaturdayStats.com. Live game results are updated every minute. Like and subscribe for more scoreboards and other content.";
 
-// IF TEAM NAME LONGER THAN SO MANY CHARACTERS, USE ABR
+const currentDate = new Date();
+const currentMonth = currentDate.getMonth();
+
+// If we are not yet in August of the current year, set the current football year to the previous year
+const currentYear =
+  currentMonth >= 7 ? currentDate.getFullYear() : currentDate.getFullYear() - 1;
 
 const ScoreboardPage = () => {
   const [games, setGames] = useState([]);
   const [teams, setTeams] = useState([]);
+  const [rankings, setRankings] = useState<any>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const responseGames = await fetch(`/api/scoreboard`);
         const responseTeams = await fetch(`/api/teams`);
+        const responseRankings = await fetch(
+          `/api/rankings?year=${currentYear}`
+        );
 
         const gamesData = await responseGames.json();
         const teamsData = await responseTeams.json();
+        const rankingsData = await responseRankings.json();
 
         setGames(gamesData);
         setTeams(teamsData);
+        setRankings(rankingsData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -35,6 +46,11 @@ const ScoreboardPage = () => {
     teams.find((team: any) => team.school === game.homeTeam.name);
   const matchingAwayTeam: any = (game: any) =>
     teams.find((team: any) => team.school === game.awayTeam.name);
+
+  const matchingHomeRank: any = (game: any) =>
+    rankings?.ranks.find((rank: any) => rank.school === game.homeTeam.name);
+  const matchingAwayRank: any = (game: any) =>
+    rankings?.ranks.find((rank: any) => rank.school === game.awayTeam.name);
 
   const periodText = (period: number) => {
     if (period === 1) {
@@ -79,6 +95,9 @@ const ScoreboardPage = () => {
                     )}
                   </div>
                   <span className="w-3/4 text-sm font-semibold uppercase leading-none	">
+                    <span className="font-normal">
+                      {matchingHomeRank(game)?.rank}
+                    </span>{" "}
                     {game.homeTeam.name}
                   </span>
                 </div>
@@ -111,6 +130,9 @@ const ScoreboardPage = () => {
                     )}
                   </div>
                   <span className="w-3/4 text-sm font-semibold uppercase leading-none	">
+                    <span className="font-normal">
+                      {matchingAwayRank(game)?.rank}
+                    </span>{" "}
                     {game.awayTeam.name}
                   </span>
                 </div>
@@ -155,7 +177,7 @@ const ScoreboardPage = () => {
         ))}
       </div>
       <Marquee
-        className="bg-gray-800 text-white py-2 bottom-0 left-0 right-0"
+        className="bg-gray-800 text-white py-2 bottom-0 left-0 right-0 text-lg"
         style={{ position: "fixed" }}
       >
         {scrollingTextContent}
