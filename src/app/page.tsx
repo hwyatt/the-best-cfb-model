@@ -32,9 +32,9 @@ const Card = ({ title, copy, icon, href }: any) => {
 
 export default async function Home() {
   return (
-    <div className="flex flex-col gap-8 w-full md:mt-8">
+    <div className="flex flex-col gap-8 w-full">
       <div className="self-center flex flex-col gap-4">
-        <div className="object-fit-contain flex justify-center mb-4">
+        <div className="object-fit-contain flex justify-center mb-4 w-full bg-gray-800 p-8">
           <img
             src={"stats.png"}
             alt={"stats logo"}
