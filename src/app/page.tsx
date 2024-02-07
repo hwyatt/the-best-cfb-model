@@ -9,7 +9,7 @@ const Card = ({ title, copy, icon, href }: any) => {
       href={href}
       className="hover-card hover:transform hover:scale-110 transition-transform duration-300"
     >
-      <div className="flex items-center justify-between gap-2 bg-white border-2 border-gray-400 rounded p-4 w-full shadow-lg hover:shadow-xl">
+      <div className="flex items-center justify-between gap-2 bg-white border-2 border-gray-400 rounded p-4 w-full shadow-lg hover:shadow-xl h-full">
         <div className="w-full flex gap-2 items-center">
           <div className={`bg-gray-200 rounded-full p-2`}>
             <div className="flex items-center justify-center w-8 h-8 font-semibold">
@@ -34,10 +34,12 @@ export default async function Home() {
   return (
     <div className="flex flex-col gap-8 w-full md:mt-8">
       <div className="self-center flex flex-col gap-4">
-        <div className="object-fit-contain">
-          <h1 className="text-center font-bold uppercase text-4xl tracking-wide	">
-            Hail Stats
-          </h1>
+        <div className="object-fit-contain flex justify-center mb-4">
+          <img
+            src={"stats.png"}
+            alt={"stats logo"}
+            className="max-h-48 md:max-h-72"
+          />
         </div>
         <p className="text-gray-600 text-center max-w-3xl">
           <span className="text-gray-800 font-semibold">Saturday Stats</span>{" "}
