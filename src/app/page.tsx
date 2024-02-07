@@ -33,7 +33,7 @@ const Card = ({ title, copy, icon, href }: any) => {
 export default async function Home() {
   return (
     <div className="flex flex-col gap-8 w-full">
-      <div className="self-center flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
         <div className="object-fit-contain flex justify-center mb-4 w-full bg-gray-800 p-8">
           <img
             src={"stats.png"}
@@ -41,11 +41,12 @@ export default async function Home() {
             className="max-h-48 md:max-h-72"
           />
         </div>
-        <p className="text-gray-600 text-center max-w-3xl">
-          <span className="text-gray-800 font-semibold">Saturday Stats</span>{" "}
-          {`is
-          the home of America's Next Top CFB Model`}{" "}
-          and all your favorite CFB stats. <br className="hidden md:block" />
+        <h1 className="text-xl text-gray-800 font-semibold self-center">
+          Welcome to Saturday Stats
+        </h1>
+        <p className="text-gray-600 text-center max-w-3xl self-center">
+          We are the home of America's Next Top CFB Model and all your favorite
+          CFB stats. <br className="hidden md:block" />
           Explore stats for every area of the game and see how your favorite
           team ranks for each stat. Model two teams from any two seasons to
           settle the debate with your weird uncle. Build a bracket for the 12
