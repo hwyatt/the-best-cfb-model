@@ -1,8 +1,12 @@
 import sgMail from "@sendgrid/mail";
 
-sgMail.setApiKey(
-  `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`
-);
+// Check if the environment variable is defined
+if (!process.env.SENDGRID_API_KEY) {
+  throw new Error("SendGrid API key is not defined in environment variables.");
+}
+
+// Set your SendGrid API key from environment variable
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export const sendEmail: any = async (name: any, email: any, message: any) => {
   const msg = {
