@@ -45,8 +45,9 @@ export default async function Home() {
           Welcome to Saturday Stats
         </h1>
         <p className="text-gray-600 text-center max-w-3xl self-center">
-          We are the home of America's Next Top CFB Model and all your favorite
-          CFB stats. <br className="hidden md:block" />
+          {`We are the home of America's Next Top CFB Model and all your favorite
+          CFB stats.`}{" "}
+          <br className="hidden md:block" />
           Explore stats for every area of the game and see how your favorite
           team ranks for each stat. Model two teams from any two seasons to
           settle the debate with your weird uncle. Build a bracket for the 12
