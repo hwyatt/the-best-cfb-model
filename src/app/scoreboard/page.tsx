@@ -1,4 +1,5 @@
 "use client";
+import { useSearchParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import Marquee from "react-fast-marquee";
 import { FaCircle } from "react-icons/fa";
@@ -17,6 +18,8 @@ const ScoreboardPage = () => {
   const [games, setGames] = useState([]);
   const [teams, setTeams] = useState([]);
   const [rankings, setRankings] = useState<any>([]);
+  const searchParams = useSearchParams();
+  const teamParam = searchParams.get("team");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,6 +77,16 @@ const ScoreboardPage = () => {
   const matchingAwayRank: any = (game: any) =>
     rankings?.ranks?.find((rank: any) => rank.school === game.awayTeam.name);
 
+  const matchingParamTeam = (game: any, teamParam: any) => {
+    return game.homeTeam.name === teamParam || game.awayTeam.name === teamParam;
+  };
+
+  const gamesForTeam = games.filter((game) =>
+    matchingParamTeam(game, teamParam)
+  );
+
+  const displayGames = gamesForTeam.length > 0 ? gamesForTeam : games;
+
   const periodText = (period: number) => {
     if (period === 1) {
       return "st";
@@ -97,8 +110,18 @@ const ScoreboardPage = () => {
         </h2>
       </div>
       <div className="grid grid-cols-2 gap-4">
-        {games.map((game: any) => (
-          <div key={game.id} className="flex bg-gray-800 rounded shadow-lg">
+        {displayGames.map((game: any) => (
+          <div
+            key={game.id}
+            className={`flex bg-gray-800 rounded shadow-lg ${
+              displayGames.length === 1 && "absolute"
+            }`}
+            style={
+              displayGames.length === 1
+                ? { bottom: 64, left: 256, right: 256 }
+                : {}
+            }
+          >
             <div className="grid grid-cols-3 text-white items-center w-full">
               {/* HOME TEAM */}
               <div
