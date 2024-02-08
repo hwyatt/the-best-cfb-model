@@ -89,7 +89,7 @@ const ScoreboardPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       <div className="flex justify-between items-center mb-4">
         <img src={"Saturday Stats.png"} className="max-h-10 w-auto" />
         <h2 className="font-semibold uppercase text-gray-600">
@@ -102,13 +102,13 @@ const ScoreboardPage = () => {
             <div className="grid grid-cols-3 text-white items-center w-full">
               {/* HOME TEAM */}
               <div
-                className="flex items-center justify-between pl-2 gap-2"
+                className="flex items-center justify-between pl-2 gap-2 rounded"
                 style={{
                   backgroundColor: matchingHomeTeam(game)?.color,
                 }}
               >
-                <div className="flex items-center justify-between w-full gap-2">
-                  <div className="w-1/4 max-w-12 bg-gray-200 rounded-full p-1">
+                <div className="flex items-center w-full gap-2">
+                  <div className="w-1/4 max-w-12 bg-gray-200 rounded-full p-2">
                     {matchingHomeTeam(game) && (
                       <img
                         src={matchingHomeTeam(game)?.logos[0]}
@@ -142,7 +142,7 @@ const ScoreboardPage = () => {
                   backgroundColor: matchingAwayTeam(game)?.color,
                 }}
               >
-                <div className="flex items-center justify-between w-full gap-2">
+                <div className="flex items-center w-full gap-2">
                   <div className="w-1/4 max-w-12 bg-gray-200 rounded-full p-1">
                     {matchingAwayTeam(game) && (
                       <img

@@ -350,7 +350,7 @@ export async function GET(request: any) {
         },
         homeTeam: {
           id: 0,
-          name: "Alabama",
+          name: "Tennessee",
           conference: "string",
           classification: "string",
           points: 48,
@@ -614,7 +614,7 @@ export async function GET(request: any) {
         },
         homeTeam: {
           id: 0,
-          name: "Alabama",
+          name: "Oklahoma",
           conference: "string",
           classification: "string",
           points: 48,
