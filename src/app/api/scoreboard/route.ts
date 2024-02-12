@@ -77,7 +77,7 @@ export async function GET(request: any) {
         status: "string",
         period: 4,
         clock: "2:20",
-        situation: "string",
+        situation: "1st & 10 at ALA 18",
         possession: "away",
         venue: {
           name: "string",
