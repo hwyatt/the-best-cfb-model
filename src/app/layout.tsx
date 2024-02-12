@@ -5,6 +5,7 @@ import Container from "./components/Container";
 // import Footer from "./components/Footer";
 // import Navbar from "./components/Navbar";
 import "./globals.css";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,12 @@ export default function RootLayout({
         <Container>{children}</Container>
         {/* <Footer /> */}
         <GoogleAnalytics gaId="G-R026BHKTYS" />
+        <Script
+          id="adsbygoogle-init"
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8680983997986739"
+        />
       </body>
     </html>
   );
