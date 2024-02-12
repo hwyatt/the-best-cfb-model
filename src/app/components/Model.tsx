@@ -57,15 +57,47 @@ const fetchTeamRatings = async (year: string, team: string) => {
   }
 };
 
-const compareTeams = (teamAData: any, teamBData: any) => {
+const compareTeams = (
+  teamAData: any,
+  teamBData: any,
+  averageScoreForTeamA: any,
+  averageScoreForTeamB: any,
+  averageScoreAllowedForTeamA: any,
+  averageScoreAllowedForTeamB: any
+) => {
   const { rating: ratingA } = teamAData;
   const { rating: ratingB } = teamBData;
 
-  const pointSpread = ratingA - ratingB;
-  const scoreA = 24 + pointSpread / 2;
-  const scoreB = 24 - pointSpread / 2;
+  // Use each team's average baseline score instead of a fixed value like 24
+  const baselineScoreForTeamA = averageScoreForTeamA;
+  const baselineScoreForTeamB = averageScoreForTeamB;
 
-  return { teamAScore: scoreA.toFixed(2), teamBScore: scoreB.toFixed(2) };
+  const pointSpread = ratingA - ratingB;
+
+  // Applying weights for point spread and average scores
+  const pointSpreadWeight = 0.5; // Adjust this weight according to your preference
+  const averageScoreWeight = 0.3; // Adjust this weight according to your preference
+  const averageScoreAllowedWeight = 0.2; // Adjust this weight according to your preference
+
+  // Calculating weighted scores
+  const weightedScoreA =
+    baselineScoreForTeamA +
+    (pointSpread * pointSpreadWeight) / 2 +
+    (averageScoreForTeamA - baselineScoreForTeamA) * averageScoreWeight +
+    (baselineScoreForTeamA - averageScoreAllowedForTeamA) *
+      averageScoreAllowedWeight;
+
+  const weightedScoreB =
+    baselineScoreForTeamB -
+    (pointSpread * pointSpreadWeight) / 2 +
+    (averageScoreForTeamB - baselineScoreForTeamB) * averageScoreWeight +
+    (baselineScoreForTeamB - averageScoreAllowedForTeamB) *
+      averageScoreAllowedWeight;
+
+  return {
+    teamAScore: weightedScoreA.toFixed(2),
+    teamBScore: weightedScoreB.toFixed(2),
+  };
 };
 
 const TeamForCompare = ({ teams, onSelectTeam }: any) => {
@@ -81,10 +113,7 @@ const TeamForCompare = ({ teams, onSelectTeam }: any) => {
 
     setYear(currentYear.toString());
 
-    const years = Array.from(
-      { length: 100 },
-      (_, index) => currentYear - index
-    );
+    const years = Array.from({ length: 24 }, (_, index) => currentYear - index);
     const formattedYears = years.map((year) => ({
       value: year.toString(),
       label: year.toString(),
@@ -219,24 +248,80 @@ const Compare = () => {
       )?.stadiumImg || null,
   }));
 
+  const calculateAverageScores = (data: any, team: any) => {
+    const teamData = data.filter(
+      (game: any) => game.away_team === team || game.home_team === team
+    );
+
+    // Calculate average points scored by the team
+    const totalPointsScored = teamData.reduce((accumulator: any, game: any) => {
+      if (game.away_team === team) {
+        return accumulator + game.away_points;
+      } else if (game.home_team === team) {
+        return accumulator + game.home_points;
+      }
+      return accumulator;
+    }, 0);
+    const averagePointsScored = totalPointsScored / teamData.length;
+
+    // Calculate average points allowed (points scored against the team)
+    const totalPointsAllowed = teamData.reduce(
+      (accumulator: any, game: any) => {
+        if (game.away_team === team) {
+          return accumulator + game.home_points;
+        } else if (game.home_team === team) {
+          return accumulator + game.away_points;
+        }
+        return accumulator;
+      },
+      0
+    );
+    const averagePointsAllowed = totalPointsAllowed / teamData.length;
+
+    return { averagePointsScored, averagePointsAllowed };
+  };
+
   const [teamA, setTeamA] = useState({ team: "", year: "" });
   const [teamB, setTeamB] = useState({ team: "", year: "" });
 
   const handleSelectTeamA = ({ team, year }: any) => {
     setTeamA({ team, year });
+    if (gameResults.teamAScore && gameResults.teamBScore) {
+      setGameResults({ teamAScore: null, teamBScore: null });
+    }
   };
 
   const handleSelectTeamB = ({ team, year }: any) => {
     setTeamB({ team, year });
+    if (gameResults.teamAScore && gameResults.teamBScore) {
+      setGameResults({ teamAScore: null, teamBScore: null });
+    }
   };
 
   const handleSimulateGame = async () => {
     if (teamA.team && teamA.year && teamB.team && teamB.year) {
       const statsTeamA = await fetchTeamRatings(teamA.year, teamA.team);
       const statsTeamB = await fetchTeamRatings(teamB.year, teamB.team);
+      const gamesA = await fetch(
+        `/api/games?year=${teamA.year}&team=${teamA.team}`
+      );
+      const gameDataA = await gamesA.json();
+      const gamesB = await fetch(
+        `/api/games?year=${teamB.year}&team=${teamB.team}`
+      );
+      const gameDataB = await gamesB.json();
+      const avgScoresA = calculateAverageScores(gameDataA, teamA.team);
+      const avgScoresB = calculateAverageScores(gameDataB, teamB.team);
 
-      if (statsTeamA && statsTeamB) {
-        const comparisonResult = compareTeams(statsTeamA[0], statsTeamB[0]);
+      if (statsTeamA && statsTeamB && avgScoresA && avgScoresB) {
+        const comparisonResult = compareTeams(
+          statsTeamA[0],
+          statsTeamB[0],
+          avgScoresA.averagePointsScored,
+          avgScoresB.averagePointsScored,
+          avgScoresA.averagePointsAllowed,
+          avgScoresB.averagePointsAllowed
+        );
         setGameResults(comparisonResult);
       }
     }
