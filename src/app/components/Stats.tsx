@@ -135,7 +135,7 @@ export default function Team() {
 
     setYearOpts(formattedYears);
     handleGetStats();
-    // handleGetRecords();
+    handleGetRecords();
   }, []);
 
   const handleGetRecords = async () => {
@@ -153,6 +153,7 @@ export default function Team() {
     );
     const records = await getRecords.json();
     const conferenceRecords: any = [];
+    const transformedRecords: any = [];
 
     records.forEach((team: any) => {
       const conference = team.conference;
@@ -177,8 +178,16 @@ export default function Team() {
       }
     });
 
-    setRecords(conferenceRecords);
-    console.log(conferenceRecords);
+    // Transform the aggregated records into the desired format
+    Object.keys(conferenceRecords).forEach((conference) => {
+      transformedRecords.push({
+        conference: conference,
+        wins: conferenceRecords[conference].wins,
+        losses: conferenceRecords[conference].losses,
+      });
+    });
+
+    setRecords(transformedRecords);
   };
 
   const handleGetStats = async () => {
@@ -331,6 +340,50 @@ export default function Team() {
   const getOpponentColor = (name: string) => {
     const oppponent = teams.find((team: any) => team.school === name);
     return oppponent?.color;
+  };
+
+  const confCol = (name: any) => {
+    const confName = name.toLowerCase();
+    let logo;
+
+    if (confName === "sec") {
+      logo = "conferenceLogos/sec.png";
+    } else if (confName === "american athletic") {
+      logo = "conferenceLogos/americanathletic.svg.png";
+    } else if (confName === "sun belt") {
+      logo = "conferenceLogos/sunbelt.svg.png";
+    } else if (confName === "pac-12") {
+      logo = "conferenceLogos/pac12.png";
+    } else if (confName === "mountain west") {
+      logo = "conferenceLogos/mountainwest.svg.png";
+    } else if (confName === "fbs independents") {
+      logo = "conferenceLogos/fbs.png";
+    } else if (confName === "acc") {
+      logo = "conferenceLogos/acc.svg.png";
+    } else if (confName === "conference usa") {
+      logo = "conferenceLogos/cusa.png";
+    } else if (confName === "big 12") {
+      logo = "conferenceLogos/big12.svg.png";
+    } else if (confName === "big ten") {
+      logo = "conferenceLogos/big10.png";
+    } else if (confName === "mid-american") {
+      logo = "conferenceLogos/midamerican.png";
+    } else {
+      logo = "icon.png";
+    }
+
+    return (
+      <div className="flex items-center gap-2">
+        <div className="p-2">
+          <img
+            src={logo}
+            alt="Conference Logo"
+            className="w-10 h-auto min-w-10"
+          />
+        </div>
+        <span className="font-semibold text-gray-800">{name}</span>
+      </div>
+    );
   };
 
   const teamCol = (row: any, rankName: any) => {
@@ -627,6 +680,23 @@ export default function Team() {
     setActiveTab(tab);
   };
 
+  const confCols = [
+    {
+      name: "Conference",
+      cell: (row: any) => confCol(row.conference),
+    },
+    {
+      name: "Wins (Vs Other Conferences)",
+      selector: (row: any) => row.wins,
+      sortable: true,
+    },
+    {
+      name: "Losses (Vs Other Conferences)",
+      selector: (row: any) => row.losses,
+      sortable: true,
+    },
+  ];
+
   return (
     <div className="flex flex-col gap-8 w-full">
       <div className="flex flex-col gap-4">
@@ -637,6 +707,7 @@ export default function Team() {
         </p>
       </div>
       <div className="flex flex-col gap-2 md:max-w-md">
+        <h2 className="text-2xl font-bold text-gray-800">Teams</h2>
         <label className="font-semibold text-gray-600">Select a Team</label>
         <TeamSelect
           teams={teams}
@@ -758,7 +829,6 @@ export default function Team() {
       {stats.length === 0 || statsLoading ? (
         <div className="self-center flex flex-col gap-2 items-center justify-center">
           <ThreeDots height="80" width="80" color="#202838" />
-          <span className="font-semibold">Loading Stats</span>
         </div>
       ) : selectedTeam && selectedTeam.id && !statsLoading ? (
         <div className="flex flex-col gap-4">
@@ -1051,7 +1121,12 @@ export default function Team() {
           </div>
         </div>
       )}
-      {/* {records && <div>Conf Records</div>} */}
+      {selectedTeam.id === null && records.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <h2 className="text-2xl font-bold text-gray-800">Conferences</h2>
+          <DataTable data={records} columns={confCols} />
+        </div>
+      )}
     </div>
   );
 }
