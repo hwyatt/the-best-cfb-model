@@ -44,7 +44,7 @@ const ContactForm = () => {
               type={"text"}
               className={`w-full text-primary outline-none text-base rounded-md p-2`}
               id="name"
-              placeholder={"Joe Burrow"}
+              placeholder={"Tua Tagovailoa"}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
@@ -69,7 +69,7 @@ const ContactForm = () => {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className={`w-full text-primary outline-none text-base rounded-md p-2`}
-              placeholder={"Lemme see some stats"}
+              placeholder={"Lemme see them stats"}
               rows={12}
             ></textarea>
           </div>

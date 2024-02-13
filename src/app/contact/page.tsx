@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 
 export default async function StatsPage() {
   return (
-    <div className="grid md:grid-cols-2 gap-8 w-full">
-      <div className="flex flex-col gap-4">
+    <div className="grid gap-8 w-full">
+      <div className="flex flex-col gap-4 md:w-3/4">
         <h1 className="text-4xl font-bold text-gray-800">Contact Us</h1>
         <p className="text-gray-800">
           Have a question? See a data error? Want a custom scoreboard for your
@@ -17,7 +17,7 @@ export default async function StatsPage() {
           us.
         </p>
       </div>
-      <div>
+      <div className="md:w-3/4">
         <ContactForm />
       </div>
     </div>
