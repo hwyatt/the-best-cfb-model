@@ -38,13 +38,15 @@ const CountdownToAugust24 = () => {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div className="flex justify-between items-center mb-4">
-        <img src={"Saturday Stats.png"} className="max-h-10 w-auto" />
-        <h2 className="font-semibold uppercase text-gray-600">
+      
+      <div className="flex flex-col justify-center items-center gap-2 text-8xl h-96 text-gray-800 font-bold absolute inset-0	m-auto">
+      <div className="flex flex-col justify-between items-center mb-8 gap-2">
+        <img src={"Saturday Stats.png"} className="max-h-16 w-auto" />
+        <h2 className="font-semibold uppercase text-gray-600 text-xl">
           Countdown to College Football
         </h2>
       </div>
-      <div className="flex justify-center items-center gap-2 text-8xl h-96 text-gray-800 font-bold absolute inset-0	m-auto">
+        <div className="flex gap-2">
         {timeLeft.days > 0 && (
           <div>
             <span>{timeLeft.days}</span>
@@ -64,6 +66,7 @@ const CountdownToAugust24 = () => {
             <span>{addLeadingZero(timeLeft.seconds)}</span>
             <span className="font-light text-gray-600">s</span>
           </div>
+        </div>
         </div>
       </div>
       <Marquee
