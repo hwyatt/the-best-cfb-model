@@ -9,8 +9,6 @@ const scrollingTextContent =
 
 const currentDate = new Date();
 const currentMonth = currentDate.getMonth();
-
-// If we are not yet in August of the current year, set the current football year to the previous year
 const currentYear =
   currentMonth >= 7 ? currentDate.getFullYear() : currentDate.getFullYear() - 1;
 
@@ -24,17 +22,14 @@ const ScoreboardPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const responseGames = await fetch(`/api/scoreboard`);
         const responseTeams = await fetch(`/api/teams`);
         const responseRankings = await fetch(
           `/api/rankings?year=${currentYear}`
         );
 
-        // const gamesData = await responseGames.json();
         const teamsData = await responseTeams.json();
         const rankingsData = await responseRankings.json();
 
-        // setGames(gamesData);
         setTeams(teamsData);
         setRankings(rankingsData);
       } catch (error) {
@@ -43,7 +38,7 @@ const ScoreboardPage = () => {
     };
 
     fetchData();
-  }, []); // Run only once on mount
+  }, []);
 
   useEffect(() => {
     const fetchScoreboardData = async () => {
@@ -56,21 +51,29 @@ const ScoreboardPage = () => {
       }
     };
 
+    // Initial fetch
     fetchScoreboardData();
 
-    // 5 seconds FOR TESTING
-    // const interval = setInterval(fetchScoreboardData, 5000);
+    // Set up interval to fetch data every 60 seconds
+    const intervalId = setInterval(fetchScoreboardData, 60000); // 60000ms = 60 seconds
 
-    // 60 seconds
-    // const interval = setInterval(fetchScoreboardData, 60000);
-
-    // return () => clearInterval(interval);
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   const matchingHomeTeam: any = (game: any) =>
-    teams.find((team: any) => team.school === game.homeTeam.name);
+    teams.find(
+      (team: any) =>
+        game.homeTeam.name.includes(team.school) &&
+        game.homeTeam.name.includes(team.mascot)
+    );
+
   const matchingAwayTeam: any = (game: any) =>
-    teams.find((team: any) => team.school === game.awayTeam.name);
+    teams.find(
+      (team: any) =>
+        game.awayTeam.name.includes(team.school) &&
+        game.awayTeam.name.includes(team.mascot)
+    );
 
   const matchingHomeRank: any = (game: any) =>
     rankings?.ranks?.find((rank: any) => rank.school === game.homeTeam.name);
@@ -81,11 +84,15 @@ const ScoreboardPage = () => {
     return game.homeTeam.name === teamParam || game.awayTeam.name === teamParam;
   };
 
-  const gamesForTeam = games.filter((game) =>
+  // Filter games based on status and team parameter
+  const gamesInProgress = games.filter(
+    (game: any) => game.status === "in_progress"
+  );
+  const gamesForTeam = gamesInProgress.filter((game) =>
     matchingParamTeam(game, teamParam)
   );
 
-  const displayGames = gamesForTeam.length > 0 ? gamesForTeam : games;
+  const displayGames = gamesForTeam.length > 0 ? gamesForTeam : gamesInProgress;
 
   const periodText = (period: number) => {
     if (period === 1) {
@@ -195,25 +202,25 @@ const ScoreboardPage = () => {
               </div>
               {/* CLOCK */}
               <div className="flex items-center justify-evenly">
-                <span className="font-semibold uppercase">
+                <span className="font-semibold uppercase text-lg">
                   {game.period}
-                  <span className="text-xs">{periodText(game.period)}</span>
+                  <span className="text-base">{periodText(game.period)}</span>
                 </span>
                 <span className="text-gray-400">|</span>
-                <span className="min-w-14 text-xl font-semibold uppercase text-center">
+                <span className="min-w-14 text-lg font-semibold uppercase text-center">
                   {game.clock}
                 </span>
                 {game.situation.includes("at") ? (
                   <>
                     <span className="text-gray-400">|</span>
-                    <span className="min-w-20 font-semibold uppercase">
+                    <span className="min-w-20 font-semibold uppercase text-lg">
                       {game.situation.split("at")[0]}
                     </span>
                   </>
                 ) : (
                   <>
                     <span className="text-gray-400">|</span>
-                    <span className="min-w-20 font-semibold uppercase"></span>
+                    <span className="min-w-20 font-semibold uppercase text-lg"></span>
                   </>
                 )}
               </div>
