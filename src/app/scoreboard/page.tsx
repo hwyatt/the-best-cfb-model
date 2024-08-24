@@ -5,7 +5,7 @@ import Marquee from "react-fast-marquee";
 import { FaCircle } from "react-icons/fa";
 
 const scrollingTextContent =
-  "Thanks for tuning in to the Saturday Stats scoreboard presented by SaturdayStats.com. Live game results are updated every minute. Like and subscribe for more scoreboards and other content.";
+  "Thanks for tuning in to the Saturday Stats scoreboard presented by SaturdayStats.com. Live game results are updated every minute. Like and subscribe for more scoreboards and other content. Visit SaturdayStats.com to build a College Football Playoff bracket, model two teams against one another, and more!";
 
 const currentDate = new Date();
 const currentMonth = currentDate.getMonth();
