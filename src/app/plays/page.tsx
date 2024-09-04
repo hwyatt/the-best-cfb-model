@@ -18,7 +18,7 @@ export default async function PlaysPage() {
   return (
     <div>
       {plays
-        .filter((play) => !play.play_text.includes("Adam Jones")) // Filter out the plays
+        .filter((play: any) => !play.play_text.includes("Adam Jones")) // Filter out the plays
         .map((play: any, index: number) => (
           <div key={index}>
             {/* Add the number emoji */}
