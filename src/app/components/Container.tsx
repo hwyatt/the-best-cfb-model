@@ -11,7 +11,11 @@ interface ContainerProps {
 const Container: React.FC<ContainerProps> = ({ children }) => {
   const pathname = usePathname();
 
-  if (pathname === "/scoreboard" || pathname === "/countdown") {
+  if (
+    pathname === "/scoreboard" ||
+    pathname === "/countdown" ||
+    pathname === "/liveScoreboard"
+  ) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-between pb-16 md:pb-8 p-8 bg-gray-200">
         {children}
