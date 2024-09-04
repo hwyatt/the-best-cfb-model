@@ -1,5 +1,5 @@
 export default async function PlaysPage() {
-  const getPlays = await fetch(`http://localhost:3000/api/plays`);
+  const getPlays = await fetch(`/api/plays`);
   const plays = await getPlays.json();
 
   const numberEmojis = [
