@@ -138,7 +138,7 @@ const ScoreboardPage = () => {
                 }}
               >
                 <div className="flex items-center w-full gap-2">
-                  <div className="w-1/4 max-w-12 bg-gray-200 rounded-full p-2">
+                  <div className="w-[40px] h-[40px] max-w-12 bg-gray-200 rounded-full p-2">
                     {matchingHomeTeam(game) && (
                       <img
                         src={matchingHomeTeam(game)?.logos[0]}
@@ -173,7 +173,7 @@ const ScoreboardPage = () => {
                 }}
               >
                 <div className="flex items-center w-full gap-2">
-                  <div className="w-1/4 max-w-12 bg-gray-200 rounded-full p-1">
+                  <div className="w-[40px] h-[40px] max-w-12 bg-gray-200 rounded-full p-1">
                     {matchingAwayTeam(game) && (
                       <img
                         src={matchingAwayTeam(game)?.logos[0]}
@@ -210,7 +210,7 @@ const ScoreboardPage = () => {
                 <span className="min-w-14 text-lg font-semibold uppercase text-center">
                   {game.clock}
                 </span>
-                {game.situation.includes("at") ? (
+                {game.situation && game.situation.includes("at") ? (
                   <>
                     <span className="text-gray-400">|</span>
                     <span className="min-w-20 font-semibold uppercase text-lg">
