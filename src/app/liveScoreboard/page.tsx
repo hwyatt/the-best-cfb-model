@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Marquee from "react-fast-marquee";
 import { FaCircle } from "react-icons/fa";
 import tinycolor from "tinycolor2";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 const scrollingTextContent =
   "Thanks for tuning in to the Saturday Stats scoreboard presented by SaturdayStats.com. Live game results are updated every minute. Like and subscribe for more scoreboards and other content. Visit SaturdayStats.com to build a College Football Playoff bracket, model two teams against one another, and more!";
@@ -85,6 +86,9 @@ const LiveScoreboardPage: React.FC = () => {
   const [rankings, setRankings] = useState<Ranking[]>([]);
   const searchParams = useSearchParams();
   const gameIdParam = searchParams.get("game");
+
+  // Using the hook consistently at the top level
+  const { height, width } = useWindowDimensions();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -177,6 +181,132 @@ const LiveScoreboardPage: React.FC = () => {
 
   if (!selectedGame) {
     return <div>Game loading...</div>;
+  }
+
+  if (height <= 100) {
+    return (
+      <div className="h-screen w-screen absolute inset-0 text-white items-center w-full flex flex-col">
+        <div className="grid grid-cols-2 w-full h-3/4">
+          <div
+            className="flex items-center justify-between pl-2 gap-2 h-full"
+            style={{
+              backgroundColor: matchingHomeTeam(selectedGame)?.color,
+            }}
+          >
+            <div className="flex items-center w-full gap-2">
+              <div className="max-w-12 bg-gray-200 rounded-full p-2">
+                {matchingHomeTeam(selectedGame) && (
+                  <img
+                    src={matchingHomeTeam(selectedGame)?.logos[0]}
+                    alt={selectedGame.awayTeam.name}
+                  />
+                )}
+              </div>
+              <span className="w-3/4 text-base font-semibold uppercase leading-none	">
+                {/* <span className="font-normal">
+                  {matchingHomeTeam(selectedGame)?.rank}
+                </span>{" "} */}
+                {selectedGame.homeTeam.name}
+              </span>
+            </div>
+            <div
+              className="flex items-center p-2 relative h-full"
+              style={{
+                backgroundColor: tinycolor(
+                  matchingHomeTeam(selectedGame)?.color
+                )
+                  .darken(10)
+                  .toString(),
+              }}
+            >
+              <span className="text-3xl font-bold min-w-9 flex justify-center">
+                {selectedGame.homeTeam.points || 0}
+              </span>
+              {selectedGame.possession === "home" && (
+                <FaCircle
+                  className="absolute"
+                  style={{ top: "4px", right: "2px", fontSize: "8px" }}
+                />
+              )}
+            </div>
+          </div>
+          <div
+            className="flex items-center justify-between pl-2 gap-2 h-full"
+            style={{
+              backgroundColor: matchingAwayTeam(selectedGame)?.color,
+            }}
+          >
+            <div className="flex items-center w-full gap-2">
+              <div className="max-w-12 bg-gray-200 rounded-full p-2">
+                {matchingAwayTeam(selectedGame) && (
+                  <img
+                    src={matchingAwayTeam(selectedGame)?.logos[0]}
+                    alt={selectedGame.awayTeam.name}
+                  />
+                )}
+              </div>
+              <span className="w-3/4 text-base font-semibold uppercase leading-none	">
+                {/* <span className="font-normal">
+                  {matchingAwayTeam(selectedGame)?.rank}
+                </span>{" "} */}
+                {selectedGame.awayTeam.name}
+              </span>
+            </div>
+            <div
+              className="flex items-center p-2 relative h-full"
+              style={{
+                backgroundColor: tinycolor(
+                  matchingAwayTeam(selectedGame)?.color
+                )
+                  .darken(10)
+                  .toString(),
+              }}
+            >
+              <span className="text-3xl font-bold min-w-9 flex justify-center">
+                {selectedGame.awayTeam.points || 0}
+              </span>
+              {selectedGame.possession === "away" && (
+                <FaCircle
+                  className="absolute"
+                  style={{ top: "4px", right: "2px", fontSize: "8px" }}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="flex bg-gray-800 w-full h-1/4">
+          <div className="flex items-center justify-evenly py-4 w-full">
+            <span className="font-semibold uppercase text-lg">
+              {selectedGame.period || 1}
+              <span className="text-base">
+                {selectedGame.period
+                  ? periodText(selectedGame.period)
+                  : periodText(1)}
+              </span>
+            </span>
+            <span className="text-gray-400">|</span>
+            <span className="min-w-14 text-lg font-semibold uppercase text-center">
+              {selectedGame.clock || `15:00`}
+            </span>
+            {selectedGame.situation && selectedGame.situation.includes("at") ? (
+              <>
+                <span className="text-gray-400">|</span>
+                <span className="min-w-20 font-semibold uppercase text-lg">
+                  {selectedGame.situation.split("at")[0]}
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="text-gray-400">|</span>
+                <span className="min-w-20 font-semibold uppercase text-lg">
+                  {`1st & 10`}
+                </span>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
