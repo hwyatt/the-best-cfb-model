@@ -1,5 +1,5 @@
 export default async function PlaysPage() {
-  //   const getPlays = await fetch(`/api/plays`);
+  //   const getPlays = await fetch(`http://localhost:3000/api/plays`);
   //   const plays = await getPlays.json();
   //   const numberEmojis = [
   //     "1️⃣",
@@ -29,7 +29,10 @@ export default async function PlaysPage() {
   //               .replace("Yd Run", "Yards")
   //               .replace("run for", "")
   //               .trim()}
-  //             {/* <div>{play.home}</div> */}
+  //             <div>
+  //               {play.home} vs {play.away} at quarter {play.period}{" "}
+  //               {JSON.stringify(play.clock)}
+  //             </div>
   //           </div>
   //         ))}
   //     </div>
