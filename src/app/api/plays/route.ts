@@ -24,9 +24,9 @@ export async function GET(request: any) {
 
     const data = await res.json();
 
-    // Filter by play_type "Passing Touchdown", "Rushing Touchdown"
+    // Filter by play_type "Passing Touchdown", "Rushing Touchdown", "Interception Return Touchdown", "Fumble Return Touchdown", "Kickoff Return Touchdown"
     const passingTouchdowns = data.filter(
-      (play: any) => play.play_type === "Rushing Touchdown"
+      (play: any) => play.play_type === "Kickoff Return Touchdown"
     );
 
     // Sort the results by "yards_gained" in descending order
@@ -35,7 +35,7 @@ export async function GET(request: any) {
     );
 
     // Limit the output to the top 15 results
-    const top15 = sortedData.slice(0, 10);
+    const top15 = sortedData.slice(0, 11);
 
     return NextResponse.json(top15, { status: 200 });
   } catch (err) {

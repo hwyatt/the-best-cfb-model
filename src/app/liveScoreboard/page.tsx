@@ -13,12 +13,78 @@ const currentMonth = currentDate.getMonth();
 const currentYear =
   currentMonth >= 7 ? currentDate.getFullYear() : currentDate.getFullYear() - 1;
 
-const LiveScoreboardPage = () => {
-  const [games, setGames] = useState([]);
-  const [teams, setTeams] = useState([]);
-  const [rankings, setRankings] = useState<any>([]);
+// Type definitions
+interface Team {
+  id: number;
+  name: string;
+  school: string;
+  mascot: string;
+  color: string;
+  logos: string[];
+}
+
+interface Ranking {
+  school: string;
+  rank: number;
+}
+
+interface Game {
+  id: number;
+  startDate: string;
+  startTimeTBD: boolean;
+  tv: string;
+  neutralSite: boolean;
+  conferenceGame: boolean;
+  status: string;
+  period: number;
+  clock: string;
+  situation: string;
+  possession: string;
+  venue: {
+    name: string;
+    city: string;
+    state: string;
+  };
+  homeTeam: {
+    id: number;
+    name: string;
+    conference: string;
+    classification: string;
+    points: number;
+  };
+  awayTeam: {
+    id: number;
+    name: string;
+    conference: string;
+    classification: string;
+    points: number;
+  };
+  weather?: {
+    temperature: string;
+    description: string;
+    windSpeed: string;
+    windDirection: string;
+  };
+  betting?: {
+    spread: string;
+    overUnder: string;
+    homeMoneyline: number;
+    awayMoneyline: number;
+  };
+}
+
+interface ScoreboardData {
+  games: Game[];
+  teams: Team[];
+  rankings: Ranking[];
+}
+
+const LiveScoreboardPage: React.FC = () => {
+  const [games, setGames] = useState<Game[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
+  const [rankings, setRankings] = useState<Ranking[]>([]);
   const searchParams = useSearchParams();
-  const teamParam = searchParams.get("team");
+  const gameIdParam = searchParams.get("game");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,8 +94,8 @@ const LiveScoreboardPage = () => {
           `/api/rankings?year=${currentYear}`
         );
 
-        const teamsData = await responseTeams.json();
-        const rankingsData = await responseRankings.json();
+        const teamsData: Team[] = await responseTeams.json();
+        const rankingsData: Ranking[] = await responseRankings.json();
 
         setTeams(teamsData);
         setRankings(rankingsData);
@@ -45,7 +111,7 @@ const LiveScoreboardPage = () => {
     const fetchScoreboardData = async () => {
       try {
         const response = await fetch(`/api/scoreboard`);
-        const scoreboardData = await response.json();
+        const scoreboardData: Game[] = await response.json();
         setGames(scoreboardData);
       } catch (error) {
         console.error("Error fetching scoreboard data:", error);
@@ -62,166 +128,160 @@ const LiveScoreboardPage = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  const matchingHomeTeam: any = (game: any) =>
+  const matchingHomeTeam = (game: Game) =>
     teams.find(
-      (team: any) =>
+      (team) =>
         game.homeTeam.name.includes(team.school) &&
         game.homeTeam.name.includes(team.mascot)
     );
 
-  const matchingAwayTeam: any = (game: any) =>
+  const matchingAwayTeam = (game: Game) =>
     teams.find(
-      (team: any) =>
+      (team) =>
         game.awayTeam.name.includes(team.school) &&
         game.awayTeam.name.includes(team.mascot)
     );
 
-  const matchingHomeRank: any = (game: any) =>
-    rankings?.ranks?.find((rank: any) => rank.school === game.homeTeam.name);
-  const matchingAwayRank: any = (game: any) =>
-    rankings?.ranks?.find((rank: any) => rank.school === game.awayTeam.name);
+  const matchingHomeRank = (game: Game) =>
+    rankings.find((rank) => rank.school === game.homeTeam.name);
 
-  const matchingParamTeam = (game: any, teamParam: any) => {
-    return game.homeTeam.name === teamParam || game.awayTeam.name === teamParam;
-  };
-
-  const game: any = {
-    id: 401635525,
-    startDate: "2024-08-24T16:00:00.000Z",
-    startTimeTBD: false,
-    tv: "ACC NETWORK",
-    neutralSite: true,
-    conferenceGame: true,
-    status: "completed",
-    period: 4,
-    clock: "11:07",
-    situation: "4th & 5 at FSU 26",
-    possession: "home",
-    venue: {
-      name: "Aviva Stadium",
-      city: "Dublin",
-      state: "",
-    },
-    homeTeam: {
-      id: 59,
-      name: "Georgia Tech Yellow Jackets",
-      conference: "ACC",
-      classification: "fbs",
-      points: 24,
-    },
-    awayTeam: {
-      id: 52,
-      name: "Florida State Seminoles",
-      conference: "ACC",
-      classification: "fbs",
-      points: 21,
-    },
-    weather: {
-      temperature: "60.8",
-      description: "Cloudy",
-      windSpeed: "19.9",
-      windDirection: "270.0",
-    },
-    betting: {
-      spread: "10.0",
-      overUnder: "54.5",
-      homeMoneyline: 345,
-      awayMoneyline: -470,
-    },
-  };
+  const matchingAwayRank = (game: Game) =>
+    rankings.find((rank) => rank.school === game.awayTeam.name);
 
   const periodText = (period: number) => {
-    if (period === 1) {
-      return "st";
-    } else if (period === 2) {
-      return "nd";
-    } else if (period === 3) {
-      return "rd";
-    } else if (period === 4) {
-      return "th";
-    } else {
-      return "";
+    switch (period) {
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      case 4:
+        return "th";
+      default:
+        return "";
     }
   };
 
-  const formatGameData = (game: any) => {
-    const { homeTeam, awayTeam, venue, situation } = game;
-    return `${homeTeam.name} ${homeTeam.points} - ${awayTeam.name} ${awayTeam.points}`;
+  const formatGameData = (game: Game) => {
+    const { homeTeam, awayTeam } = game;
+    return `${homeTeam.name} ${homeTeam.points || 0} - ${awayTeam.name} ${
+      awayTeam.points || 0
+    }`;
   };
 
   const formattedGamesData = games.map(formatGameData).join(" | ");
+
+  // Find the game that matches the gameId from search params
+  const selectedGame = games.find((g) => g.id.toString() === gameIdParam);
+
+  if (!selectedGame) {
+    return <div>Game loading...</div>;
+  }
 
   return (
     <div className="h-screen w-screen relative -my-8">
       <div
         className="absolute top-0 left-0 h-full w-1/2 flex flex-col gap-4 items-center justify-center"
         style={{
-          backgroundColor: matchingHomeTeam(game)?.color,
+          backgroundColor: matchingHomeTeam(selectedGame)?.color,
         }}
       >
-        <img src={matchingHomeTeam(game)?.logos[0]} alt={game.homeTeam.name} />
+        <img
+          src={
+            selectedGame.homeTeam.name.includes("Crimson Tide")
+              ? matchingHomeTeam(selectedGame)?.logos[1]
+              : matchingHomeTeam(selectedGame)?.logos[0]
+          }
+          alt={selectedGame.homeTeam.name}
+        />
         <span
-          className="text-white text-4xl font-bold rounded-lg border-2 p-4"
+          className="text-white text-4xl font-bold rounded-lg border-2 p-4 relative"
           style={{
-            backgroundColor: tinycolor(matchingHomeTeam(game)?.color)
+            backgroundColor: tinycolor(matchingHomeTeam(selectedGame)?.color)
               .darken(10)
               .toString(),
-            borderColor: tinycolor(matchingHomeTeam(game)?.color)
+            borderColor: tinycolor(matchingHomeTeam(selectedGame)?.color)
               .darken(15)
               .toString(),
           }}
         >
-          {game.homeTeam.points}
+          {selectedGame.homeTeam.points || 0}
+          {selectedGame.possession === "home" && (
+            <div
+              className="bg-white rounded-full w-3 h-3 absolute"
+              style={{ top: 4, right: 4 }}
+            ></div>
+          )}
         </span>
       </div>
       <div
         className="absolute top-0 right-0 h-full w-1/2 flex flex-col gap-4 items-center justify-center"
         style={{
-          backgroundColor: matchingAwayTeam(game)?.color,
+          backgroundColor: matchingAwayTeam(selectedGame)?.color,
         }}
       >
-        <img src={matchingAwayTeam(game)?.logos[0]} alt={game.homeTeam.name} />
+        <img
+          src={
+            selectedGame.awayTeam.name.includes("Crimson Tide")
+              ? matchingAwayTeam(selectedGame)?.logos[1]
+              : matchingAwayTeam(selectedGame)?.logos[0]
+          }
+          alt={selectedGame.awayTeam.name}
+        />
         <span
-          className="text-white text-4xl font-bold rounded-lg border-2 p-4"
+          className="text-white text-4xl font-bold rounded-lg border-2 p-4 relative"
           style={{
-            backgroundColor: tinycolor(matchingAwayTeam(game)?.color)
+            backgroundColor: tinycolor(matchingAwayTeam(selectedGame)?.color)
               .darken(10)
               .toString(),
-            borderColor: tinycolor(matchingAwayTeam(game)?.color)
+            borderColor: tinycolor(matchingAwayTeam(selectedGame)?.color)
               .darken(15)
               .toString(),
           }}
         >
-          {game.awayTeam.points}
+          {selectedGame.awayTeam.points || 0}
+          {selectedGame.possession === "away" && (
+            <div
+              className="bg-white rounded-full w-3 h-3 absolute"
+              style={{ top: 4, right: 4 }}
+            ></div>
+          )}
         </span>
       </div>
       <div
-        key={game.id}
-        className={`flex bg-gray-800 rounded absolute border-2 border-gray-900`}
+        key={selectedGame.id}
+        className="flex bg-gray-800 rounded absolute border-2 border-gray-900"
         style={{ bottom: 72, left: 256, right: 256 }}
       >
         <div className="text-white items-center w-full rounded-lg">
           {/* CLOCK */}
           <div className="flex items-center justify-evenly py-4">
             <span className="font-semibold uppercase text-3xl">
-              {game.period}
-              <span className="text-xl">{periodText(game.period)}</span>
+              {selectedGame.period || 1}
+              <span className="text-xl">
+                {selectedGame.period
+                  ? periodText(selectedGame.period)
+                  : periodText(1)}
+              </span>
             </span>
             <span className="text-gray-400">|</span>
             <span className="min-w-14 text-3xl font-semibold uppercase text-center">
-              {game.clock}
+              {selectedGame.clock || `15:00`}
             </span>
-            {game.situation && game.situation.includes("at") ? (
+            {selectedGame.situation && selectedGame.situation.includes("at") ? (
               <>
                 <span className="text-gray-400">|</span>
                 <span className="min-w-20 font-semibold uppercase text-3xl">
-                  {game.situation.split("at")[0]}
+                  {selectedGame.situation.split("at")[0]}
                 </span>
               </>
             ) : (
               <>
                 <span className="text-gray-400">|</span>
-                <span className="min-w-20 font-semibold uppercase text-lg"></span>
+                <span className="min-w-20 font-semibold uppercase text-3xl">
+                  {`1st & 10`}
+                </span>
               </>
             )}
           </div>
