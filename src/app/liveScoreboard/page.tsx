@@ -183,7 +183,7 @@ const LiveScoreboardPage: React.FC = () => {
     return <div>Game loading...</div>;
   }
 
-  if (height <= 100) {
+  if (height <= 200) {
     return (
       <div className="h-screen w-screen absolute inset-0 text-white items-center w-full flex flex-col">
         <div className="grid grid-cols-2 w-full h-3/4">
@@ -305,6 +305,15 @@ const LiveScoreboardPage: React.FC = () => {
             )}
           </div>
         </div>
+        {height == 200 && (
+          <div className="flex py-2 gap-2 pl-2 bg-gray-200">
+            <img src={"Saturday Stats.png"} className="max-h-10 w-auto" />
+
+            <Marquee className="text-gray-800 text-xl border-l-gray-400 border-2">
+              {formattedGamesData + scrollingTextContent}
+            </Marquee>
+          </div>
+        )}
       </div>
     );
   }
