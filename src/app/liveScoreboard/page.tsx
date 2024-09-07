@@ -114,7 +114,7 @@ const LiveScoreboardPage: React.FC = () => {
   useEffect(() => {
     const fetchScoreboardData = async () => {
       try {
-        const response = await fetch(`/api/scoreboard`);
+        const response = await fetch(`/api/scoreboard`, { cache: "no-store" });
         const scoreboardData: Game[] = await response.json();
         setGames(scoreboardData);
       } catch (error) {
