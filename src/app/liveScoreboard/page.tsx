@@ -116,6 +116,8 @@ const LiveScoreboardPage: React.FC = () => {
       try {
         const response = await fetch("/api/scoreboard", {
           method: "GET",
+          cache: "no-store",
+          next: { revalidate: 10 },
           // headers: {
           //   "Cache-Control": "no-cache",
           //   Pragma: "no-cache",

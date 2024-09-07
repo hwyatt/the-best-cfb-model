@@ -31,7 +31,7 @@ export async function GET(request: any) {
     headers.set("Expires", "0");
 
     return NextResponse.json(json, { headers, status: 200 });
-  } catch (err) {
+  } catch (err: any) {
     console.log(err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
