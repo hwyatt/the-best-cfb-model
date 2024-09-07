@@ -11,7 +11,7 @@ export async function GET(request: any) {
     const res = await fetch(ENDPOINT, {
       headers: {
         Authorization: `Bearer ${BEARER_TOKEN}`,
-        "Cache-Control": "no-cache",
+        "Cache-Control": "no-store",
       },
     });
 
