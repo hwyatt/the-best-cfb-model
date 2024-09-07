@@ -116,11 +116,11 @@ const LiveScoreboardPage: React.FC = () => {
       try {
         const response = await fetch("/api/scoreboard", {
           method: "GET",
-          headers: {
-            "Cache-Control": "no-cache",
-            Pragma: "no-cache",
-            Expires: "0",
-          },
+          // headers: {
+          //   "Cache-Control": "no-cache",
+          //   Pragma: "no-cache",
+          //   Expires: "0",
+          // },
         });
         const scoreboardData: Game[] = await response.json();
         setGames(scoreboardData);

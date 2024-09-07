@@ -11,6 +11,7 @@ export async function GET(request: any) {
     const res = await fetch(ENDPOINT, {
       headers: {
         Authorization: `Bearer ${BEARER_TOKEN}`,
+        "Cache-Control": "no-store", // Ensure the request is not cached
       },
     });
 
@@ -20,8 +21,18 @@ export async function GET(request: any) {
 
     const json = await res.json();
 
-    return NextResponse.json(json, { status: 200 });
+    // Add no-cache headers to the response
+    const headers = new Headers();
+    headers.set(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, proxy-revalidate"
+    );
+    headers.set("Pragma", "no-cache");
+    headers.set("Expires", "0");
+
+    return NextResponse.json(json, { headers, status: 200 });
   } catch (err) {
     console.log(err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
