@@ -282,35 +282,44 @@ const LiveScoreboardPage: React.FC = () => {
           </div>
         </div>
         <div className="flex bg-gray-800 w-full h-1/4">
-          <div className="flex items-center justify-evenly py-4 w-full">
-            <span className="font-semibold uppercase text-lg">
-              {selectedGame.period || 1}
-              <span className="text-base">
-                {selectedGame.period
-                  ? periodText(selectedGame.period)
-                  : periodText(1)}
+          {selectedGame.period === 2 && selectedGame.clock === "00:00:00" ? (
+            <div className="flex items-center justify-evenly py-4 w-full">
+              <span className="font-semibold uppercase text-center text-3xl">
+                Halftime
               </span>
-            </span>
-            <span className="text-gray-400">|</span>
-            <span className="min-w-14 text-lg font-semibold uppercase text-center">
-              {selectedGame.clock || `15:00`}
-            </span>
-            {selectedGame.situation && selectedGame.situation.includes("at") ? (
-              <>
-                <span className="text-gray-400">|</span>
-                <span className="min-w-20 font-semibold uppercase text-lg">
-                  {selectedGame.situation.split("at")[0]}
+            </div>
+          ) : (
+            <div className="flex items-center justify-evenly py-4 w-full">
+              <span className="font-semibold uppercase text-lg">
+                {selectedGame.period || 1}
+                <span className="text-base">
+                  {selectedGame.period
+                    ? periodText(selectedGame.period)
+                    : periodText(1)}
                 </span>
-              </>
-            ) : (
-              <>
-                <span className="text-gray-400">|</span>
-                <span className="min-w-20 font-semibold uppercase text-lg">
-                  {`1st & 10`}
-                </span>
-              </>
-            )}
-          </div>
+              </span>
+              <span className="text-gray-400">|</span>
+              <span className="min-w-14 text-lg font-semibold uppercase text-center">
+                {selectedGame.clock || `15:00`}
+              </span>
+              {selectedGame.situation &&
+              selectedGame.situation.includes("at") ? (
+                <>
+                  <span className="text-gray-400">|</span>
+                  <span className="min-w-20 font-semibold uppercase text-lg">
+                    {selectedGame.situation.split("at")[0]}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="text-gray-400">|</span>
+                  <span className="min-w-20 font-semibold uppercase text-lg">
+                    {`1st & 10`}
+                  </span>
+                </>
+              )}
+            </div>
+          )}
         </div>
         {height == 200 && (
           <div className="flex py-2 gap-2 pl-2 bg-gray-200">
@@ -401,36 +410,42 @@ const LiveScoreboardPage: React.FC = () => {
         style={{ bottom: 72, left: 256, right: 256 }}
       >
         <div className="text-white items-center w-full rounded-lg">
-          {/* CLOCK */}
-          <div className="flex items-center justify-evenly py-4">
-            <span className="font-semibold uppercase text-3xl">
-              {selectedGame.period || 1}
-              <span className="text-xl">
-                {selectedGame.period
-                  ? periodText(selectedGame.period)
-                  : periodText(1)}
+          {selectedGame.period === 2 && selectedGame.clock === "00:00:00" ? (
+            <div className="flex items-center justify-evenly py-4">
+              <span className="font-semibold uppercase text-3xl">Halftime</span>
+            </div>
+          ) : (
+            <div className="flex items-center justify-evenly py-4">
+              <span className="font-semibold uppercase text-3xl">
+                {selectedGame.period || 1}
+                <span className="text-xl">
+                  {selectedGame.period
+                    ? periodText(selectedGame.period)
+                    : periodText(1)}
+                </span>
               </span>
-            </span>
-            <span className="text-gray-400">|</span>
-            <span className="min-w-14 text-3xl font-semibold uppercase text-center">
-              {selectedGame.clock || `15:00`}
-            </span>
-            {selectedGame.situation && selectedGame.situation.includes("at") ? (
-              <>
-                <span className="text-gray-400">|</span>
-                <span className="min-w-20 font-semibold uppercase text-3xl">
-                  {selectedGame.situation.split("at")[0]}
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="text-gray-400">|</span>
-                <span className="min-w-20 font-semibold uppercase text-3xl">
-                  {`1st & 10`}
-                </span>
-              </>
-            )}
-          </div>
+              <span className="text-gray-400">|</span>
+              <span className="min-w-14 text-3xl font-semibold uppercase text-center">
+                {selectedGame.clock || `15:00`}
+              </span>
+              {selectedGame.situation &&
+              selectedGame.situation.includes("at") ? (
+                <>
+                  <span className="text-gray-400">|</span>
+                  <span className="min-w-20 font-semibold uppercase text-3xl">
+                    {selectedGame.situation.split("at")[0]}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="text-gray-400">|</span>
+                  <span className="min-w-20 font-semibold uppercase text-3xl">
+                    {`1st & 10`}
+                  </span>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
       <div className="bottom-0 left-0 right-0 fixed flex py-2 gap-2 pl-2 bg-gray-200">
