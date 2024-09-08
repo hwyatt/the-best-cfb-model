@@ -290,6 +290,10 @@ const LiveScoreboardPage: React.FC = () => {
                 Halftime
               </span>
             </div>
+          ) : selectedGame.status === "completed" ? (
+            <div className="flex items-center justify-evenly py-4 w-full">
+              <span className="font-semibold uppercase text-3xl">Final</span>
+            </div>
           ) : (
             <div className="flex items-center justify-evenly py-4 w-full">
               <span className="font-semibold uppercase text-lg">
@@ -413,8 +417,12 @@ const LiveScoreboardPage: React.FC = () => {
       >
         <div className="text-white items-center w-full rounded-lg">
           {selectedGame.period === 2 && selectedGame.clock === "00:00:00" ? (
-            <div className="flex items-center justify-evenly py-4">
+            <div className="flex items-center justify-evenly py-4 w-full">
               <span className="font-semibold uppercase text-3xl">Halftime</span>
+            </div>
+          ) : selectedGame.status === "completed" ? (
+            <div className="flex items-center justify-evenly py-4">
+              <span className="font-semibold uppercase text-3xl">Final</span>
             </div>
           ) : (
             <div className="flex items-center justify-evenly py-4">
