@@ -350,7 +350,8 @@ const LiveScoreboardPage: React.FC = () => {
       >
         <img
           src={
-            selectedGame.homeTeam.name.includes("Crimson Tide")
+            selectedGame.homeTeam.name.includes("Crimson Tide") ||
+            selectedGame.homeTeam.name.includes("Oregon Ducks")
               ? matchingHomeTeam(selectedGame)?.logos[1]
               : matchingHomeTeam(selectedGame)?.logos[0]
           }
