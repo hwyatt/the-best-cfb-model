@@ -380,7 +380,11 @@ const LiveScoreboardPage: React.FC = () => {
       <div
         className="absolute top-0 right-0 h-full w-1/2 flex flex-col gap-4 items-center justify-center"
         style={{
-          backgroundColor: matchingAwayTeam(selectedGame)?.color,
+          backgroundColor: selectedGame.homeTeam.name.includes(
+            "Texas A&M Aggies"
+          )
+            ? "white"
+            : matchingAwayTeam(selectedGame)?.color,
         }}
       >
         <img
